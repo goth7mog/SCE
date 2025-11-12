@@ -58,6 +58,11 @@ resource "azurerm_container_group" "node_red" {
 
   ip_address_type = "Public"
   dns_name_label  = "sce-nodered-demo"
+
+  depends_on = [
+    azurerm_iothub.sce_iothub,
+    azurerm_iothub_device.sce_device
+  ]
 }
 
 output "node_red_url" {
