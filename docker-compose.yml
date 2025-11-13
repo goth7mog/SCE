@@ -2,6 +2,7 @@ version: '3.7'
 services:
   nodered:
     # build: .
+    # image: kuzurik/node-red-sce
     image: nodered/node-red
     ports:
       - "1880:1880"
