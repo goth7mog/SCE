@@ -1,0 +1,145 @@
+[
+    {
+        "id": "524bde768d1b3eb9",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "raspi1-inject",
+        "type": "inject",
+        "z": "524bde768d1b3eb9",
+        "name": "Raspberry Pi 1",
+        "props": [],
+        "repeat": "30",
+        "once": true,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 220,
+        "wires": [
+            [
+                "raspi1-func"
+            ]
+        ]
+    },
+    {
+        "id": "raspi1-func",
+        "type": "function",
+        "z": "524bde768d1b3eb9",
+        "name": "Payload Pi 1",
+        "func": "msg.payload = {\n  device_id: \"raspi-1\",\n  temperature: Math.random() * 10 + 20,\n  humidity: Math.random() * 20 + 40\n};\nreturn msg;",
+        "outputs": 1,
+        "x": 360,
+        "y": 220,
+        "wires": [
+            [
+                "raspi1-debug"
+            ]
+        ]
+    },
+    {
+        "id": "raspi1-debug",
+        "type": "debug",
+        "z": "524bde768d1b3eb9",
+        "name": "Debug Pi 1",
+        "active": true,
+        "tosidebar": true,
+        "x": 560,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "raspi2-inject",
+        "type": "inject",
+        "z": "524bde768d1b3eb9",
+        "name": "Raspberry Pi 2",
+        "props": [],
+        "repeat": "30",
+        "once": true,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 300,
+        "wires": [
+            [
+                "raspi2-func"
+            ]
+        ]
+    },
+    {
+        "id": "raspi2-func",
+        "type": "function",
+        "z": "524bde768d1b3eb9",
+        "name": "Payload Pi 2",
+        "func": "msg.payload = {\n  device_id: \"raspi-2\",\n  temperature: Math.random() * 10 + 20,\n  humidity: Math.random() * 20 + 40\n};\nreturn msg;",
+        "outputs": 1,
+        "x": 360,
+        "y": 300,
+        "wires": [
+            [
+                "raspi2-debug"
+            ]
+        ]
+    },
+    {
+        "id": "raspi2-debug",
+        "type": "debug",
+        "z": "524bde768d1b3eb9",
+        "name": "Debug Pi 2",
+        "active": true,
+        "tosidebar": true,
+        "x": 560,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "raspi3-inject",
+        "type": "inject",
+        "z": "524bde768d1b3eb9",
+        "name": "Raspberry Pi 3",
+        "props": [],
+        "repeat": "30",
+        "once": true,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 380,
+        "wires": [
+            [
+                "raspi3-func"
+            ]
+        ]
+    },
+    {
+        "id": "raspi3-func",
+        "type": "function",
+        "z": "524bde768d1b3eb9",
+        "name": "Payload Pi 3",
+        "func": "msg.payload = {\n  device_id: \"raspi-3\",\n  temperature: Math.random() * 10 + 20,\n  humidity: Math.random() * 20 + 40\n};\nreturn msg;",
+        "outputs": 1,
+        "x": 360,
+        "y": 380,
+        "wires": [
+            [
+                "raspi3-debug"
+            ]
+        ]
+    },
+    {
+        "id": "raspi3-debug",
+        "type": "debug",
+        "z": "524bde768d1b3eb9",
+        "name": "Debug Pi 3",
+        "active": true,
+        "tosidebar": true,
+        "x": 560,
+        "y": 380,
+        "wires": []
+    }
+]
