@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  nodered:
+    # build: .
+    image: nodered/node-red
+    ports:
+      - "1880:1880"
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - ./nodered/data:/data
