@@ -7,6 +7,7 @@ brief.txt
 tf-commands.txt
 useful-docker-commands.txt
 az-cli-commands.txt
+mqtt-sample.txt
 Plan.md
 .terraform/
 terraform.tfstate
