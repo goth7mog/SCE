@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
+        "node-red-contrib-azure-iot-device": "^0.2.6",
         "node-red-contrib-azure-iot-hub": "^0.4.0"
     }
 }
