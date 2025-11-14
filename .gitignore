@@ -4,6 +4,7 @@ nodered/data/.config.runtime.json
 nodered/data/.config.runtime.json.backup
 brief.pdf
 brief.txt
+.DS_Store
 tf-commands.txt
 useful-docker-commands.txt
 az-cli-commands.txt
