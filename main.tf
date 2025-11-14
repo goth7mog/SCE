@@ -1,20 +1,3 @@
-resource "azurerm_iothub_device" "raspi_1" {
-  iothub_name         = azurerm_iothub.sce_iothub.name
-  resource_group_name = azurerm_resource_group.sce_rg.name
-  device_id           = "raspi-1"
-}
-
-resource "azurerm_iothub_device" "raspi_2" {
-  iothub_name         = azurerm_iothub.sce_iothub.name
-  resource_group_name = azurerm_resource_group.sce_rg.name
-  device_id           = "raspi-2"
-}
-
-resource "azurerm_iothub_device" "raspi_3" {
-  iothub_name         = azurerm_iothub.sce_iothub.name
-  resource_group_name = azurerm_resource_group.sce_rg.name
-  device_id           = "raspi-3"
-}
 terraform {
   required_providers {
     azurerm = {
@@ -26,6 +9,7 @@ terraform {
 
 provider "azurerm" {
   features {}
+  subscription_id = "584f8a59-dcda-4698-a720-39e3963a9708"
 }
 
 resource "azurerm_resource_group" "sce_rg" {
