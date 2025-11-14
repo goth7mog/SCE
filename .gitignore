@@ -9,3 +9,7 @@ useful-docker-commands.txt
 az-cli-commands.txt
 Plan.md
 .terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.backup

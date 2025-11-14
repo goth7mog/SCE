@@ -14,11 +14,11 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "sce_rg" {
   name     = "sce-rg"
-  location = "West Europe"
+  location = "switzerlandnorth" # ["switzerlandnorth","polandcentral","italynorth","norwayeast","swedencentral"]
 }
 
 resource "azurerm_iothub" "sce_iothub" {
-  name                = "sce-iothub"
+  name                = "sce-iothub-01"
   resource_group_name = azurerm_resource_group.sce_rg.name
   location            = azurerm_resource_group.sce_rg.location
   sku {
