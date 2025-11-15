@@ -11,7 +11,9 @@ az-cli-commands.txt
 mqtt-sample.txt
 Plan.md
 .terraform/
+certificates/
 terraform.tfstate
 terraform.tfstate.backup
 *.tfstate
 *.tfstate.backup
+sanitize.py
