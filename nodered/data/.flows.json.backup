@@ -72,7 +72,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 146,
-    "y": 400,
+    "y": 431,
     "wires": [
       [
         "raspi2-func"
@@ -92,7 +92,7 @@
     "finalize": "",
     "libs": [],
     "x": 356,
-    "y": 400,
+    "y": 431,
     "wires": [
       [
         "raspi2-debug",
@@ -108,7 +108,7 @@
     "active": true,
     "tosidebar": true,
     "x": 556,
-    "y": 400,
+    "y": 431,
     "wires": []
   },
   {
@@ -122,8 +122,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 147,
-    "y": 581,
+    "x": 157,
+    "y": 679,
     "wires": [
       [
         "raspi3-func"
@@ -135,13 +135,19 @@
     "type": "function",
     "z": "524bde768d1b3eb9",
     "name": "Payload Pi 3",
-    "func": "msg.payload = {\n  device_id: \"raspi-3\",\n  temperature: Math.random() * 10 + 20,\n  humidity: Math.random() * 20 + 40\n};\nreturn msg;",
+    "func": "msg = {\n  topic: \"telemetry\",\n  payload: {\n    device_id: \"raspi-3\",\n    temperature: Math.random() * 10 + 20,\n    humidity: Math.random() * 20 + 40\n  },\n  properties: [\n    { \"key\": \"exampleKey\", \"value\": \"exampleValue\" } // Optional, include if needed\n  ]\n};\nreturn msg;",
     "outputs": 1,
-    "x": 347,
-    "y": 581,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 357,
+    "y": 679,
     "wires": [
       [
-        "raspi3-debug"
+        "raspi3-debug",
+        "840347e3cc6e7199"
       ]
     ]
   },
@@ -152,8 +158,8 @@
     "name": "Debug Pi 3",
     "active": true,
     "tosidebar": true,
-    "x": 547,
-    "y": 581,
+    "x": 557,
+    "y": 679,
     "wires": []
   },
   {
@@ -226,7 +232,7 @@
     "caname": "",
     "ca": "",
     "x": 600,
-    "y": 300,
+    "y": 331,
     "wires": [
       [
         "28d81c96b2fb33b6"
@@ -247,7 +253,54 @@
     "statusVal": "",
     "statusType": "auto",
     "x": 810,
-    "y": 300,
+    "y": 331,
+    "wires": []
+  },
+  {
+    "id": "840347e3cc6e7199",
+    "type": "azureiotdevice",
+    "z": "524bde768d1b3eb9",
+    "deviceid": "raspi-3",
+    "pnpModelid": "",
+    "connectiontype": "constr",
+    "authenticationmethod": "x509",
+    "iothub": "sce-iothub-01.azure-devices.net",
+    "isIotcentral": false,
+    "scopeid": "",
+    "enrollmenttype": "group",
+    "certname": "raspi-3.cert.pem",
+    "keyname": "raspi-3.key.pem",
+    "passphrase": "",
+    "protocol": "mqtt",
+    "retryInterval": 10,
+    "methods": [],
+    "DPSpayload": "",
+    "gatewayHostname": "",
+    "caname": "",
+    "ca": "",
+    "x": 600,
+    "y": 560,
+    "wires": [
+      [
+        "750a7648d9bdaf09"
+      ]
+    ]
+  },
+  {
+    "id": "750a7648d9bdaf09",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "debug Azure Pi 3",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 810,
+    "y": 560,
     "wires": []
   }
 ]
