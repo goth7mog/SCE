@@ -1,3 +1,4 @@
+# Included in the pre-commit hook
 import json
 
 WATCH_FILES = [

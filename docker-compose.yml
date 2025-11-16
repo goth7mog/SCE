@@ -10,3 +10,22 @@ services:
       - TZ=Europe/London
     volumes:
       - ./nodered/data:/data
+    networks:
+      - sce-net
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - "6379:6379"
+    environment:
+      - TZ=Europe/London
+    networks:
+      - sce-net
+    volumes:
+      - edge-redis-data:/data
+
+networks:
+  sce-net:
+    driver: bridge
+
+volumes:
+  edge-redis-data:
