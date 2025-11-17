@@ -302,5 +302,52 @@
     "x": 810,
     "y": 560,
     "wires": []
+  },
+  {
+    "id": "c5a773bfc92d5671",
+    "type": "azureiotdevice",
+    "z": "524bde768d1b3eb9",
+    "deviceid": "edge-gateway-1",
+    "pnpModelid": "",
+    "connectiontype": "constr",
+    "authenticationmethod": "x509",
+    "iothub": "sce-iothub-01.azure-devices.net",
+    "isIotcentral": false,
+    "scopeid": "",
+    "enrollmenttype": "group",
+    "certname": "edge-gateway-1.cert.pem",
+    "keyname": "edge-gateway-1.key.pem",
+    "passphrase": "",
+    "protocol": "mqtt",
+    "retryInterval": 10,
+    "methods": [],
+    "DPSpayload": "",
+    "gatewayHostname": "",
+    "caname": "",
+    "ca": "",
+    "x": 730,
+    "y": 920,
+    "wires": [
+      [
+        "1d1226decca79ea6"
+      ]
+    ]
+  },
+  {
+    "id": "1d1226decca79ea6",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "debug 1",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 960,
+    "y": 920,
+    "wires": []
   }
 ]
