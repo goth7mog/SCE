@@ -16,4 +16,5 @@ terraform.tfstate
 terraform.tfstate.backup
 *.tfstate
 *.tfstate.backup
+lambda-example.py
 .env
