@@ -166,6 +166,7 @@
     "id": "926c5b13ef3ddb46",
     "type": "azureiotdevice",
     "z": "524bde768d1b3eb9",
+    "d": true,
     "deviceid": "raspi-1",
     "pnpModelid": "",
     "connectiontype": "constr",
@@ -213,6 +214,7 @@
     "id": "f96089bf547ff022",
     "type": "azureiotdevice",
     "z": "524bde768d1b3eb9",
+    "d": true,
     "deviceid": "raspi-2",
     "pnpModelid": "",
     "connectiontype": "constr",
@@ -260,6 +262,7 @@
     "id": "840347e3cc6e7199",
     "type": "azureiotdevice",
     "z": "524bde768d1b3eb9",
+    "d": true,
     "deviceid": "raspi-3",
     "pnpModelid": "",
     "connectiontype": "constr",
@@ -307,6 +310,7 @@
     "id": "c5a773bfc92d5671",
     "type": "azureiotdevice",
     "z": "524bde768d1b3eb9",
+    "d": true,
     "deviceid": "edge-gateway-1",
     "pnpModelid": "",
     "connectiontype": "constr",
@@ -349,5 +353,78 @@
     "x": 960,
     "y": 920,
     "wires": []
+  },
+  {
+    "id": "d33c713ecff66ace",
+    "type": "exec",
+    "z": "524bde768d1b3eb9",
+    "command": "node /data/gateway.js",
+    "addpay": "",
+    "append": "",
+    "useSpawn": "false",
+    "timer": "2",
+    "winHide": false,
+    "oldrc": false,
+    "name": "Run Gateway.js",
+    "x": 760,
+    "y": 1140,
+    "wires": [
+      [
+        "c0e8b0b840e4bd2a"
+      ],
+      [
+        "c0e8b0b840e4bd2a"
+      ],
+      [
+        "c0e8b0b840e4bd2a"
+      ]
+    ],
+    "icon": "node-red/bridge.svg"
+  },
+  {
+    "id": "c0e8b0b840e4bd2a",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "debug 2",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 960,
+    "y": 1140,
+    "wires": []
+  },
+  {
+    "id": "e6635506bc177e0a",
+    "type": "inject",
+    "z": "524bde768d1b3eb9",
+    "name": "Timestamp",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "30",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "time",
+    "payload": "",
+    "payloadType": "date",
+    "x": 490,
+    "y": 1140,
+    "wires": [
+      [
+        "d33c713ecff66ace"
+      ]
+    ]
   }
 ]

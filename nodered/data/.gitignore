@@ -1,2 +1,4 @@
 node_modules/
+certificates/
 .DS_Store
+.env*
