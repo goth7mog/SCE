@@ -2,3 +2,7 @@
 # nodered/data/.config*
 nodered/data/.config.runtime.json
 nodered/data/.config.runtime.json.backup
+nodered/data/node_modules/
+nodered/data/.npm
+nodered/data/certificates
+nodered-backup/

@@ -427,6 +427,25 @@
             }
         }
     },
+    "node-red-contrib-azure-iot-device": {
+        "name": "node-red-contrib-azure-iot-device",
+        "version": "0.2.6",
+        "local": true,
+        "user": true,
+        "nodes": {
+            "AzureIoTDevice": {
+                "name": "AzureIoTDevice",
+                "types": [
+                    "azureiotdevice"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "node-red-contrib-azure-iot-device",
+                "file": "/data/node_modules/node-red-contrib-azure-iot-device/azureiotdevice/azureiotdevice.js"
+            }
+        }
+    },
     "node-red-contrib-azure-iot-hub": {
         "name": "node-red-contrib-azure-iot-hub",
         "version": "0.4.0",
@@ -446,25 +465,6 @@
                 "user": false,
                 "module": "node-red-contrib-azure-iot-hub",
                 "file": "/data/node_modules/node-red-contrib-azure-iot-hub/azureiothub.js"
-            }
-        }
-    },
-    "node-red-contrib-azure-iot-device": {
-        "name": "node-red-contrib-azure-iot-device",
-        "version": "0.2.6",
-        "local": true,
-        "user": true,
-        "nodes": {
-            "AzureIoTDevice": {
-                "name": "AzureIoTDevice",
-                "types": [
-                    "azureiotdevice"
-                ],
-                "enabled": true,
-                "local": true,
-                "user": false,
-                "module": "node-red-contrib-azure-iot-device",
-                "file": "/data/node_modules/node-red-contrib-azure-iot-device/azureiotdevice/azureiotdevice.js"
             }
         }
     }
