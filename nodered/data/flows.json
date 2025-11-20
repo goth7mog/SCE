@@ -156,7 +156,7 @@
     "type": "debug",
     "z": "524bde768d1b3eb9",
     "name": "Debug Pi 3",
-    "active": false,
+    "active": true,
     "tosidebar": true,
     "x": 557,
     "y": 679,
