@@ -1,0 +1,4 @@
+# Ignore all .config files in Node-RED data folder
+# nodered/data/.config*
+nodered/data/.config.runtime.json
+nodered/data/.config.runtime.json.backup

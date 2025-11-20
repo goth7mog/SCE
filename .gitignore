@@ -1,20 +1,8 @@
-# Ignore all .config files in Node-RED data folder
-# nodered/data/.config*
-nodered/data/.config.runtime.json
-nodered/data/.config.runtime.json.backup
-brief.pdf
-brief.txt
+etc/
 .DS_Store
-tf-commands.txt
-useful-docker-commands.txt
-az-cli-commands.txt
-mqtt-sample.txt
-Plan.md
 .terraform/
-certificates/
 terraform.tfstate
 terraform.tfstate.backup
 *.tfstate
 *.tfstate.backup
-lambda-example.py
 .env

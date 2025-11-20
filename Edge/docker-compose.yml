@@ -13,6 +13,7 @@ services:
       - ./nodered/data:/data
     networks:
       - sce-net-edge
+    command: sh -c "cd /data && npm install && npm start"
   redis:
     container_name: redis-edge
     image: redis/redis-stack:latest

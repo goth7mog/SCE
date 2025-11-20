@@ -2,8 +2,8 @@
 import json
 
 WATCH_FILES = [
-    "nodered/data/flows.json",
-    "nodered/data/.flows.json.backup"
+    "Edge/nodered/data/flows.json",
+    "Edge/nodered/data/.flows.json.backup"
 ]
 SENSITIVE_KEYS = {"key", "cert", "saskey"}
 
