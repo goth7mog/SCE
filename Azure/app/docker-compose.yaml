@@ -1,20 +1,31 @@
 version: '3.8'
 services:
   app:
+    container_name: app
     build: .
     ports:
       - "8080:8080"
     env_file:
-      - .env.development
+      - .env
     volumes:
       - .:/usr/src/app
     depends_on:
       - redis
+    networks:
+      - sce-net-cloud
   redis:
+    container_name: redis-cloud
     image: redis:7
     ports:
       - "6379:6379"
     volumes:
-      - redis-data:/data
+      - redis-data-cloud:/data
+    networks:
+      - sce-net-cloud
+
+networks:
+  sce-net-cloud:
+    driver: bridge
+
 volumes:
-  redis-data:
+  redis-data-cloud:

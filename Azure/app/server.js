@@ -1,11 +1,11 @@
 
 const dotenv = require('dotenv');
-dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+dotenv.config({ path: '.env' });
 
 const path = require('path');
 global.approute = path.resolve(__dirname);
 
-const port = process.env.WEB_PORT || 8080;
+const port = process.env.PORT || 8080;
 const express = require('express');
 const cors = require('cors');
 
@@ -40,7 +40,6 @@ app.get('/api/v1/info', (req, res) => {
         data: {
             NAME: process.env.npm_package_name,
             VERSION: process.env.npm_package_version,
-            NODE_ENV: process.env.NODE_ENV,
             REDIS_HOST: process.env.REDIS_HOST,
             REDIS_PORT: process.env.REDIS_PORT,
         },
@@ -50,7 +49,7 @@ app.get('/api/v1/info', (req, res) => {
 
 const startup = async () => {
     try {
-        await connectRedis();
+        // await connectRedis();
         app.emit('ready');
     } catch (err) {
         console.log(err);
@@ -61,11 +60,22 @@ app.on('ready', () => {
     app.listen(port, () => {
         console.log('server is running  on port ' + port);
         console.log('VERSION', process.env.npm_package_version);
-        console.log('NODE_ENV =', process.env.NODE_ENV);
-        console.log('PORT =', process.env.WEB_PORT);
         console.log('REDIS_HOST =', process.env.REDIS_HOST);
         console.log('REDIS_PORT =', process.env.REDIS_PORT);
     });
+
+    (() => {
+        const { triggerDirectMethod } = require('./automate.js');
+
+        setInterval(async () => {
+            try {
+                const result = await triggerDirectMethod('edge-gateway-2', 'getSensorData', { request: 'latest' });
+                console.log('Direct Method response from edge-gateway-2', result);
+            } catch (err) {
+                console.error('Direct Method error on edge-gateway-2', err);
+            }
+        }, 30000);
+    })();
 });
 
 startup();

@@ -1,6 +1,7 @@
 version: '3.7'
 services:
   nodered:
+    container_name: nodered
     # build: .
     # image: kuzurik/node-red-sce
     image: nodered/node-red
@@ -11,20 +12,21 @@ services:
     volumes:
       - ./nodered/data:/data
     networks:
-      - sce-net
+      - sce-net-edge
   redis:
+    container_name: redis-edge
     image: redis/redis-stack:latest
     ports:
       - "6379:6379"
     environment:
       - TZ=Europe/London
     networks:
-      - sce-net
+      - sce-net-edge
     volumes:
       - edge-redis-data:/data
 
 networks:
-  sce-net:
+  sce-net-edge:
     driver: bridge
 
 volumes:
