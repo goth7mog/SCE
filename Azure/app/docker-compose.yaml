@@ -15,9 +15,9 @@ services:
       - sce-net-cloud
   redis:
     container_name: redis-cloud
-    image: redis:7
+    image: redis/redis-stack:latest
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis-data-cloud:/data
     networks:

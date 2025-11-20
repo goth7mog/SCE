@@ -26,12 +26,12 @@ app.use(express.json());
 app.use(cors());
 
 
-const gatewayRouter = require(global.approute + '/routers/gatewayRouter.js');
-const timeseries = require('./routers/timeseries.js');
+// const gatewayRouter = require(global.approute + '/routers/gatewayRouter.js');
+// const timeseries = require('./routers/timeseries.js');
 
 
-app.use('/api/v1/connect-to-gateway', gatewayRouter);
-app.use('/api/v1/timeseries', timeseries);
+// app.use('/api/v1/connect-to-gateway', gatewayRouter);
+// app.use('/api/v1/timeseries', timeseries);
 
 app.get('/api/v1/info', (req, res) => {
     res.json({
