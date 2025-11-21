@@ -8,6 +8,8 @@ dotenv.config({ path: '.env' });
 // Connection string for edge-gateway-2
 const connectionString = process.env.EDGE_GATEWAY_2_CONNECTION_STRING;
 
+console.log(connectionString);
+
 const client = Client.fromConnectionString(connectionString, Mqtt);
 
 

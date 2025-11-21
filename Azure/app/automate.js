@@ -11,7 +11,7 @@ async function triggerDirectMethod(deviceId, methodName, payload = {}) {
         const methodParams = {
             methodName,
             payload,
-            responseTimeoutInSeconds: 10
+            responseTimeoutInSeconds: 30
         };
         serviceClient.invokeDeviceMethod(deviceId, methodParams, (err, result) => {
             if (err) {

@@ -1,6 +1,6 @@
 [
   {
-    "id": "5ddffe0310063468",
+    "id": "524bde768d1b3eb9",
     "type": "tab",
     "label": "Flow 1",
     "disabled": false,
@@ -8,9 +8,400 @@
     "env": []
   },
   {
-    "id": "6daff48f0c516c81",
+    "id": "raspi1-inject",
     "type": "inject",
-    "z": "5ddffe0310063468",
+    "z": "524bde768d1b3eb9",
+    "name": "Raspberry Pi 1",
+    "props": [],
+    "repeat": "30",
+    "once": true,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 220,
+    "wires": [
+      [
+        "raspi1-func"
+      ]
+    ]
+  },
+  {
+    "id": "raspi1-func",
+    "type": "function",
+    "z": "524bde768d1b3eb9",
+    "name": "Payload Pi 1",
+    "func": "msg = {\n  topic: \"telemetry\",\n  payload: {\n    device_id: \"raspi-1\",\n    temperature: Math.random() * 10 + 20,\n    humidity: Math.random() * 20 + 40\n  },\n  properties: [\n    { \"key\": \"exampleKey\", \"value\": \"exampleValue\" } // Optional, include if needed\n  ]\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 220,
+    "wires": [
+      [
+        "raspi1-debug",
+        "926c5b13ef3ddb46"
+      ]
+    ]
+  },
+  {
+    "id": "raspi1-debug",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "Debug Pi 1",
+    "active": false,
+    "tosidebar": true,
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 560,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "raspi2-inject",
+    "type": "inject",
+    "z": "524bde768d1b3eb9",
+    "name": "Raspberry Pi 2",
+    "props": [],
+    "repeat": "30",
+    "once": true,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 146,
+    "y": 431,
+    "wires": [
+      [
+        "raspi2-func"
+      ]
+    ]
+  },
+  {
+    "id": "raspi2-func",
+    "type": "function",
+    "z": "524bde768d1b3eb9",
+    "name": "Payload Pi 2",
+    "func": "msg = {\n  topic: \"telemetry\",\n  payload: {\n    device_id: \"raspi-2\",\n    temperature: Math.random() * 10 + 20,\n    humidity: Math.random() * 20 + 40\n  },\n  properties: [\n    { \"key\": \"exampleKey\", \"value\": \"exampleValue\" } // Optional, include if needed\n  ]\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 356,
+    "y": 431,
+    "wires": [
+      [
+        "raspi2-debug",
+        "f96089bf547ff022"
+      ]
+    ]
+  },
+  {
+    "id": "raspi2-debug",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "Debug Pi 2",
+    "active": false,
+    "tosidebar": true,
+    "x": 556,
+    "y": 431,
+    "wires": []
+  },
+  {
+    "id": "raspi3-inject",
+    "type": "inject",
+    "z": "524bde768d1b3eb9",
+    "name": "Raspberry Pi 3",
+    "props": [],
+    "repeat": "30",
+    "once": true,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 157,
+    "y": 679,
+    "wires": [
+      [
+        "raspi3-func"
+      ]
+    ]
+  },
+  {
+    "id": "raspi3-func",
+    "type": "function",
+    "z": "524bde768d1b3eb9",
+    "name": "Payload Pi 3",
+    "func": "msg = {\n  topic: \"telemetry\",\n  payload: {\n    device_id: \"raspi-3\",\n    temperature: Math.random() * 10 + 20,\n    humidity: Math.random() * 20 + 40\n  },\n  properties: [\n    { \"key\": \"exampleKey\", \"value\": \"exampleValue\" } // Optional, include if needed\n  ]\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 357,
+    "y": 679,
+    "wires": [
+      [
+        "raspi3-debug",
+        "840347e3cc6e7199"
+      ]
+    ]
+  },
+  {
+    "id": "raspi3-debug",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "Debug Pi 3",
+    "active": false,
+    "tosidebar": true,
+    "x": 557,
+    "y": 679,
+    "wires": []
+  },
+  {
+    "id": "926c5b13ef3ddb46",
+    "type": "azureiotdevice",
+    "z": "524bde768d1b3eb9",
+    "d": true,
+    "deviceid": "raspi-1",
+    "pnpModelid": "",
+    "connectiontype": "constr",
+    "authenticationmethod": "x509",
+    "iothub": "sce-iothub-01.azure-devices.net",
+    "isIotcentral": false,
+    "scopeid": "",
+    "enrollmenttype": "group",
+    "certname": "raspi-1.cert.pem",
+    "keyname": "raspi-1.key.pem",
+    "passphrase": "",
+    "protocol": "mqtt",
+    "retryInterval": 10,
+    "methods": [],
+    "DPSpayload": "",
+    "gatewayHostname": "",
+    "caname": "",
+    "ca": "",
+    "x": 600,
+    "y": 100,
+    "wires": [
+      [
+        "c2ef7c926276a855"
+      ]
+    ]
+  },
+  {
+    "id": "c2ef7c926276a855",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "debug Azure Pi 1",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 810,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "f96089bf547ff022",
+    "type": "azureiotdevice",
+    "z": "524bde768d1b3eb9",
+    "d": true,
+    "deviceid": "raspi-2",
+    "pnpModelid": "",
+    "connectiontype": "constr",
+    "authenticationmethod": "x509",
+    "iothub": "sce-iothub-01.azure-devices.net",
+    "isIotcentral": false,
+    "scopeid": "",
+    "enrollmenttype": "group",
+    "certname": "raspi-2.cert.pem",
+    "keyname": "raspi-2.key.pem",
+    "passphrase": "",
+    "protocol": "mqtt",
+    "retryInterval": 10,
+    "methods": [],
+    "DPSpayload": "",
+    "gatewayHostname": "",
+    "caname": "",
+    "ca": "",
+    "x": 600,
+    "y": 331,
+    "wires": [
+      [
+        "28d81c96b2fb33b6"
+      ]
+    ]
+  },
+  {
+    "id": "28d81c96b2fb33b6",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "debug Azure Pi 2",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 810,
+    "y": 331,
+    "wires": []
+  },
+  {
+    "id": "840347e3cc6e7199",
+    "type": "azureiotdevice",
+    "z": "524bde768d1b3eb9",
+    "d": true,
+    "deviceid": "raspi-3",
+    "pnpModelid": "",
+    "connectiontype": "constr",
+    "authenticationmethod": "x509",
+    "iothub": "sce-iothub-01.azure-devices.net",
+    "isIotcentral": false,
+    "scopeid": "",
+    "enrollmenttype": "group",
+    "certname": "raspi-3.cert.pem",
+    "keyname": "raspi-3.key.pem",
+    "passphrase": "",
+    "protocol": "mqtt",
+    "retryInterval": 10,
+    "methods": [],
+    "DPSpayload": "",
+    "gatewayHostname": "",
+    "caname": "",
+    "ca": "",
+    "x": 600,
+    "y": 560,
+    "wires": [
+      [
+        "750a7648d9bdaf09"
+      ]
+    ]
+  },
+  {
+    "id": "750a7648d9bdaf09",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "debug Azure Pi 3",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 810,
+    "y": 560,
+    "wires": []
+  },
+  {
+    "id": "c5a773bfc92d5671",
+    "type": "azureiotdevice",
+    "z": "524bde768d1b3eb9",
+    "d": true,
+    "deviceid": "edge-gateway-1",
+    "pnpModelid": "",
+    "connectiontype": "constr",
+    "authenticationmethod": "x509",
+    "iothub": "sce-iothub-01.azure-devices.net",
+    "isIotcentral": false,
+    "scopeid": "",
+    "enrollmenttype": "group",
+    "certname": "edge-gateway-1.cert.pem",
+    "keyname": "edge-gateway-1.key.pem",
+    "passphrase": "",
+    "protocol": "mqtt",
+    "retryInterval": 10,
+    "methods": [],
+    "DPSpayload": "",
+    "gatewayHostname": "",
+    "caname": "",
+    "ca": "",
+    "x": 730,
+    "y": 920,
+    "wires": [
+      [
+        "1d1226decca79ea6"
+      ]
+    ]
+  },
+  {
+    "id": "1d1226decca79ea6",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "debug 1",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 960,
+    "y": 920,
+    "wires": []
+  },
+  {
+    "id": "d33c713ecff66ace",
+    "type": "exec",
+    "z": "524bde768d1b3eb9",
+    "command": "node /data/GATEWAY.js",
+    "addpay": "",
+    "append": "",
+    "useSpawn": "false",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "gateway.js",
+    "x": 750,
+    "y": 1140,
+    "wires": [
+      [
+        "c0e8b0b840e4bd2a"
+      ],
+      [
+        "c0e8b0b840e4bd2a"
+      ],
+      [
+        "c0e8b0b840e4bd2a"
+      ]
+    ],
+    "icon": "node-red/bridge.svg"
+  },
+  {
+    "id": "c0e8b0b840e4bd2a",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "debug 2",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 960,
+    "y": 1140,
+    "wires": []
+  },
+  {
+    "id": "2117cce77ae2f664",
+    "type": "inject",
+    "z": "524bde768d1b3eb9",
     "name": "",
     "props": [
       {
@@ -21,17 +412,19 @@
         "vt": "str"
       }
     ],
-    "repeat": "",
+    "repeat": "25",
     "crontab": "",
     "once": false,
     "onceDelay": 0.1,
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 260,
-    "y": 200,
+    "x": 450,
+    "y": 1140,
     "wires": [
-      []
+      [
+        "d33c713ecff66ace"
+      ]
     ]
   }
 ]
