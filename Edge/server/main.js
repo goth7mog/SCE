@@ -1,32 +1,23 @@
-const { Client } = require('azure-iot-device');
-const { Mqtt } = require('azure-iot-device-mqtt');
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
 
-// Connection string for edge-gateway-2
-const connectionString = process.env.EDGE_GATEWAY_2_CONNECTION_STRING;
-// console.log('IoT Hub connection string:', connectionString);
 
-const client = Client.fromConnectionString(connectionString, Mqtt);
+// Create Global Directory to use throughout the app
+const path = require('path');
+global.approute = path.resolve(__dirname);
 
-// Register Direct Method handler
-client.onDeviceMethod('getSensorData', (request, response) => {
-    console.log(`Direct Method called: ${request.methodName}`);
-    // Example payload
-    const sensorData = {
-        temperature: 22.5,
-        humidity: 60,
-        timestamp: new Date().toISOString()
-    };
-    response.send(200, sensorData, (err) => {
-        if (err) {
-            console.error('Error sending response:', err.message);
-        } else {
-            console.log('Response sent successfully:', sensorData);
-        }
-    });
-});
+
+const connectAzure = async () => {
+    try {
+        global.azureClient = require(global.approute + '/connect-azure/authenticate.js');
+
+        console.log('Azure connection is running');
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
 
 // Express server setup
 const app = express();
@@ -44,11 +35,42 @@ app.get('/sensor', (req, res) => {
     });
 });
 
+
+const startup = async () => {
+    try {
+        await connectAzure();
+        app.emit('ready');
+
+    } catch (err) {
+        console.log(`Startup error: ${err}`);
+    }
+}
+
 const PORT = process.env.EXPRESS_PORT || 8081;
 
+app.on('ready', () => {
+    app.listen(PORT, () => {
+        console.log(`Express server running on port ${PORT}`);
+    });
 
-app.listen(PORT, () => {
-    console.log(`Express server running on port ${PORT}`);
+    global.azureClient.onDeviceMethod('getSensorData', (request, response) => {
+        console.log(`Direct Method called: ${request.methodName}`);
+        // Example payload
+        const sensorData = {
+            temperature: 22.5,
+            humidity: 60,
+            timestamp: new Date().toISOString()
+        };
+        response.send(200, sensorData, (err) => {
+            if (err) {
+                console.error('Error sending response:', err.message);
+            } else {
+                console.log('Response sent successfully:', sensorData);
+            }
+        });
+    });
 });
 
-console.log('Listening for Direct Methods and HTTP requests...');
+
+//----------------------------RUN APP------------------------------//
+startup();

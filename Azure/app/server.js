@@ -69,10 +69,10 @@ app.on('ready', () => {
 
         setInterval(async () => {
             try {
-                const result = await triggerDirectMethod('edge-gateway-2', 'getSensorData', { request: 'latest' });
-                console.log('Direct Method response from edge-gateway-2', result);
+                const result = await triggerDirectMethod('edge-gateway-3', 'getSensorData', { request: 'latest' });
+                console.log('Direct Method response from edge-gateway-3', result);
             } catch (err) {
-                console.error('Direct Method error on edge-gateway-2', err);
+                console.error('Direct Method error on edge-gateway-3', err);
             }
         }, 30000);
     })();
