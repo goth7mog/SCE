@@ -15,8 +15,9 @@ services:
       - redis
   edge-server:
     container_name: edge-server
-    build: ./server
-    target: debug #or prod
+    build:
+      context: ./server
+      target: debug
     ports:
       - "8081:8080"
     environment:
