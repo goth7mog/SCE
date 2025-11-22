@@ -6,3 +6,4 @@ terraform.tfstate.backup
 *.tfstate
 *.tfstate.backup
 .env
+docker-compose-mqtt.yml
