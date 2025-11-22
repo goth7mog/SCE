@@ -19,13 +19,15 @@ services:
       context: ./server
       target: debug
     ports:
-      - "8081:8080"
+      - "8081:8081"
     environment:
       - TZ=Europe/London
     networks:
       - sce-net-edge
     env_file:
       - ./server/.env
+    volumes:
+      - ./server:/usr/src/app
     depends_on:
       - nodered
       - redis

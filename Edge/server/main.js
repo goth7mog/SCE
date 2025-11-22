@@ -6,7 +6,7 @@ dotenv.config({ path: '.env' });
 
 // Connection string for edge-gateway-2
 const connectionString = process.env.EDGE_GATEWAY_2_CONNECTION_STRING;
-console.log('IoT Hub connection string:', connectionString);
+// console.log('IoT Hub connection string:', connectionString);
 
 const client = Client.fromConnectionString(connectionString, Mqtt);
 
@@ -37,7 +37,6 @@ app.get('/status', (req, res) => {
 });
 
 app.get('/sensor', (req, res) => {
-    // Simulate sensor data
     res.json({
         temperature: 22.5,
         humidity: 60,
@@ -47,7 +46,6 @@ app.get('/sensor', (req, res) => {
 
 const PORT = process.env.EXPRESS_PORT || 8081;
 
-// console.log(PORT);
 
 app.listen(PORT, () => {
     console.log(`Express server running on port ${PORT}`);
