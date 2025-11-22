@@ -358,15 +358,16 @@
     "id": "d33c713ecff66ace",
     "type": "exec",
     "z": "524bde768d1b3eb9",
+    "d": true,
     "command": "export $(cat /data/.env | xargs) && node /data/GATEWAY.js",
     "addpay": "",
     "append": "",
-    "useSpawn": "false",
-    "timer": "",
+    "useSpawn": "true",
+    "timer": "0",
     "winHide": false,
     "oldrc": false,
-    "name": "gateway.js",
-    "x": 750,
+    "name": "gateway",
+    "x": 740,
     "y": 1140,
     "wires": [
       [
@@ -386,7 +387,7 @@
     "type": "debug",
     "z": "524bde768d1b3eb9",
     "name": "debug 2",
-    "active": true,
+    "active": false,
     "tosidebar": true,
     "console": false,
     "tostatus": false,
@@ -397,34 +398,5 @@
     "x": 960,
     "y": 1140,
     "wires": []
-  },
-  {
-    "id": "2117cce77ae2f664",
-    "type": "inject",
-    "z": "524bde768d1b3eb9",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "25",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 450,
-    "y": 1140,
-    "wires": [
-      [
-        "d33c713ecff66ace"
-      ]
-    ]
   }
 ]

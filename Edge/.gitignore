@@ -6,3 +6,6 @@ nodered/data/node_modules/
 nodered/data/.npm
 nodered/data/certificates
 nodered-backup/
+
+server/node_modules/
+server/.env*

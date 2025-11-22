@@ -2,8 +2,6 @@ version: '3.7'
 services:
   nodered:
     container_name: nodered
-    # build: .
-    # image: kuzurik/node-red-sce
     image: nodered/node-red
     ports:
       - "1880:1880"
@@ -13,7 +11,22 @@ services:
       - ./nodered/data:/data
     networks:
       - sce-net-edge
-    # command: sh -c "cd /data && npm install && npm start"
+    depends_on:
+      - redis
+  edge-server:
+    container_name: edge-server
+    build: ./server
+    ports:
+      - "8081:8080"
+    environment:
+      - TZ=Europe/London
+    networks:
+      - sce-net-edge
+    env_file:
+      - ./server/.env
+    depends_on:
+      - nodered
+      - redis
   redis:
     container_name: redis-edge
     image: redis/redis-stack:latest
