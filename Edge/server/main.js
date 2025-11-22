@@ -27,7 +27,7 @@ app.get('/status', (req, res) => {
     res.json({ status: 'online', timestamp: new Date().toISOString() });
 });
 
-app.get('/sensor', (req, res) => {
+app.get('/api/v1/load', (req, res) => {
     res.json({
         temperature: 22.5,
         humidity: 60,
@@ -35,6 +35,21 @@ app.get('/sensor', (req, res) => {
     });
 });
 
+app.get('/api/v1/usage', (req, res) => {
+    res.json({
+        temperature: 22.5,
+        humidity: 60,
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/api/v1/relay', (req, res) => {
+    res.json({
+        temperature: 22.5,
+        humidity: 60,
+        timestamp: new Date().toISOString()
+    });
+});
 
 const startup = async () => {
     try {

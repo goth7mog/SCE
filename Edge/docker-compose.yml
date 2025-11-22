@@ -1,4 +1,4 @@
-version: '3.7'
+# version: '3.7'
 services:
   nodered:
     container_name: nodered
@@ -13,8 +13,23 @@ services:
       - sce-net-edge
     depends_on:
       - redis
+  mosquitto: # Topics (`node/${global.nodeId}/data/`, payload) and (`node/${circuit.nodeId}/${circuit.circuitId}/relay`, 1)
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    networks:
+      - sce-net-edge
+    environment:
+      - TZ=Europe/London
+    # restart: unless-stopped
   edge-server:
-    container_name: edge-server
+    container_name: server
     build:
       context: ./server
       target: debug
@@ -32,8 +47,9 @@ services:
     depends_on:
       - nodered
       - redis
+      - mosquitto
   redis:
-    container_name: redis-edge
+    container_name: redis
     image: redis/redis-stack:latest
     ports:
       - "6379:6379"
@@ -42,11 +58,12 @@ services:
     networks:
       - sce-net-edge
     volumes:
-      - edge-redis-data:/data
+      - redis-data:/data
+      
 
 networks:
   sce-net-edge:
     driver: bridge
 
 volumes:
-  edge-redis-data:
+  redis-data:

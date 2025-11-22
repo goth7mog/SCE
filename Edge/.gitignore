@@ -10,3 +10,6 @@ nodered-backup/
 server/node_modules/
 server/.env*
 server/certificates/
+
+mosquitto/data/
+mosquitto/log/

@@ -8,16 +8,109 @@
     "env": []
   },
   {
+    "id": "244ef6ab4bfd754c",
+    "type": "mqtt-broker",
+    "name": "Mosquitto docker",
+    "broker": "mosquitto",
+    "port": 1883,
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": 4,
+    "keepalive": 60,
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
+    "id": "28ec7555a5538021",
+    "type": "mqtt-broker",
+    "name": "",
+    "broker": "172.18.0.2",
+    "port": 1883,
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": 4,
+    "keepalive": 60,
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
+    "id": "5bae78e16b4e380b",
+    "type": "mqtt-broker",
+    "name": "",
+    "broker": "mosquitto",
+    "port": 1883,
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": 4,
+    "keepalive": 60,
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
     "id": "raspi1-inject",
     "type": "inject",
     "z": "524bde768d1b3eb9",
-    "name": "Raspberry Pi 1",
+    "name": "Raspberry Pi ",
     "props": [],
     "repeat": "30",
+    "crontab": "",
     "once": true,
+    "onceDelay": "",
     "topic": "",
-    "payload": "",
-    "payloadType": "date",
     "x": 160,
     "y": 220,
     "wires": [
@@ -30,7 +123,7 @@
     "id": "raspi1-func",
     "type": "function",
     "z": "524bde768d1b3eb9",
-    "name": "Payload Pi 1",
+    "name": "Payload Pi",
     "func": "msg = {\n  topic: \"telemetry\",\n  payload: {\n    device_id: \"raspi-1\",\n    temperature: Math.random() * 10 + 20,\n    humidity: Math.random() * 20 + 40\n  },\n  properties: [\n    { \"key\": \"exampleKey\", \"value\": \"exampleValue\" } // Optional, include if needed\n  ]\n};\nreturn msg;",
     "outputs": 1,
     "timeout": "",
@@ -64,13 +157,13 @@
     "id": "raspi2-inject",
     "type": "inject",
     "z": "524bde768d1b3eb9",
-    "name": "Raspberry Pi 2",
+    "name": "Raspberry Pi",
     "props": [],
     "repeat": "30",
+    "crontab": "",
     "once": true,
+    "onceDelay": "",
     "topic": "",
-    "payload": "",
-    "payloadType": "date",
     "x": 146,
     "y": 431,
     "wires": [
@@ -83,7 +176,7 @@
     "id": "raspi2-func",
     "type": "function",
     "z": "524bde768d1b3eb9",
-    "name": "Payload Pi 2",
+    "name": "Payload Pi",
     "func": "msg = {\n  topic: \"telemetry\",\n  payload: {\n    device_id: \"raspi-2\",\n    temperature: Math.random() * 10 + 20,\n    humidity: Math.random() * 20 + 40\n  },\n  properties: [\n    { \"key\": \"exampleKey\", \"value\": \"exampleValue\" } // Optional, include if needed\n  ]\n};\nreturn msg;",
     "outputs": 1,
     "timeout": "",
@@ -115,13 +208,13 @@
     "id": "raspi3-inject",
     "type": "inject",
     "z": "524bde768d1b3eb9",
-    "name": "Raspberry Pi 3",
+    "name": "Raspberry Pi",
     "props": [],
     "repeat": "30",
+    "crontab": "",
     "once": true,
+    "onceDelay": "",
     "topic": "",
-    "payload": "",
-    "payloadType": "date",
     "x": 157,
     "y": 679,
     "wires": [
@@ -134,7 +227,7 @@
     "id": "raspi3-func",
     "type": "function",
     "z": "524bde768d1b3eb9",
-    "name": "Payload Pi 3",
+    "name": "Payload Pi",
     "func": "msg = {\n  topic: \"telemetry\",\n  payload: {\n    device_id: \"raspi-3\",\n    temperature: Math.random() * 10 + 20,\n    humidity: Math.random() * 20 + 40\n  },\n  properties: [\n    { \"key\": \"exampleKey\", \"value\": \"exampleValue\" } // Optional, include if needed\n  ]\n};\nreturn msg;",
     "outputs": 1,
     "timeout": "",
@@ -367,8 +460,8 @@
     "winHide": false,
     "oldrc": false,
     "name": "gateway",
-    "x": 740,
-    "y": 1140,
+    "x": 727.1428375244141,
+    "y": 1024.2857303619385,
     "wires": [
       [
         "c0e8b0b840e4bd2a"
@@ -395,8 +488,292 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 960,
-    "y": 1140,
+    "x": 947.1428375244141,
+    "y": 1024.2857303619385,
     "wires": []
+  },
+  {
+    "id": "7637d9a6774d7da9",
+    "type": "mqtt out",
+    "z": "524bde768d1b3eb9",
+    "name": "Publish sensor-data",
+    "topic": "/node/Pi-livingroom-5f2d7a/data",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "5bae78e16b4e380b",
+    "x": 600,
+    "y": 1360,
+    "wires": []
+  },
+  {
+    "id": "094b1956188c140f",
+    "type": "function",
+    "z": "524bde768d1b3eb9",
+    "name": "Pi 1 payload",
+    "func": "msg.topic = `node/${msg.nodeId}/data`;\nmsg.payload = {\n    circuitA: {\n        temperature: Math.random() * 10 + 20,\n        humidity: Math.random() * 20 + 40,\n    },\n    circuitB: {\n        temperature: Math.random() * 10 + 20,\n        humidity: Math.random() * 20 + 40,\n    },\n    circuitC: {\n        temperature: Math.random() * 10 + 20,\n        humidity: Math.random() * 20 + 40,\n    },\n    timestamp: Date.now()\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 1360,
+    "wires": [
+      [
+        "7637d9a6774d7da9"
+      ]
+    ]
+  },
+  {
+    "id": "de52615e739fba8e",
+    "type": "inject",
+    "z": "524bde768d1b3eb9",
+    "name": "Raspberry Pi 1",
+    "props": [
+      {
+        "p": "nodeId",
+        "v": "Pi-livingroom-5f2d7a",
+        "vt": "str"
+      },
+      {
+        "p": "curcuitId",
+        "v": "curcuitA",
+        "vt": "str"
+      },
+      {
+        "p": "curcuitId",
+        "v": "curcuitB",
+        "vt": "str"
+      },
+      {
+        "p": "curcuitId",
+        "v": "curcuitC",
+        "vt": "str"
+      }
+    ],
+    "repeat": "30",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 160,
+    "y": 1360,
+    "wires": [
+      [
+        "094b1956188c140f"
+      ]
+    ]
+  },
+  {
+    "id": "def2b07f08ff1021",
+    "type": "mqtt in",
+    "z": "524bde768d1b3eb9",
+    "name": "subscribe",
+    "topic": "/node/Pi-livingroom-5f2d7a/data",
+    "qos": "2",
+    "datatype": "auto-detect",
+    "broker": "244ef6ab4bfd754c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 900,
+    "y": 1360,
+    "wires": [
+      [
+        "9914aec49361a956"
+      ]
+    ]
+  },
+  {
+    "id": "9914aec49361a956",
+    "type": "debug",
+    "z": "524bde768d1b3eb9",
+    "name": "debug MQTT",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1030,
+    "y": 1460,
+    "wires": []
+  },
+  {
+    "id": "e018248b4fca131c",
+    "type": "function",
+    "z": "524bde768d1b3eb9",
+    "name": "Pi 2 payload",
+    "func": "msg.topic = `node/${msg.nodeId}/data`;\nmsg.payload = {\n    circuitA: {\n        temperature: Math.random() * 10 + 20,\n        humidity: Math.random() * 20 + 40,\n    },\n    circuitB: {\n        temperature: Math.random() * 10 + 20,\n        humidity: Math.random() * 20 + 40,\n    },\n    timestamp: Date.now()\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 1440,
+    "wires": [
+      [
+        "39bf9677e5073aa0"
+      ]
+    ]
+  },
+  {
+    "id": "924510c84189d222",
+    "type": "inject",
+    "z": "524bde768d1b3eb9",
+    "name": "Raspberry Pi 2",
+    "props": [
+      {
+        "p": "nodeId",
+        "v": "Pi-hall-7b1f4d",
+        "vt": "str"
+      }
+    ],
+    "repeat": "15",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 160,
+    "y": 1440,
+    "wires": [
+      [
+        "e018248b4fca131c"
+      ]
+    ]
+  },
+  {
+    "id": "eb8d3adddbd9d24e",
+    "type": "inject",
+    "z": "524bde768d1b3eb9",
+    "name": "Raspberry Pi 3",
+    "props": [
+      {
+        "p": "nodeId",
+        "v": "Pi-checkin-a3c9e2",
+        "vt": "str"
+      }
+    ],
+    "repeat": "15",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 160,
+    "y": 1520,
+    "wires": [
+      [
+        "05fd413f9ad07068"
+      ]
+    ]
+  },
+  {
+    "id": "05fd413f9ad07068",
+    "type": "function",
+    "z": "524bde768d1b3eb9",
+    "name": "Pi 3 payload",
+    "func": "msg.topic = `node/${msg.nodeId}/data`;\nmsg.payload = {\n    circuitA: {\n        temperature: Math.random() * 10 + 20,\n        humidity: Math.random() * 20 + 40,\n    },\n    circuitB: {\n        temperature: Math.random() * 10 + 20,\n        humidity: Math.random() * 20 + 40,\n    },\n    circuitC: {\n        temperature: Math.random() * 10 + 20,\n        humidity: Math.random() * 20 + 40,\n    },\n    timestamp: Date.now()\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 1520,
+    "wires": [
+      [
+        "24e462c7049af206"
+      ]
+    ]
+  },
+  {
+    "id": "39bf9677e5073aa0",
+    "type": "mqtt out",
+    "z": "524bde768d1b3eb9",
+    "name": "Publish sensor-data",
+    "topic": "/node/Pi-hall-7b1f4d/data",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "5bae78e16b4e380b",
+    "x": 600,
+    "y": 1440,
+    "wires": []
+  },
+  {
+    "id": "24e462c7049af206",
+    "type": "mqtt out",
+    "z": "524bde768d1b3eb9",
+    "name": "Publish sensor-data",
+    "topic": "/node/Pi-checkin-a3c9e2/data",
+    "qos": "0",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "5bae78e16b4e380b",
+    "x": 600,
+    "y": 1520,
+    "wires": []
+  },
+  {
+    "id": "111fc5b95e246833",
+    "type": "mqtt in",
+    "z": "524bde768d1b3eb9",
+    "name": "subscribe",
+    "topic": "/node/Pi-hall-7b1f4d/data",
+    "qos": "2",
+    "datatype": "auto-detect",
+    "broker": "244ef6ab4bfd754c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 840,
+    "y": 1420,
+    "wires": [
+      [
+        "9914aec49361a956"
+      ]
+    ]
+  },
+  {
+    "id": "d856a04a12966d41",
+    "type": "mqtt in",
+    "z": "524bde768d1b3eb9",
+    "name": "subscribe",
+    "topic": "/node/Pi-checkin-a3c9e2/data",
+    "qos": "2",
+    "datatype": "auto-detect",
+    "broker": "244ef6ab4bfd754c",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 860,
+    "y": 1480,
+    "wires": [
+      [
+        "9914aec49361a956"
+      ]
+    ]
   }
 ]
