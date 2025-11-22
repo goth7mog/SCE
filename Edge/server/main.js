@@ -46,6 +46,9 @@ app.get('/sensor', (req, res) => {
 });
 
 const PORT = process.env.EXPRESS_PORT || 8081;
+
+// console.log(PORT);
+
 app.listen(PORT, () => {
     console.log(`Express server running on port ${PORT}`);
 });
