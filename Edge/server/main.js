@@ -81,7 +81,7 @@ const startup = async () => {
 
 const PORT = process.env.EXPRESS_PORT || 8081;
 
-app.on('ready', () => {
+app.on('ready', async () => {
     app.listen(PORT, () => {
         console.log(`Express server running on port ${PORT}`);
     });
@@ -105,7 +105,7 @@ app.on('ready', () => {
     });
 
     const automate = require('./automate');
-    automate.trigger();
+    await automate.trigger();
 });
 
 
