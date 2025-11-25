@@ -5,7 +5,6 @@ dotenv.config({ path: '.env' });
 
 // Create Global Directory to use throughout the app
 const path = require('path');
-const { create } = require('domain');
 global.approute = path.resolve(__dirname);
 
 
