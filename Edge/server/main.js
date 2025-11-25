@@ -84,6 +84,9 @@ app.on('ready', () => {
             }
         });
     });
+
+    const automate = require('./automate');
+    automate.trigger();
 });
 
 
