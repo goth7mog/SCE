@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
 
 
-module.exports = (() => {
+module.exports = () => {
     const iotHubHostname = process.env.IOTHUB_HOSTNAME || 'sce-iothub-01.azure-devices.net';
     const deviceId = process.env.DEVICE_ID || 'edge-gateway-3';
     const certPath = process.env.X509_CERT_PATH || './certificates/edge-gateway-3.cert.pem';
@@ -22,4 +22,4 @@ module.exports = (() => {
 
     return client;
 
-})();
+};

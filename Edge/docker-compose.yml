@@ -58,7 +58,8 @@ services:
     networks:
       - sce-net-edge
     volumes:
-      - redis-data:/data
+      # - redis-data:/data
+      - /data
       
 
 networks:

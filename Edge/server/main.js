@@ -5,14 +5,30 @@ dotenv.config({ path: '.env' });
 
 // Create Global Directory to use throughout the app
 const path = require('path');
+const { create } = require('domain');
 global.approute = path.resolve(__dirname);
 
 
 const connectAzure = async () => {
     try {
-        global.azureClient = require(global.approute + '/connect-azure/authenticate.js');
+        const createAzureClient = require(global.approute + '/connect-azure/authenticate.js');
+
+        global.azureClient = await createAzureClient();
 
         console.log('Azure connection is running');
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+const connectRedis = async () => {
+    try {
+        const createRedisClient = require(global.approute + '/connect-redis/redis-client.js');
+
+        global.redisClient = await createRedisClient();
+
+        console.log('Redis connection is running');
     } catch (err) {
         console.log(err);
         throw err;
@@ -54,6 +70,8 @@ app.get('/api/v1/relay', (req, res) => {
 const startup = async () => {
     try {
         await connectAzure();
+        await connectRedis();
+        console.log('Startup complete');
         app.emit('ready');
 
     } catch (err) {
@@ -67,6 +85,7 @@ app.on('ready', () => {
     app.listen(PORT, () => {
         console.log(`Express server running on port ${PORT}`);
     });
+
 
     global.azureClient.onDeviceMethod('getSensorData', (request, response) => {
         console.log(`Direct Method called: ${request.methodName}`);

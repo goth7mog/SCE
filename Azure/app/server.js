@@ -11,7 +11,7 @@ const cors = require('cors');
 
 const connectRedis = async () => {
     try {
-        const Client = require(global.approute + '/redis_client/client.js');
+        const Client = require(global.approute + '/connect-redis/client.js');
         global.client = await Client();
         console.log('Redis connection is running');
     } catch (err) {
