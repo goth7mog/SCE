@@ -1,0 +1,77 @@
+---
+- name: Initialize Redis TimeSeries keys
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    retention: 172800000 # Set retention period for time-series data for 2 days
+    redis_host: 127.0.0.1
+    redis_port: 6379
+  tasks:
+    - name: Create Pi-hall-1b2c3d4e5f6a7b8c circuitA temperature
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-hall-1b2c3d4e5f6a7b8c:circuitA:temperature RETENTION {{ retention }} LABELS device Pi-hall-1b2c3d4e5f6a7b8c circuit circuitA type temperature
+
+    - name: Create Pi-hall-1b2c3d4e5f6a7b8c circuitA humidity
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-hall-1b2c3d4e5f6a7b8c:circuitA:humidity RETENTION {{ retention }} LABELS device Pi-hall-1b2c3d4e5f6a7b8c circuit circuitA type humidity
+
+    - name: Create Pi-hall-1b2c3d4e5f6a7b8c circuitB temperature
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-hall-1b2c3d4e5f6a7b8c:circuitB:temperature RETENTION {{ retention }} LABELS device Pi-hall-1b2c3d4e5f6a7b8c circuit circuitB type temperature
+
+    - name: Create Pi-hall-1b2c3d4e5f6a7b8c circuitB humidity
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-hall-1b2c3d4e5f6a7b8c:circuitB:humidity RETENTION {{ retention }} LABELS device Pi-hall-1b2c3d4e5f6a7b8c circuit circuitB type humidity
+
+    - name: Create Pi-checkin-9e8f7d6c5b4a3e2d circuitA temperature
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:temperature RETENTION {{ retention }} LABELS device Pi-checkin-9e8f7d6c5b4a3e2d circuit circuitA type temperature
+
+    - name: Create Pi-checkin-9e8f7d6c5b4a3e2d circuitA humidity
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:humidity RETENTION {{ retention }} LABELS device Pi-checkin-9e8f7d6c5b4a3e2d circuit circuitA type humidity
+
+    - name: Create Pi-checkin-9e8f7d6c5b4a3e2d circuitB temperature
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:temperature RETENTION {{ retention }} LABELS device Pi-checkin-9e8f7d6c5b4a3e2d circuit circuitB type temperature
+
+    - name: Create Pi-checkin-9e8f7d6c5b4a3e2d circuitB humidity
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:humidity RETENTION {{ retention }} LABELS device Pi-checkin-9e8f7d6c5b4a3e2d circuit circuitB type humidity
+
+    - name: Create Pi-checkin-9e8f7d6c5b4a3e2d circuitC temperature
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:temperature RETENTION {{ retention }} LABELS device Pi-checkin-9e8f7d6c5b4a3e2d circuit circuitC type temperature
+
+    - name: Create Pi-checkin-9e8f7d6c5b4a3e2d circuitC humidity
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:humidity RETENTION {{ retention }} LABELS device Pi-checkin-9e8f7d6c5b4a3e2d circuit circuitC type humidity
+
+    - name: Create Pi-livingroom-f8e7d6c5b4a39281 circuitA temperature
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-livingroom-f8e7d6c5b4a39281:circuitA:temperature RETENTION {{ retention }} LABELS device Pi-livingroom-f8e7d6c5b4a39281 circuit circuitA type temperature
+
+    - name: Create Pi-livingroom-f8e7d6c5b4a39281 circuitA humidity
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-livingroom-f8e7d6c5b4a39281:circuitA:humidity RETENTION {{ retention }} LABELS device Pi-livingroom-f8e7d6c5b4a39281 circuit circuitA type humidity
+
+    - name: Create Pi-livingroom-f8e7d6c5b4a39281 circuitB temperature
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-livingroom-f8e7d6c5b4a39281:circuitB:temperature RETENTION {{ retention }} LABELS device Pi-livingroom-f8e7d6c5b4a39281 circuit circuitB type temperature
+
+    - name: Create Pi-livingroom-f8e7d6c5b4a39281 circuitB humidity
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-livingroom-f8e7d6c5b4a39281:circuitB:humidity RETENTION {{ retention }} LABELS device Pi-livingroom-f8e7d6c5b4a39281 circuit circuitB type humidity
+
+    - name: Create Pi-livingroom-f8e7d6c5b4a39281 circuitC temperature
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-livingroom-f8e7d6c5b4a39281:circuitC:temperature RETENTION {{ retention }} LABELS device Pi-livingroom-f8e7d6c5b4a39281 circuit circuitC type temperature
+
+    - name: Create Pi-livingroom-f8e7d6c5b4a39281 circuitC humidity
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-livingroom-f8e7d6c5b4a39281:circuitC:humidity RETENTION {{ retention }} LABELS device Pi-livingroom-f8e7d6c5b4a39281 circuit circuitC type humidity
+
+    - name: Print completion message
+      debug:
+        msg: "Redis time series keys initialized."

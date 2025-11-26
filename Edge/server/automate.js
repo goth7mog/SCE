@@ -61,7 +61,7 @@ async function trigger() {
             }
 
 
-            /*** Receiving status of Pis and storing itin Redis ***/
+            /*** Receiving status of Pis and storing it in Redis ***/
             if (/\/node\/.+?\/status$/.test(topic)) {
                 console.log(`Status received on ${topic}:`, message.toString());
                 const deviceIdMatch = topic.match(/\/node\/(.+?)\/status/);
