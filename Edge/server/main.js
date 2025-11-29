@@ -38,8 +38,14 @@ const connectRedis = async () => {
 const app = express();
 app.use(express.json());
 
+
 app.get('/status', (req, res) => {
     res.json({ status: 'online', timestamp: new Date().toISOString() });
+});
+
+// Heartbeat API for health checks
+app.get('/heartbeat', (req, res) => {
+    res.json({ heartbeat: 'alive', timestamp: new Date().toISOString() });
 });
 
 app.get('/api/v1/load', (req, res) => {
