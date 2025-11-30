@@ -45,7 +45,16 @@ app.get('/status', (req, res) => {
 
 // Heartbeat API for health checks
 app.get('/heartbeat', (req, res) => {
-    res.json({ heartbeat: 'alive', timestamp: new Date().toISOString() });
+    res.json({
+        heartbeat: 'alive',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        platform: process.platform,
+        nodeVersion: process.version,
+        memoryUsage: process.memoryUsage(),
+        redis: global.redisClient ? 'connected' : 'disconnected',
+        azure: global.azureClient ? 'connected' : 'disconnected'
+    });
 });
 
 app.get('/api/v1/load', (req, res) => {
