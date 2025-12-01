@@ -20,6 +20,22 @@ const connectRedis = async () => {
     }
 }
 
+// Assign Mongo connection
+const connectMongo = async () => {
+    try {
+        const connect = require(global.approute + '/connect-mongo/mongo.js');
+
+
+        global.mongoDB = await connect(process.env.MONGO_DATABASE);
+
+        console.log(`Connected: ${process.env.MONGO_DATABASE} database`);
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+
+}
+
 
 
 const app = new express();
@@ -51,6 +67,8 @@ app.get('/api/v1/info', (req, res) => {
 const startup = async () => {
     try {
         await connectRedis();
+        await connectMongo();
+
         app.emit('ready');
     } catch (err) {
         console.log(err);
@@ -60,9 +78,6 @@ const startup = async () => {
 app.on('ready', () => {
     app.listen(port, () => {
         console.log('server is running  on port ' + port);
-        console.log('VERSION', process.env.npm_package_version);
-        console.log('REDIS_HOST =', process.env.REDIS_HOST);
-        console.log('REDIS_PORT =', process.env.REDIS_PORT);
     });
 
     (() => {
