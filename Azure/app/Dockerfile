@@ -1,11 +1,31 @@
 # Use official Node.js LTS image
-FROM node:18-alpine
+FROM node:18-alpine as debug
 
 WORKDIR /usr/src/app
-
-COPY package.json .
+ENV HOST 0.0.0.0
+COPY package.json ./
 RUN npm install
-COPY . .
+RUN npm install -g nodemon
 
-EXPOSE 8080
-CMD ["npm", "start"]
+COPY . .
+RUN chown -R node /usr/src/app
+USER node
+
+ENTRYPOINT [ "nodemon", "server.js" ]
+
+
+
+FROM node:18-alpine as prod
+
+WORKDIR /usr/src/app
+ENV HOST 0.0.0.0
+COPY package.json ./
+RUN npm install
+
+COPY . .
+RUN chown -R node /usr/src/app
+USER node
+
+CMD [ "node", "server.js" ]
+
+
