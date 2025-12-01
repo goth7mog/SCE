@@ -6,9 +6,12 @@
         "start": "node server.js"
     },
     "dependencies": {
+        "@redis/time-series": "^5.10.0",
         "azure-iothub": "^1.16.6",
         "cors": "^2.8.5",
         "dotenv": "^16.0.3",
-        "express": "^4.18.2"
+        "express": "^4.18.2",
+        "mongodb": "^7.0.0",
+        "redis": "^5.10.0"
     }
 }

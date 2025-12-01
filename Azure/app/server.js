@@ -12,10 +12,11 @@ const cors = require('cors');
 const connectRedis = async () => {
     try {
         const Client = require(global.approute + '/connect-redis/client.js');
-        global.client = await Client();
+        global.redisClient = await Client();
         console.log('Redis connection is running');
     } catch (err) {
         console.log(err);
+        throw err;
     }
 }
 
@@ -49,7 +50,7 @@ app.get('/api/v1/info', (req, res) => {
 
 const startup = async () => {
     try {
-        // await connectRedis();
+        await connectRedis();
         app.emit('ready');
     } catch (err) {
         console.log(err);
@@ -74,7 +75,7 @@ app.on('ready', () => {
             } catch (err) {
                 console.error('Direct Method error on edge-gateway-3', err);
             }
-        }, 30000);
+        }, 300000);
     })();
 });
 
