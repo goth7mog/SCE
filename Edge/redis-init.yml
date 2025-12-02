@@ -8,6 +8,11 @@
     redis_host: 127.0.0.1
     redis_port: 6379
   tasks:
+    # Flush existing data before the start
+    - name: Flush Redis database
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} FLUSHALL
+        
     - name: Create Pi-hall-1b2c3d4e5f6a7b8c circuitA temperature
       command: >
         redis-cli -h {{ redis_host }} -p {{ redis_port }} TS.CREATE Pi-hall-1b2c3d4e5f6a7b8c:circuitA:temperature RETENTION {{ retention }} LABELS device Pi-hall-1b2c3d4e5f6a7b8c circuit circuitA type temperature

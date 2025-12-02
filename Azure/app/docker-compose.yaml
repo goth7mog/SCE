@@ -11,6 +11,8 @@ services:
       - .env
     volumes:
       - .:/usr/src/app
+    environment:
+      - TZ=Europe/London
     depends_on:
       - redis
     networks:
@@ -22,6 +24,8 @@ services:
       - "6380:6379"
     volumes:
       - redis-data-cloud:/data
+    environment:
+      - TZ=Europe/London
     networks:
       - sce-net-cloud
 

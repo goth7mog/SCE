@@ -8,7 +8,10 @@ global.approute = path.resolve(__dirname);
 const port = process.env.PORT || 8080;
 const express = require('express');
 const cors = require('cors');
-const { triggerDirectMethod } = require('./DirectMethodApi.js');
+const { setUpMQTT, getAverageTemperatureOnSite, getMaxHumidityPerCircuit } = require('./operations.js');
+
+
+const SENSOR_DATA_PULL_INTERVAL = 30000; // each 5 minutes
 
 const connectRedis = async () => {
     try {
@@ -44,13 +47,6 @@ app.use(express.json());
 app.use(cors());
 
 
-// const gatewayRouter = require(global.approute + '/routers/gatewayRouter.js');
-// const timeseries = require('./routers/timeseries.js');
-
-
-// app.use('/api/v1/connect-to-gateway', gatewayRouter);
-// app.use('/api/v1/timeseries', timeseries);
-
 app.get('/api/v1/info', (req, res) => {
     res.json({
         code: 1,
@@ -81,50 +77,21 @@ app.on('ready', () => {
         console.log('server is running  on port ' + port);
     });
 
-
-    // setUpMQTT direct method: retrieve site name and send payload with device names and circuits
-    const setUpMQTT = async () => {
-        try {
-            const sitesCollection = global.mongoDB.collection('sites');
-            const devicesCollection = global.mongoDB.collection('devices');
-
-            // Scan through 'sites' collection
-            const sites = await sitesCollection.find({}).toArray();
-            if (sites.length === 0) {
-                throw new Error('No sites found');
-            }
-
-            for (const site of sites) {
-                // Get devices for this site
-                const devices = await devicesCollection.find({ site_id: site._id }).toArray();
-                const payload = devices.map(device => ({
-                    name: device.name,
-                    circuits: device.circuits
-                }));
-                // Call the direct method with site name and payload
-                try {
-                    const result = await triggerDirectMethod(site.name, 'setUpMQTT', payload);
-                    // console.log(`setUpMQTT called for site ${site.name}:`, result);
-                    console.log(`setUpMQTT called for site ${site.name}.`, `Status: ${result.status}`);
-                } catch (err) {
-                    console.error(`setUpMQTT error for site ${site.name}:`, err);
-                }
-            }
-        } catch (err) {
-            console.error('Error in setUpMQTT:', err);
-        }
-    };
-
+    /** SETTING UP MQTT SUBSCRIPTIONS */
     setUpMQTT();
 
+
+    /** PULLING SENSOR DATA */
     setInterval(async () => {
+        // setTimeout(async () => {
+        const timePeriod = 20 * 60 * 1000; // Query data from the last 1 hour
+        const bucketSize = 5 * 60 * 1000; // Aggregate data in 5-minute buckets
         try {
-            const result = await triggerDirectMethod('edge-gateway-3', 'getSensorData', { request: 'latest' });
-            console.log('Direct Method response from edge-gateway-3', result);
+            await getAverageTemperatureOnSite(timePeriod, bucketSize);
         } catch (err) {
-            console.error('Direct Method error on edge-gateway-3', err);
+            console.error('Error pulling sensor data:', err);
         }
-    }, 300000);
+    }, SENSOR_DATA_PULL_INTERVAL);
 });
 
 startup();

@@ -2,3 +2,4 @@
 node_modules/
 nodejs-example-app/
 connect-mongo/create-collections.js
+payload_*.json

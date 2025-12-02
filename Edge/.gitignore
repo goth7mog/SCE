@@ -13,3 +13,5 @@ server/certificates/
 
 mosquitto/data/
 mosquitto/log/
+
+ts-commands.md

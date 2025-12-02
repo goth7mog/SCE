@@ -2,10 +2,11 @@ const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
 const { subscribeToClients } = require('./automate');
+// const { aggregateTimeSeries } = require('./timeseries');
 
 global.MQTT_SETUP_STATUS = null;
 
-const MQTT_SETUP_TIMEOUT = 300000; // 5 minutes
+const MQTT_SETUP_TIMEOUT = 3000000; //
 
 // Create Global Directory to use throughout the app
 const path = require('path');
@@ -104,6 +105,22 @@ app.on('ready', async () => {
         console.log(`Express server running on port ${PORT}`);
     });
 
+    // // Timeout for MQTT setup
+    // setTimeout(async () => {
+    //     try {
+    //         if (!(global.MQTT_SETUP_STATUS === 'COMPLETE' || global.MQTT_SETUP_STATUS === 'DEFAULT')) {
+    //             await subscribeToClients([]); // Defaults to subscribing to all topics
+    //             global.MQTT_SETUP_STATUS = 'DEFAULT';
+    //         }
+    //     } catch (err) {
+    //         global.MQTT_SETUP_STATUS = 'ERROR';
+    //         console.error('MQTT setup timeout error:', err);
+    //     }
+    // }, MQTT_SETUP_TIMEOUT);
+
+
+
+
     // Register handler for setupMQTT direct method
     global.azureClient.onDeviceMethod('setUpMQTT', async (request, response) => {
         try {
@@ -120,35 +137,38 @@ app.on('ready', async () => {
         }
     });
 
-    // Timeout for MQTT setup
-    setTimeout(async () => {
+
+
+    global.azureClient.onDeviceMethod('remoteExecuteRedis', async (request, response) => {
         try {
-            if (!(global.MQTT_SETUP_STATUS === 'COMPLETE' || global.MQTT_SETUP_STATUS === 'DEFAULT')) {
-                await subscribeToClients([]); // Defaults to subscribing to all topics
-                global.MQTT_SETUP_STATUS = 'DEFAULT';
-            }
-        } catch (err) {
-            global.MQTT_SETUP_STATUS = 'ERROR';
-            console.error('MQTT setup timeout error:', err);
-        }
-    }, MQTT_SETUP_TIMEOUT);
+            let RESULT;
 
+            const commands = request.payload;
 
-    global.azureClient.onDeviceMethod('getSensorData', (request, response) => {
-        console.log(`Direct Method called: ${request.methodName}`);
-        // Example payload
-        const sensorData = {
-            temperature: 22.5,
-            humidity: 60,
-            timestamp: new Date().toISOString()
-        };
-        response.send(200, sensorData, (err) => {
-            if (err) {
-                console.error('Error sending response:', err.message);
+            if (Array.isArray(commands) && Array.isArray(commands[0])) {
+                // commandsArray is an array of arrays
+                RESULT = [];
+                for (const cmdArr of commands) {
+                    // console.log(cmdArr);
+                    // console.log('------------');
+                    const res = await global.redisClient.sendCommand(cmdArr);
+                    // console.log(res);
+                    RESULT.push(res);
+                }
             } else {
-                console.log('Response sent successfully:', sensorData);
+                // Process a single command array
+                RESULT = await global.redisClient.sendCommand(commands);
             }
-        });
+
+            // console.log('remoteExecuteRedis RESULT:', RESULT);
+            // console.log(JSON.stringify(RESULT, null, 2));
+
+            response.send(200, RESULT, err => {
+                if (err) console.error('Failed to send method response:', err);
+            });
+        } catch (err) {
+            response.send(500, { error: err.message }, () => { });
+        }
     });
 
 });
