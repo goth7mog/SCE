@@ -1,35 +1,46 @@
 const mosquitto = require('./connect-mqtt/mosquitto');
 
-async function trigger() {
+
+// Handler for setupMQTT direct method
+async function subscribeToClients(payload) {
     try {
         await mosquitto.connect();
-        // const topics = [
-        // '/node/Pi-livingroom-f8e7d6c5b4a39281/data',
-        // '/node/Pi-hall-1b2c3d4e5f6a7b8c/data',
-        // '/node/Pi-checkin-9e8f7d6c5b4a3e2d/data'
-        // ];
-        // const topics = [
-        //     // '#'
-        //     // '/node/Pi-livingroom-f8e7d6c5b4a39281/status',
-        //     // '/node/Pi-hall-1b2c3d4e5f6a7b8c/status',
-        //     // '/node/Pi-checkin-9e8f7d6c5b4a3e2d/status'
-        // ];
 
+        let SUBSCRIBE_RESULT = [];
 
-        const topics = [
-            '/node/+/data',
-            '/node/+/status'
-        ];
-        for (const topic of topics) {
-            const result = await mosquitto.subscribe(topic);
-            console.log(result.message);
+        if (payload.length === 0) {
+            // Subscribes to all topics if no payload provided
+            const topics = [
+                '/node/+/data',
+                '/node/+/status'
+            ];
+            for (const topic of topics) {
+                const result = await mosquitto.subscribe(topic);
+                SUBSCRIBE_RESULT.push(result.message);
+            }
+
+        } else {
+            for (const device of payload) {
+                if (!device.name) continue;
+                // Subscribe to data and status topics for each device
+                const dataTopic = `/node/${device.name}/data`;
+                const statusTopic = `/node/${device.name}/status`;
+
+                const subscribeDataResult = await mosquitto.subscribe(dataTopic);
+                SUBSCRIBE_RESULT.push(subscribeDataResult.message);
+
+                const subscribeStatusResult = await mosquitto.subscribe(statusTopic);
+                SUBSCRIBE_RESULT.push(subscribeStatusResult.message);
+
+            }
         }
+
 
         // Handle incoming messages
         global.mqttClient.on('message', async (topic, message) => {
             console.log(`Received on ${topic}:`, message.toString());
 
-            /*** Processing telemetry from Raspberries and storing it in Redis Time Series ***/
+            /*** Process telemetry from Raspberries and store it in Redis Time Series ***/
             if (/\/node\/.+?\/data$/.test(topic)) {
                 try {
                     const data = JSON.parse(message.toString());
@@ -78,9 +89,13 @@ async function trigger() {
                 }
             }
         });
+
+        return SUBSCRIBE_RESULT;
+
     } catch (err) {
-        console.error('Error:', err);
+        console.error('setupMQTT handler error:', err);
+        return { error: err.message };
     }
 }
 
-module.exports = { trigger };
+module.exports.subscribeToClients = subscribeToClients;

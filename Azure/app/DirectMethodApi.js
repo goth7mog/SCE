@@ -6,19 +6,17 @@ const connectionString = process.env.IOTHUB_CONNECTION_STRING;
 
 const serviceClient = iothub.Client.fromConnectionString(connectionString);
 
-async function triggerDirectMethod(deviceId, methodName, payload = {}) {
+async function triggerDirectMethod(gatewayId, methodName, payload = {}) {
     return new Promise((resolve, reject) => {
         const methodParams = {
             methodName,
             payload,
             responseTimeoutInSeconds: 30
         };
-        serviceClient.invokeDeviceMethod(deviceId, methodParams, (err, result) => {
+        serviceClient.invokeDeviceMethod(gatewayId, methodParams, (err, result) => {
             if (err) {
-                console.error('Failed to invoke method:', err.message);
                 reject(err);
             } else {
-                console.log('Direct Method result:', result);
                 resolve(result);
             }
         });

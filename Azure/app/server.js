@@ -8,6 +8,7 @@ global.approute = path.resolve(__dirname);
 const port = process.env.PORT || 8080;
 const express = require('express');
 const cors = require('cors');
+const { triggerDirectMethod } = require('./DirectMethodApi.js');
 
 const connectRedis = async () => {
     try {
@@ -80,18 +81,50 @@ app.on('ready', () => {
         console.log('server is running  on port ' + port);
     });
 
-    (() => {
-        const { triggerDirectMethod } = require('./automate.js');
 
-        setInterval(async () => {
-            try {
-                const result = await triggerDirectMethod('edge-gateway-3', 'getSensorData', { request: 'latest' });
-                console.log('Direct Method response from edge-gateway-3', result);
-            } catch (err) {
-                console.error('Direct Method error on edge-gateway-3', err);
+    // setUpMQTT direct method: retrieve site name and send payload with device names and circuits
+    const setUpMQTT = async () => {
+        try {
+            const sitesCollection = global.mongoDB.collection('sites');
+            const devicesCollection = global.mongoDB.collection('devices');
+
+            // Scan through 'sites' collection
+            const sites = await sitesCollection.find({}).toArray();
+            if (sites.length === 0) {
+                throw new Error('No sites found');
             }
-        }, 300000);
-    })();
+
+            for (const site of sites) {
+                // Get devices for this site
+                const devices = await devicesCollection.find({ site_id: site._id }).toArray();
+                const payload = devices.map(device => ({
+                    name: device.name,
+                    circuits: device.circuits
+                }));
+                // Call the direct method with site name and payload
+                try {
+                    const result = await triggerDirectMethod(site.name, 'setUpMQTT', payload);
+                    // console.log(`setUpMQTT called for site ${site.name}:`, result);
+                    console.log(`setUpMQTT called for site ${site.name}.`, `Status: ${result.status}`);
+                } catch (err) {
+                    console.error(`setUpMQTT error for site ${site.name}:`, err);
+                }
+            }
+        } catch (err) {
+            console.error('Error in setUpMQTT:', err);
+        }
+    };
+
+    setUpMQTT();
+
+    setInterval(async () => {
+        try {
+            const result = await triggerDirectMethod('edge-gateway-3', 'getSensorData', { request: 'latest' });
+            console.log('Direct Method response from edge-gateway-3', result);
+        } catch (err) {
+            console.error('Direct Method error on edge-gateway-3', err);
+        }
+    }, 300000);
 });
 
 startup();

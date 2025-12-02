@@ -1,7 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
+const { subscribeToClients } = require('./automate');
 
+global.MQTT_SETUP_STATUS = null;
+
+const MQTT_SETUP_TIMEOUT = 300000; // 5 minutes
 
 // Create Global Directory to use throughout the app
 const path = require('path');
@@ -100,6 +104,35 @@ app.on('ready', async () => {
         console.log(`Express server running on port ${PORT}`);
     });
 
+    // Register handler for setupMQTT direct method
+    global.azureClient.onDeviceMethod('setUpMQTT', async (request, response) => {
+        try {
+            const result = await subscribeToClients(request.payload);
+
+            global.MQTT_SETUP_STATUS = 'COMPLETE';
+
+            response.send(200, result, err => {
+                if (err) console.error('Failed to send method response:', err);
+            });
+        } catch (err) {
+            global.MQTT_SETUP_STATUS = 'ERROR';
+            response.send(500, { error: err.message }, () => { });
+        }
+    });
+
+    // Timeout for MQTT setup
+    setTimeout(async () => {
+        try {
+            if (!(global.MQTT_SETUP_STATUS === 'COMPLETE' || global.MQTT_SETUP_STATUS === 'DEFAULT')) {
+                await subscribeToClients([]); // Defaults to subscribing to all topics
+                global.MQTT_SETUP_STATUS = 'DEFAULT';
+            }
+        } catch (err) {
+            global.MQTT_SETUP_STATUS = 'ERROR';
+            console.error('MQTT setup timeout error:', err);
+        }
+    }, MQTT_SETUP_TIMEOUT);
+
 
     global.azureClient.onDeviceMethod('getSensorData', (request, response) => {
         console.log(`Direct Method called: ${request.methodName}`);
@@ -118,8 +151,6 @@ app.on('ready', async () => {
         });
     });
 
-    const automate = require('./automate');
-    await automate.trigger();
 });
 
 
