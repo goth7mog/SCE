@@ -81,12 +81,13 @@ module.exports.getAverageTemperatureOnSite = async (timePeriod, bucketSize) => {
 
                 // Get average temperatures per device (across all its circuits.)
                 if (result && result.payload) {
+                    // Build time-series array for Grafana
+                    const timeSeriesData = [];
                     const deviceBuckets = {};
                     for (const deviceGroup of result.payload) {
                         for (const entry of deviceGroup) {
                             const labels = entry[1];
                             const readings = entry[2];
-                            // Find device name from labels
                             const deviceLabel = labels.find(l => l[0] === 'device');
                             const deviceName = deviceLabel ? deviceLabel[1] : null;
                             if (!deviceName) continue;
@@ -102,20 +103,35 @@ module.exports.getAverageTemperatureOnSite = async (timePeriod, bucketSize) => {
                                     }
                                     deviceBuckets[deviceName][timestamp].sum += value;
                                     deviceBuckets[deviceName][timestamp].count += 1;
+
+                                    // Store temperature in Redis time-series ]
+                                    await global.redisClient.sendCommand([
+                                        'TS.ADD',
+                                        `${deviceName}:temperature`,
+                                        String(timestamp),
+                                        String(value),
+                                        'ON_DUPLICATE', 'LAST'
+                                    ]);
                                 }
                             }
                         }
                     }
-                    // Calculate averages per timestamp
-                    const deviceTimeAverages = {};
+                    // Build time-series array
                     for (const [device, buckets] of Object.entries(deviceBuckets)) {
-                        deviceTimeAverages[device] = {};
                         for (const [timestamp, { sum, count }] of Object.entries(buckets)) {
-                            deviceTimeAverages[device][timestamp] = count > 0 ? sum / count : null;
+                            if (count > 0) {
+                                timeSeriesData.push({
+                                    device,
+                                    timestamp: Number(timestamp),
+                                    value: sum / count
+                                });
+                            }
                         }
                     }
-                    console.log('Average temperature per device per timestamp:', deviceTimeAverages);
-                    // Optionally, return or use 'deviceTimeAverages' as needed
+                    console.log('Average temperature calculated per device:', timeSeriesData);
+                    // Optionally, write to file for Grafana ingestion
+                    // fs.writeFileSync('timeseries.json', JSON.stringify(timeSeriesData, null, 2), 'utf8');
+                    // Each entry in timeSeriesData is: { device, timestamp, value } where value is the average temperature.
                 } else {
                     console.warn('No payload found in result');
                 }
