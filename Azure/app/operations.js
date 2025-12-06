@@ -109,8 +109,8 @@ module.exports.getAverageTemperatureOnSite = async (timePeriod, bucketSize) => {
                                         'TS.ADD',
                                         `${deviceName}:temperature`,
                                         String(timestamp),
-                                        String(value),
-                                        'ON_DUPLICATE', 'LAST'
+                                        String(value)
+                                        // 'ON_DUPLICATE', 'LAST'
                                     ]);
                                 }
                             }
