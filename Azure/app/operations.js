@@ -38,10 +38,8 @@ module.exports.setUpMQTT = async () => {
 module.exports.getAverageTemperatureOnSite = async (timePeriod, bucketSize) => {
     try {
         const now = new Date();
-        console.log(now);
         const fromTimestamp = (new Date(now.getTime() - timePeriod)).getTime(); // ms since epoch
         const toTimestamp = now.getTime();
-        console.log(toTimestamp);
 
         const sitesCollection = global.mongoDB.collection('sites');
         const devicesCollection = global.mongoDB.collection('devices');
@@ -79,9 +77,8 @@ module.exports.getAverageTemperatureOnSite = async (timePeriod, bucketSize) => {
                 // );
                 // console.log(`remoteExecuteRedis called for site ${site.name}.`, `Status: ${result.status}`);
 
-                // Get average temperatures per device (across all its circuits.)
+                /** GET AVERAGE TEMPERATURES PER DEVICE (ACROSS ALL ITS CIRCUITS.) **/
                 if (result && result.payload) {
-                    // Build time-series array for Grafana
                     const timeSeriesData = [];
                     const deviceBuckets = {};
                     for (const deviceGroup of result.payload) {
@@ -133,7 +130,7 @@ module.exports.getAverageTemperatureOnSite = async (timePeriod, bucketSize) => {
                     // fs.writeFileSync('timeseries.json', JSON.stringify(timeSeriesData, null, 2), 'utf8');
                     // Each entry in timeSeriesData is: { device, timestamp, value } where value is the average temperature.
                 } else {
-                    console.warn('No payload found in result');
+                    throw new Error('No result from remoteExecuteRedis method');
                 }
 
             } catch (err) {
