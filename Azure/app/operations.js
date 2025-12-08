@@ -11,7 +11,7 @@ module.exports.setUpMQTT = async () => {
         const sites = await sitesCollection.find({}).toArray();
         if (sites.length === 0) {
             // throw new Error('No sites found');
-            console.log('SetUpMQTT: No sites found in database.');
+            console.log('setUpMQTT warning: No sites found in database.');
             return;
         }
 
@@ -32,7 +32,7 @@ module.exports.setUpMQTT = async () => {
             }
         }
     } catch (err) {
-        console.error('Error in setUpMQTT:', err);
+        console.error('setUpMQTT error:', err);
     }
 };
 
