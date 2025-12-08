@@ -10,7 +10,9 @@ module.exports.setUpMQTT = async () => {
         // Scan through 'sites' collection
         const sites = await sitesCollection.find({}).toArray();
         if (sites.length === 0) {
-            throw new Error('No sites found');
+            // throw new Error('No sites found');
+            console.log('SetUpMQTT: No sites found in database.');
+            return;
         }
 
         for (const site of sites) {
