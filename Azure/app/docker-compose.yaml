@@ -26,7 +26,7 @@ services:
       - redis-data-cloud:/data
     environment:
       - TZ=Europe/London
-      - REDIS_SAVE=900 1 150 10 60 10000
+      - REDIS_SAVE=30 1
       - REDIS_APPENDONLY=yes
     networks:
       - sce-net-cloud
