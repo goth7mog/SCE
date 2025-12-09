@@ -3,14 +3,14 @@ services:
   app:
     container_name: app
     build:
-      context: .
+      context: ./app
       target: debug
     ports:
       - "8080:8080"
     env_file:
-      - .env
+      - ./app/.env
     volumes:
-      - .:/usr/src/app
+      - ./app:/usr/src/app
     environment:
       - TZ=Europe/London
     depends_on:
