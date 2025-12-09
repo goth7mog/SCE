@@ -102,28 +102,28 @@ module.exports.getAverageTemperatureOnSite = async (timePeriod, bucketSize) => {
                                     }
                                     deviceBuckets[deviceName][timestamp].sum += value;
                                     deviceBuckets[deviceName][timestamp].count += 1;
-
-                                    // Store temperature in Redis time-series ]
-                                    await global.redisClient.sendCommand([
-                                        'TS.ADD',
-                                        `${deviceName}:temperature`,
-                                        String(timestamp),
-                                        String(value)
-                                        // 'ON_DUPLICATE', 'LAST'
-                                    ]);
                                 }
                             }
                         }
                     }
-                    // Build time-series array
+                    // Build time-series array and add to Redis
                     for (const [device, buckets] of Object.entries(deviceBuckets)) {
                         for (const [timestamp, { sum, count }] of Object.entries(buckets)) {
                             if (count > 0) {
+                                const avgValue = sum / count;
                                 timeSeriesData.push({
                                     device,
                                     timestamp: Number(timestamp),
-                                    value: sum / count
+                                    value: avgValue
                                 });
+                                // Store only the averaged value per device/timestamp
+                                await global.redisClient.sendCommand([
+                                    'TS.ADD',
+                                    `${device}:temperature`,
+                                    String(timestamp),
+                                    String(avgValue),
+                                    'ON_DUPLICATE', 'LAST'
+                                ]);
                             }
                         }
                     }
