@@ -13,6 +13,7 @@ services:
       - ./app:/usr/src/app
     environment:
       - TZ=Europe/London
+      - GF_INSTALL_PLUGINS=redis-datasource
     depends_on:
       - redis
     networks:
@@ -39,6 +40,7 @@ services:
       - "3000:3000"
     environment:
       - TZ=Europe/London
+      - GF_INSTALL_PLUGINS=redis-app
     depends_on:
       - redis
     networks:
@@ -46,6 +48,8 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+
 
       
 networks:

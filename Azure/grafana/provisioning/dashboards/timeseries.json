@@ -1,0 +1,293 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 0,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "redis-datasource",
+        "uid": "PA7F6415749A3297A"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "aggregation": "avg",
+          "bucket": 299964,
+          "command": "ts.range",
+          "datasource": {
+            "type": "redis-datasource",
+            "uid": "PA7F6415749A3297A"
+          },
+          "keyName": "Pi-livingroom-f8e7d6c5b4a39281:humidity",
+          "query": "",
+          "refId": "A",
+          "type": "timeSeries"
+        },
+        {
+          "aggregation": "avg",
+          "bucket": 299964,
+          "command": "ts.range",
+          "datasource": {
+            "type": "redis-datasource",
+            "uid": "PA7F6415749A3297A"
+          },
+          "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:humidity",
+          "query": "",
+          "refId": "B",
+          "type": "timeSeries"
+        },
+        {
+          "aggregation": "avg",
+          "bucket": 299964,
+          "command": "ts.range",
+          "datasource": {
+            "type": "redis-datasource",
+            "uid": "PA7F6415749A3297A"
+          },
+          "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:humidity",
+          "query": "",
+          "refId": "C",
+          "type": "timeSeries"
+        }
+      ],
+      "title": "Humidity (All Locations)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "redis-datasource",
+        "uid": "PA7F6415749A3297A"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "aggregation": "avg",
+          "bucket": 299964,
+          "command": "ts.range",
+          "datasource": {
+            "type": "redis-datasource",
+            "uid": "PA7F6415749A3297A"
+          },
+          "keyName": "Pi-livingroom-f8e7d6c5b4a39281:temperature",
+          "query": "",
+          "refId": "A",
+          "type": "timeSeries"
+        },
+        {
+          "aggregation": "avg",
+          "bucket": 299964,
+          "command": "ts.range",
+          "datasource": {
+            "type": "redis-datasource",
+            "uid": "PA7F6415749A3297A"
+          },
+          "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:temperature",
+          "query": "",
+          "refId": "B",
+          "type": "timeSeries"
+        },
+        {
+          "aggregation": "avg",
+          "bucket": 299964,
+          "command": "ts.range",
+          "datasource": {
+            "type": "redis-datasource",
+            "uid": "PA7F6415749A3297A"
+          },
+          "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:temperature",
+          "query": "",
+          "refId": "C",
+          "type": "timeSeries"
+        }
+      ],
+      "title": "Temperature (All Locations)",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "refresh": "5s",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Time Series Dashboard",
+  "uid": "adwt74k",
+  "version": 3
+}

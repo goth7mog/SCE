@@ -69,7 +69,7 @@ module.exports.getAverageTemperatureOnSite = async (timePeriod, bucketSize) => {
             try {
                 const result = await triggerDirectMethod(site.name, 'remoteExecuteRedis', payload.commandsArray);
                 const sizeInBytes = Buffer.byteLength(JSON.stringify(result), 'utf8');
-                console.log('testTS size in bytes:', sizeInBytes);
+                console.log('The payload size in bytes:', sizeInBytes);
                 // // console.log(JSON.stringify(result, null, 2));
 
                 // fs.writeFileSync(
@@ -174,7 +174,7 @@ module.exports.getMaxHumidityOnSite = async (timePeriod, bucketSize) => {
             try {
                 const result = await triggerDirectMethod(site.name, 'remoteExecuteRedis', payload.commandsArray);
                 const sizeInBytes = Buffer.byteLength(JSON.stringify(result), 'utf8');
-                console.log('testTS size in bytes:', sizeInBytes);
+                console.log('The payload size in bytes:', sizeInBytes);
 
                 /** GET MAX HUMIDITY PER DEVICE (ACROSS ALL ITS CIRCUITS.) **/
                 if (result && result.payload) {
@@ -195,9 +195,9 @@ module.exports.getMaxHumidityOnSite = async (timePeriod, bucketSize) => {
                                 const value = parseFloat(reading[1]);
                                 if (!isNaN(value)) {
                                     if (!deviceBuckets[deviceName][timestamp]) {
-                                        deviceBuckets[deviceName][timestamp] = { max: value };
+                                        deviceBuckets[deviceName][timestamp] = { maxValue: value };
                                     } else {
-                                        deviceBuckets[deviceName][timestamp].max = Math.max(deviceBuckets[deviceName][timestamp].max, value);
+                                        deviceBuckets[deviceName][timestamp].maxValue = Math.max(deviceBuckets[deviceName][timestamp].maxValue, value);
                                     }
                                 }
                             }
@@ -205,18 +205,18 @@ module.exports.getMaxHumidityOnSite = async (timePeriod, bucketSize) => {
                     }
                     // Build time-series array and add to Redis
                     for (const [device, buckets] of Object.entries(deviceBuckets)) {
-                        for (const [timestamp, { max }] of Object.entries(buckets)) {
+                        for (const [timestamp, { maxValue }] of Object.entries(buckets)) {
                             timeSeriesData.push({
                                 device,
                                 timestamp: Number(timestamp),
-                                value: max
+                                value: maxValue
                             });
                             // Store only the max value per device/timestamp
                             await global.redisClient.sendCommand([
                                 'TS.ADD',
                                 `${device}:humidity`,
                                 String(timestamp),
-                                String(max),
+                                String(maxValue),
                                 'ON_DUPLICATE', 'LAST'
                             ]);
                         }
