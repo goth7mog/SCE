@@ -128,9 +128,100 @@ module.exports.getAverageTemperatureOnSite = async (timePeriod, bucketSize) => {
                         }
                     }
                     console.log('Average temperature calculated per device:', timeSeriesData);
-                    // Optionally, write to file for Grafana ingestion
-                    // fs.writeFileSync('timeseries.json', JSON.stringify(timeSeriesData, null, 2), 'utf8');
-                    // Each entry in timeSeriesData is: { device, timestamp, value } where value is the average temperature.
+                } else {
+                    throw new Error('No result from remoteExecuteRedis method');
+                }
+
+            } catch (err) {
+                console.error(`remoteExecuteRedis error for site ${site.name}:`, err);
+            }
+        }
+    } catch (err) {
+        console.error('Error in remoteExecuteRedis:', err);
+    }
+};
+
+
+module.exports.getMaxHumidityOnSite = async (timePeriod, bucketSize) => {
+    try {
+        const now = new Date();
+        const fromTimestamp = (new Date(now.getTime() - timePeriod)).getTime(); // ms since epoch
+        const toTimestamp = now.getTime();
+
+        const sitesCollection = global.mongoDB.collection('sites');
+        const devicesCollection = global.mongoDB.collection('devices');
+
+        // Scan through 'sites' collection
+        const sites = await sitesCollection.find({}).toArray();
+        if (sites.length === 0) {
+            throw new Error('No sites found');
+        }
+
+        for (const site of sites) {
+            // Get devices for this site
+            const devices = await devicesCollection.find({ site_id: site._id }).toArray();
+            const payload = {};
+
+            payload.commandsArray = devices.map(device => ([
+                'TS.MRANGE',
+                String(fromTimestamp),
+                String(toTimestamp),
+                'AGGREGATION', 'max', String(bucketSize),
+                'WITHLABELS',
+                'FILTER', `device=${device.name}`, 'type=humidity'
+            ]));
+
+            try {
+                const result = await triggerDirectMethod(site.name, 'remoteExecuteRedis', payload.commandsArray);
+                const sizeInBytes = Buffer.byteLength(JSON.stringify(result), 'utf8');
+                console.log('testTS size in bytes:', sizeInBytes);
+
+                /** GET MAX HUMIDITY PER DEVICE (ACROSS ALL ITS CIRCUITS.) **/
+                if (result && result.payload) {
+                    const timeSeriesData = [];
+                    const deviceBuckets = {};
+                    for (const deviceGroup of result.payload) {
+                        for (const entry of deviceGroup) {
+                            const labels = entry[1];
+                            const readings = entry[2];
+                            const deviceLabel = labels.find(l => l[0] === 'device');
+                            const deviceName = deviceLabel ? deviceLabel[1] : null;
+                            if (!deviceName) continue;
+                            if (!deviceBuckets[deviceName]) {
+                                deviceBuckets[deviceName] = {};
+                            }
+                            for (const reading of readings) {
+                                const timestamp = reading[0];
+                                const value = parseFloat(reading[1]);
+                                if (!isNaN(value)) {
+                                    if (!deviceBuckets[deviceName][timestamp]) {
+                                        deviceBuckets[deviceName][timestamp] = { max: value };
+                                    } else {
+                                        deviceBuckets[deviceName][timestamp].max = Math.max(deviceBuckets[deviceName][timestamp].max, value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // Build time-series array and add to Redis
+                    for (const [device, buckets] of Object.entries(deviceBuckets)) {
+                        for (const [timestamp, { max }] of Object.entries(buckets)) {
+                            timeSeriesData.push({
+                                device,
+                                timestamp: Number(timestamp),
+                                value: max
+                            });
+                            // Store only the max value per device/timestamp
+                            await global.redisClient.sendCommand([
+                                'TS.ADD',
+                                `${device}:humidity`,
+                                String(timestamp),
+                                String(max),
+                                'ON_DUPLICATE', 'LAST'
+                            ]);
+                        }
+                    }
+                    console.log('Max humidity calculated per device:', timeSeriesData);
                 } else {
                     throw new Error('No result from remoteExecuteRedis method');
                 }

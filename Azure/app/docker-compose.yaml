@@ -28,8 +28,6 @@ services:
       # - /var/lib/redis-stack
     environment:
       - TZ=Europe/London
-      # - REDIS_SAVE=900 1 100 10 60 10000
-      # - REDIS_APPENDONLY=yes
     networks:
       - sce-net-cloud
     command: redis-stack-server /usr/local/etc/redis/redis.conf

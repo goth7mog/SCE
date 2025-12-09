@@ -8,7 +8,7 @@ global.approute = path.resolve(__dirname);
 const port = process.env.PORT || 8080;
 const express = require('express');
 const cors = require('cors');
-const { setUpMQTT, getAverageTemperatureOnSite, getMaxHumidityPerCircuit } = require('./operations.js');
+const { setUpMQTT, getAverageTemperatureOnSite, getMaxHumidityOnSite } = require('./operations.js');
 
 
 const SENSOR_DATA_PULL_INTERVAL = 30000; // each 5 minutes
@@ -88,6 +88,7 @@ app.on('ready', () => {
         const bucketSize = 5 * 60 * 1000; // Aggregate data in 5-minute buckets
         try {
             await getAverageTemperatureOnSite(timePeriod, bucketSize);
+            await getMaxHumidityOnSite(timePeriod, bucketSize);
         } catch (err) {
             console.error('Error pulling sensor data:', err);
         }
