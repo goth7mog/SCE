@@ -50,18 +50,21 @@ services:
       - mosquitto
   redis:
     container_name: redis
-    image: redis/redis-stack:latest
+    image: redis/redis-stack-server:latest
     ports:
       - "6379:6379"
     environment:
       - TZ=Europe/London
-      - REDIS_SAVE=30 1
-      - REDIS_APPENDONLY=yes
+      # - REDIS_SAVE=900 1 100 10 60 10000
+      # - REDIS_SAVE=30 1
+      # - REDIS_APPENDONLY=yes
     networks:
       - sce-net-edge
     volumes:
-      - redis-data:/data
-      # - /data
+      - redis-data:/var/lib/redis-stack
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      # - /var/lib/redis-stack
+    command: redis-stack-server /usr/local/etc/redis/redis.conf
       
 
 networks:
