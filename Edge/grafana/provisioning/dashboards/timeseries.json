@@ -1,0 +1,266 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "row",
+      "title": "Pi-livingroom",
+      "collapsed": false
+    },
+    {
+      "title": "Pi-livingroom Humidity",
+      "type": "timeseries",
+      "datasource": {
+        "type": "redis-datasource",
+        "uid": "PA7F6415749A3297A"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitA:humidity",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "A"
+        },
+        {
+          "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitB:humidity",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "B"
+        },
+        {
+          "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitC:humidity",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "title": "Pi-livingroom Temperature",
+      "type": "timeseries",
+      "datasource": {
+        "type": "redis-datasource",
+        "uid": "PA7F6415749A3297A"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "targets": [
+        {
+          "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitA:temperature",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "A"
+        },
+        {
+          "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitB:temperature",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "B"
+        },
+        {
+          "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitC:temperature",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "Pi-hall",
+      "collapsed": false
+    },
+    {
+      "title": "Pi-hall Humidity",
+      "type": "timeseries",
+      "datasource": {
+        "type": "redis-datasource",
+        "uid": "PA7F6415749A3297A"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "targets": [
+        {
+          "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitA:humidity",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "A"
+        },
+        {
+          "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitB:humidity",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "title": "Pi-hall Temperature",
+      "type": "timeseries",
+      "datasource": {
+        "type": "redis-datasource",
+        "uid": "PA7F6415749A3297A"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "targets": [
+        {
+          "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitA:temperature",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "A"
+        },
+        {
+          "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitB:temperature",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "title": "Pi-checkin",
+      "collapsed": false
+    },
+    {
+      "title": "Pi-checkin Humidity",
+      "type": "timeseries",
+      "datasource": {
+        "type": "redis-datasource",
+        "uid": "PA7F6415749A3297A"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "targets": [
+        {
+          "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:humidity",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "A"
+        },
+        {
+          "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:humidity",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "B"
+        },
+        {
+          "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:humidity",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "title": "Pi-checkin Temperature",
+      "type": "timeseries",
+      "datasource": {
+        "type": "redis-datasource",
+        "uid": "PA7F6415749A3297A"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "targets": [
+        {
+          "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:temperature",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "A"
+        },
+        {
+          "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:temperature",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "B"
+        },
+        {
+          "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:temperature",
+          "type": "timeSeries",
+          "command": "ts.range",
+          "aggregation": "avg",
+          "bucket": 300000,
+          "refId": "C"
+        }
+      ]
+    }
+  ],
+  "preload": false,
+  "refresh": "5s",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Time Series Dashboard",
+  "uid": "adwt74k",
+  "version": 3
+}

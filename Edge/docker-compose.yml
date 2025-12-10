@@ -13,6 +13,7 @@ services:
       - sce-net-edge
     depends_on:
       - redis
+
   mosquitto: # Topics (`node/${global.nodeId}/data/`, payload) and (`node/${circuit.nodeId}/${circuit.circuitId}/relay`, 1)
     container_name: mosquitto
     image: eclipse-mosquitto:latest
@@ -28,6 +29,7 @@ services:
     environment:
       - TZ=Europe/London
     # restart: unless-stopped
+
   edge-server:
     container_name: server
     build:
@@ -48,6 +50,7 @@ services:
       - nodered
       - redis
       - mosquitto
+
   redis:
     container_name: redis
     image: redis/redis-stack-server:latest
@@ -62,6 +65,23 @@ services:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
       # - /var/lib/redis-stack
     command: redis-stack-server /usr/local/etc/redis/redis.conf
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana-edge
+    ports:
+      - "3002:3000"
+    environment:
+      - TZ=Europe/London
+      - GF_INSTALL_PLUGINS=redis-app
+    depends_on:
+      - redis
+    networks:
+      - sce-net-edge
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       
 
 networks:
@@ -70,3 +90,4 @@ networks:
 
 volumes:
   redis-data:
+  grafana-data:

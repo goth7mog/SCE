@@ -13,7 +13,6 @@ services:
       - ./app:/usr/src/app
     environment:
       - TZ=Europe/London
-      - GF_INSTALL_PLUGINS=redis-datasource
     depends_on:
       - redis
     networks:
