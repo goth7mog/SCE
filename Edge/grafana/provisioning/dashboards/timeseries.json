@@ -40,12 +40,19 @@
           "mappings": [
             {
               "options": {
+                "DISCONNECTED": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "DISCONNECTED"
+                },
                 "OFFLINE": {
                   "color": "red",
+                  "index": 1,
                   "text": "OFFLINE"
                 },
                 "ONLINE": {
                   "color": "green",
+                  "index": 0,
                   "text": "ONLINE"
                 }
               },
@@ -56,12 +63,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "text",
                 "value": 0
-              },
-              {
-                "color": "green",
-                "value": "ONLINE"
               }
             ]
           }
@@ -70,7 +73,7 @@
       },
       "gridPos": {
         "h": 1,
-        "w": 3,
+        "w": 5,
         "x": 0,
         "y": 1
       },
@@ -78,18 +81,18 @@
       "options": {
         "colorMode": "value",
         "graphMode": "area",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^Value$/",
           "values": false
         },
         "showPercentChange": false,
-        "textMode": "auto",
+        "textMode": "value",
         "wideLayout": true
       },
       "pluginVersion": "12.3.0",
@@ -101,11 +104,12 @@
           "query": "",
           "refId": "A",
           "streaming": true,
-          "streamingInterval": 0,
+          "streamingInterval": 1000,
           "type": "command"
         }
       ],
-      "title": "Status",
+      "title": "",
+      "transparent": true,
       "type": "stat"
     },
     {
@@ -191,7 +195,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -224,6 +229,8 @@
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitA:humidity",
           "legend": "circuitA",
           "refId": "A",
+          "streaming": false,
+          "streamingInterval": 8,
           "type": "timeSeries"
         },
         {
@@ -305,7 +312,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "celsius"
         },
         "overrides": []
       },
@@ -388,12 +396,19 @@
           "mappings": [
             {
               "options": {
+                "DISCONNECTED": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "DISCONNECTED"
+                },
                 "OFFLINE": {
                   "color": "red",
+                  "index": 1,
                   "text": "OFFLINE"
                 },
                 "ONLINE": {
                   "color": "green",
+                  "index": 0,
                   "text": "ONLINE"
                 }
               },
@@ -404,12 +419,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "text",
                 "value": 0
-              },
-              {
-                "color": "green",
-                "value": "ONLINE"
               }
             ]
           }
@@ -418,7 +429,7 @@
       },
       "gridPos": {
         "h": 1,
-        "w": 3,
+        "w": 5,
         "x": 0,
         "y": 12
       },
@@ -426,18 +437,18 @@
       "options": {
         "colorMode": "value",
         "graphMode": "area",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^Value$/",
           "values": false
         },
         "showPercentChange": false,
-        "textMode": "auto",
+        "textMode": "value",
         "wideLayout": true
       },
       "pluginVersion": "12.3.0",
@@ -449,10 +460,12 @@
           "query": "",
           "refId": "A",
           "streaming": true,
+          "streamingInterval": 1000,
           "type": "command"
         }
       ],
-      "title": "Status",
+      "title": "",
+      "transparent": true,
       "type": "stat"
     },
     {
@@ -538,7 +551,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -643,7 +657,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "celsius"
         },
         "overrides": []
       },
@@ -717,12 +732,19 @@
           "mappings": [
             {
               "options": {
+                "DISCONNECTED": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "DISCONNECTED"
+                },
                 "OFFLINE": {
                   "color": "red",
+                  "index": 1,
                   "text": "OFFLINE"
                 },
                 "ONLINE": {
                   "color": "green",
+                  "index": 0,
                   "text": "ONLINE"
                 }
               },
@@ -733,12 +755,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "text",
                 "value": 0
-              },
-              {
-                "color": "green",
-                "value": "ONLINE"
               }
             ]
           }
@@ -747,7 +765,7 @@
       },
       "gridPos": {
         "h": 1,
-        "w": 3,
+        "w": 5,
         "x": 0,
         "y": 23
       },
@@ -755,18 +773,18 @@
       "options": {
         "colorMode": "value",
         "graphMode": "area",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^Value$/",
           "values": false
         },
         "showPercentChange": false,
-        "textMode": "auto",
+        "textMode": "value",
         "wideLayout": true
       },
       "pluginVersion": "12.3.0",
@@ -778,10 +796,12 @@
           "query": "",
           "refId": "A",
           "streaming": true,
+          "streamingInterval": 1000,
           "type": "command"
         }
       ],
-      "title": "Status",
+      "title": "",
+      "transparent": true,
       "type": "stat"
     },
     {
@@ -867,7 +887,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -981,7 +1002,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "celsius"
         },
         "overrides": []
       },
@@ -1055,5 +1077,5 @@
   "timezone": "browser",
   "title": "Sensor Dashboard (edge-gateway-3)",
   "uid": "adwt74k",
-  "version": 50
+  "version": 72
 }
