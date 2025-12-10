@@ -112,7 +112,7 @@
       "targets": [
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitA:humidity",
           "legend": "circuitA",
@@ -121,7 +121,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitB:humidity",
           "legend": "circuitB",
@@ -130,7 +130,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitC:humidity",
           "legend": "circuitC",
@@ -226,7 +226,7 @@
       "targets": [
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitA:temperature",
           "legend": "circuitA",
@@ -235,7 +235,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitB:temperature",
           "legend": "circuitB",
@@ -244,7 +244,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitC:temperature",
           "legend": "circuitC",
@@ -353,7 +353,7 @@
       "targets": [
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitA:humidity",
           "legend": "circuitA",
@@ -362,7 +362,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitB:humidity",
           "legend": "circuitB",
@@ -458,7 +458,7 @@
       "targets": [
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitA:temperature",
           "legend": "circuitA",
@@ -467,7 +467,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitB:temperature",
           "legend": "circuitB",
@@ -576,7 +576,7 @@
       "targets": [
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:humidity",
           "legend": "circuitA",
@@ -585,7 +585,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:humidity",
           "legend": "circuitB",
@@ -594,7 +594,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:humidity",
           "legend": "circuitC",
@@ -690,7 +690,7 @@
       "targets": [
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:temperature",
           "legend": "circuitA",
@@ -699,7 +699,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:temperature",
           "legend": "circuitB",
@@ -708,7 +708,7 @@
         },
         {
           "aggregation": "avg",
-          "bucket": 1200000,
+          "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:temperature",
           "legend": "circuitC",
