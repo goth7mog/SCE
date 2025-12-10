@@ -218,7 +218,7 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitA:humidity",
@@ -227,7 +227,7 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitB:humidity",
@@ -236,7 +236,7 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitC:humidity",
@@ -332,7 +332,7 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitA:temperature",
@@ -341,7 +341,7 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitB:temperature",
@@ -350,7 +350,7 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-livingroom-f8e7d6c5b4a39281:circuitC:temperature",
@@ -565,7 +565,7 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitA:humidity",
@@ -574,7 +574,7 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitB:humidity",
@@ -670,7 +670,7 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitA:temperature",
@@ -679,7 +679,7 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-hall-1b2c3d4e5f6a7b8c:circuitB:temperature",
@@ -894,7 +894,7 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:humidity",
@@ -903,7 +903,7 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:humidity",
@@ -912,7 +912,7 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:humidity",
@@ -1008,7 +1008,7 @@
       "pluginVersion": "12.3.0",
       "targets": [
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:temperature",
@@ -1017,7 +1017,7 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:temperature",
@@ -1026,12 +1026,13 @@
           "type": "timeSeries"
         },
         {
-          "aggregation": "avg",
+          "aggregation": "",
           "bucket": 120000,
           "command": "ts.range",
           "keyName": "Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:temperature",
           "legend": "circuitC",
           "refId": "C",
+          "streaming": false,
           "type": "timeSeries"
         }
       ],
@@ -1054,5 +1055,5 @@
   "timezone": "browser",
   "title": "Sensor Dashboard (edge-gateway-3)",
   "uid": "adwt74k",
-  "version": 48
+  "version": 50
 }
