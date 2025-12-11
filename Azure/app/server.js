@@ -80,11 +80,11 @@ app.on('ready', () => {
     /** SETTING UP MQTT SUBSCRIPTIONS */
     // setUpMQTT();
 
-
+    //
     /** PULLING SENSOR DATA */
     setInterval(async () => {
         // setTimeout(async () => {
-        const timePeriod = 20 * 60 * 1000; // Query data for the last hour. However this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
+        const timePeriod = 60 * 60 * 1000; // Query data for the last hour. Nonetheless, this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
         const bucketSize = 15 * 60 * 1000; // Aggregate data in 15-minute buckets
         try {
             await downsampleEdgeData(timePeriod, bucketSize);
