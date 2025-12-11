@@ -88,7 +88,7 @@ app.on('ready', () => {
         try {
             await downsampleEdgeData(timePeriod, bucketSize);
         } catch (err) {
-            throw new Error('Error pulling sensor data:', err);
+            console.log('Error pulling sensor data:', err);
         }
     }, SENSOR_DATA_PULL_INTERVAL);
 });
