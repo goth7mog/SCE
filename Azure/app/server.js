@@ -8,7 +8,7 @@ global.approute = path.resolve(__dirname);
 const port = process.env.PORT || 8080;
 const express = require('express');
 const cors = require('cors');
-const { setUpMQTT, getAverageTemperatureOnSite, getMaxHumidityOnSite } = require('./operations.js');
+const { setUpMQTT, downsampleEdgeData } = require('./operations.js');
 
 
 const SENSOR_DATA_PULL_INTERVAL = 30000; // each 5 minutes
@@ -78,17 +78,16 @@ app.on('ready', () => {
     });
 
     /** SETTING UP MQTT SUBSCRIPTIONS */
-    setUpMQTT();
+    // setUpMQTT();
 
 
     /** PULLING SENSOR DATA */
     setInterval(async () => {
         // setTimeout(async () => {
-        const timePeriod = 20 * 60 * 1000; // Query data from the last 1 hour
-        const bucketSize = 5 * 60 * 1000; // Aggregate data in 5-minute buckets
+        const timePeriod = 20 * 60 * 1000; // Query data for the last hour. However this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
+        const bucketSize = 15 * 60 * 1000; // Aggregate data in 15-minute buckets
         try {
-            await getAverageTemperatureOnSite(timePeriod, bucketSize);
-            await getMaxHumidityOnSite(timePeriod, bucketSize);
+            await downsampleEdgeData(timePeriod, bucketSize);
         } catch (err) {
             console.error('Error pulling sensor data:', err);
         }

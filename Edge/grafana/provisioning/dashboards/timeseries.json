@@ -73,7 +73,7 @@
       },
       "gridPos": {
         "h": 1,
-        "w": 5,
+        "w": 6,
         "x": 0,
         "y": 1
       },
@@ -109,7 +109,6 @@
         }
       ],
       "title": "",
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -429,7 +428,7 @@
       },
       "gridPos": {
         "h": 1,
-        "w": 5,
+        "w": 6,
         "x": 0,
         "y": 12
       },
@@ -465,7 +464,6 @@
         }
       ],
       "title": "",
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -765,7 +763,7 @@
       },
       "gridPos": {
         "h": 1,
-        "w": 5,
+        "w": 6,
         "x": 0,
         "y": 23
       },
@@ -801,7 +799,6 @@
         }
       ],
       "title": "",
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -1077,5 +1074,5 @@
   "timezone": "browser",
   "title": "Sensor Dashboard (edge-gateway-3)",
   "uid": "adwt74k",
-  "version": 72
+  "version": 73
 }

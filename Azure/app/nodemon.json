@@ -1,0 +1,5 @@
+{
+    "ignore": [
+        "payload_edge-gateway-3.json"
+    ]
+}
