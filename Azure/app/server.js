@@ -78,7 +78,7 @@ app.on('ready', () => {
     });
 
     /** SETTING UP MQTT SUBSCRIPTIONS */
-    // setUpMQTT();
+    setUpMQTT();
 
     //
     /** PULLING SENSOR DATA */

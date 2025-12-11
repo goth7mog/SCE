@@ -1,11 +1,10 @@
 apiVersion: 1
 
 datasources:
-  - name: Redis
+  - name: Redis-Cloud
     type: redis-datasource
     access: proxy
-    url: redis://redis-cloud:6379
-    isDefault: true
+    url: redis://192.168.0.41:6380
     jsonData:
       client: standalone
       poolSize: 5

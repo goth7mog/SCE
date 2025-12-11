@@ -1,0 +1,748 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "enable": false,
+                "hide": false
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1,
+    "links": [],
+    "panels": [
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "panels": [],
+            "title": "Pi-livingroom-f8e7d6c5b4a3928",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "redis-datasource",
+                "uid": "P934DC26ED5A259BC"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "showValues": false,
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 0,
+                "y": 2
+            },
+            "id": 2,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.3.0",
+            "targets": [
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitA:humidity",
+                    "legend": "circuitA",
+                    "refId": "A",
+                    "streaming": false,
+                    "streamingInterval": 8,
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitB:humidity",
+                    "legend": "circuitB",
+                    "refId": "B",
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitC:humidity",
+                    "legend": "circuitC",
+                    "refId": "C",
+                    "type": "timeSeries"
+                }
+            ],
+            "title": "Humidity",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "redis-datasource",
+                "uid": "P934DC26ED5A259BC"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "showValues": false,
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "celsius"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 12,
+                "y": 2
+            },
+            "id": 3,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.3.0",
+            "targets": [
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitA:temperature",
+                    "legend": "circuitA",
+                    "refId": "A",
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitB:temperature",
+                    "legend": "circuitB",
+                    "refId": "B",
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitC:temperature",
+                    "legend": "circuitC",
+                    "refId": "C",
+                    "type": "timeSeries"
+                }
+            ],
+            "title": "Temperature",
+            "type": "timeseries"
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 11
+            },
+            "id": 4,
+            "panels": [],
+            "title": "Pi-hall-1b2c3d4e5f6a7b8c",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "redis-datasource",
+                "uid": "P934DC26ED5A259BC"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "showValues": false,
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 0,
+                "y": 13
+            },
+            "id": 5,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.3.0",
+            "targets": [
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-hall-1b2c3d4e5f6a7b8c:circuitA:humidity",
+                    "legend": "circuitA",
+                    "refId": "A",
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-hall-1b2c3d4e5f6a7b8c:circuitB:humidity",
+                    "legend": "circuitB",
+                    "refId": "B",
+                    "type": "timeSeries"
+                }
+            ],
+            "title": "Humidity",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "redis-datasource",
+                "uid": "P934DC26ED5A259BC"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "showValues": false,
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "celsius"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 12,
+                "y": 13
+            },
+            "id": 6,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.3.0",
+            "targets": [
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-hall-1b2c3d4e5f6a7b8c:circuitA:temperature",
+                    "legend": "circuitA",
+                    "refId": "A",
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-hall-1b2c3d4e5f6a7b8c:circuitB:temperature",
+                    "legend": "circuitB",
+                    "refId": "B",
+                    "type": "timeSeries"
+                }
+            ],
+            "title": "Temperature",
+            "type": "timeseries"
+        },
+        {
+            "collapsed": false,
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 22
+            },
+            "id": 7,
+            "panels": [],
+            "title": "Pi-checkin-9e8f7d6c5b4a3e2d",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "redis-datasource",
+                "uid": "P934DC26ED5A259BC"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "showValues": false,
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 0,
+                "y": 24
+            },
+            "id": 8,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.3.0",
+            "targets": [
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:humidity",
+                    "legend": "circuitA",
+                    "refId": "A",
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:humidity",
+                    "legend": "circuitB",
+                    "refId": "B",
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:humidity",
+                    "legend": "circuitC",
+                    "refId": "C",
+                    "type": "timeSeries"
+                }
+            ],
+            "title": "Humidity",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "redis-datasource",
+                "uid": "P934DC26ED5A259BC"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "showValues": false,
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": 0
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "celsius"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 12,
+                "x": 12,
+                "y": 24
+            },
+            "id": 9,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "12.3.0",
+            "targets": [
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:temperature",
+                    "legend": "circuitA",
+                    "refId": "A",
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:temperature",
+                    "legend": "circuitB",
+                    "refId": "B",
+                    "type": "timeSeries"
+                },
+                {
+                    "aggregation": "",
+                    "bucket": 120000,
+                    "command": "ts.range",
+                    "keyName": "edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:temperature",
+                    "legend": "circuitC",
+                    "refId": "C",
+                    "streaming": false,
+                    "type": "timeSeries"
+                }
+            ],
+            "title": "Temperature",
+            "type": "timeseries"
+        }
+    ],
+    "preload": false,
+    "refresh": "5s",
+    "schemaVersion": 42,
+    "tags": [],
+    "templating": {
+        "list": []
+    },
+    "time": {
+        "from": "now-1h",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Sensor Dashboard Cloud (edge-gateway-3)",
+    "uid": "adwt75k",
+    "version": 73
+}
