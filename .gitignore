@@ -1,6 +1,7 @@
 etc/
 .DS_Store
 .terraform/
+.github/copilot-instructions.md
 terraform.tfstate
 terraform.tfstate.backup
 *.tfstate
