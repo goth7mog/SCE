@@ -83,13 +83,12 @@ app.on('ready', () => {
     //
     /** PULLING SENSOR DATA */
     setInterval(async () => {
-        // setTimeout(async () => {
         const timePeriod = 60 * 60 * 1000; // Query data for the last hour. Nonetheless, this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
         const bucketSize = 15 * 60 * 1000; // Aggregate data in 15-minute buckets
         try {
             await downsampleEdgeData(timePeriod, bucketSize);
         } catch (err) {
-            console.error('Error pulling sensor data:', err);
+            throw new Error('Error pulling sensor data:', err);
         }
     }, SENSOR_DATA_PULL_INTERVAL);
 });

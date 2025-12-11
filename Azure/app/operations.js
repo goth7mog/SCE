@@ -98,10 +98,10 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
                 }
 
             } catch (err) {
-                console.error(`remoteExecuteRedis error for site ${site.name}:`, err);
+                throw new Error(`remoteExecuteRedis error for site ${site.name}: ${err}`);
             }
         }
     } catch (err) {
-        console.error('Error in remoteExecuteRedis:', err);
+        throw err;
     }
 };
