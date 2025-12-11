@@ -8,5 +8,4 @@ terraform.tfstate.backup
 *.tfstate.backup
 .env
 docker-compose-mqtt.yml
-LoRaWAN/
 
