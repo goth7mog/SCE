@@ -72,7 +72,7 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
                 // const sizeInBytes = Buffer.byteLength(JSON.stringify(result), 'utf8');
                 // console.log('The payload size in bytes:', sizeInBytes); /** Around ~ 5 KB */
 
-                fs.writeFileSync('payload_edge-gateway-3.json', JSON.stringify(result, null, 2), 'utf8');
+                // fs.writeFileSync('payload_edge-gateway-3.json', JSON.stringify(result, null, 2), 'utf8');
 
                 /* Process and store it in the cloud Redis instance */
                 if (result && result.payload) {
