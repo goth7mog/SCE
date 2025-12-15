@@ -4,6 +4,7 @@ const fs = require('fs');
 
 module.exports.setUpMQTT = async () => {
     try {
+        const RESULT = [];
         const sitesCollection = global.mongoDB.collection('sites');
         const devicesCollection = global.mongoDB.collection('devices');
 
@@ -26,13 +27,18 @@ module.exports.setUpMQTT = async () => {
             try {
                 const result = await triggerDirectMethod(site.name, 'setUpMQTT', payload);
                 // console.log(`setUpMQTT called for site ${site.name}:`, result);
-                console.log(`setUpMQTT called for site ${site.name}.`, `Status: ${result.status}`);
+                RESULT.push({ site: site.name, status: result.status });
+                // console.log(`setUpMQTT called for site ${site.name}.`, `Status: ${result.status}`);
+
             } catch (err) {
-                console.error(`setUpMQTT error for site ${site.name}:`, err);
+                RESULT.push({ site: site.name, status: err });
             }
         }
+
+        return RESULT;
+
     } catch (err) {
-        console.error('setUpMQTT error:', err);
+        throw err;
     }
 };
 
@@ -67,6 +73,7 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
                 'FILTER', `device=${device.name}`
             ]));
 
+
             try {
                 const result = await triggerDirectMethod(site.name, 'remoteExecuteRedis', payload.commandsArray);
                 // const sizeInBytes = Buffer.byteLength(JSON.stringify(result), 'utf8');
@@ -76,12 +83,20 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
 
                 /* Process and store it in the cloud Redis instance */
                 if (result && result.payload) {
+                    const timeSeriesData = [];
+                    let numberOfKeys = 0;
                     for (const siteSeries of result.payload) {
                         for (const series of siteSeries) {
                             const key = series[0];
                             const labels = series[1];
                             const datapoints = series[2];
                             for (const [timestamp, value] of datapoints) {
+                                timeSeriesData.push({
+                                    key: `${site.name}:${key}`,
+                                    timestamp: Number(timestamp),
+                                    value: value
+                                });
+
                                 await global.redisClient.sendCommand([
                                     'TS.ADD',
                                     `${site.name}:${key}`,
@@ -89,9 +104,13 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
                                     String(value),
                                     'ON_DUPLICATE', 'LAST'
                                 ]);
+                                numberOfKeys++;
                             }
                         }
                     }
+
+                    // console.log('Downsampled data:', timeSeriesData);
+                    console.log(`** Downsampled ${numberOfKeys} keys from ${site.name} **`);
 
                 } else {
                     throw new Error('No result from remoteExecuteRedis method');

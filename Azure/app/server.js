@@ -61,6 +61,55 @@ app.get('/api/v1/info', (req, res) => {
     });
 });
 
+app.get("/mqtt/start-up", async (req, res) => {
+    try {
+
+        /** SETTING UP MQTT SUBSCRIPTIONS */
+        const result = await setUpMQTT();
+
+        res.status(200).json({ message: "setUpMQTT called", result: result });
+
+    } catch (error) {
+        // console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get("/collect-data/start", async (req, res) => {
+    try {
+
+        /** PULLING SENSOR DATA */
+        global.intervalId = setInterval(async () => {
+            const timePeriod = 60 * 60 * 1000; // Query data for the last hour. Nonetheless, this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
+            const bucketSize = 15 * 60 * 1000; // Aggregate data in 15-minute buckets
+            try {
+                await downsampleEdgeData(timePeriod, bucketSize);
+            } catch (err) {
+                console.log('Error pulling sensor data:', err);
+            }
+        }, SENSOR_DATA_PULL_INTERVAL);
+
+        res.status(200).json({ success: true, message: "Started" });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Error starting data collection", error: error.message });
+    }
+});
+
+
+app.get("/collect-data/stop", async (req, res) => {
+    try {
+        clearInterval(global.intervalId);
+
+        res.status(200).json({ success: true, message: "Stopped" });
+
+    } catch (error) {
+        // console.error(error);
+        res.status(500).json({ success: false, message: "Error stopping data collection", error: error.message });
+    }
+});
+
 const startup = async () => {
     try {
         await connectRedis();
@@ -77,20 +126,20 @@ app.on('ready', () => {
         console.log('server is running  on port ' + port);
     });
 
-    /** SETTING UP MQTT SUBSCRIPTIONS */
-    setUpMQTT();
+    // /** SETTING UP MQTT SUBSCRIPTIONS */
+    // setUpMQTT();
 
-    //
-    /** PULLING SENSOR DATA */
-    setInterval(async () => {
-        const timePeriod = 60 * 60 * 1000; // Query data for the last hour. Nonetheless, this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
-        const bucketSize = 15 * 60 * 1000; // Aggregate data in 15-minute buckets
-        try {
-            await downsampleEdgeData(timePeriod, bucketSize);
-        } catch (err) {
-            console.log('Error pulling sensor data:', err);
-        }
-    }, SENSOR_DATA_PULL_INTERVAL);
+    // //
+    // /** PULLING SENSOR DATA */
+    // setInterval(async () => {
+    //     const timePeriod = 60 * 60 * 1000; // Query data for the last hour. Nonetheless, this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
+    //     const bucketSize = 15 * 60 * 1000; // Aggregate data in 15-minute buckets
+    //     try {
+    //         await downsampleEdgeData(timePeriod, bucketSize);
+    //     } catch (err) {
+    //         console.log('Error pulling sensor data:', err);
+    //     }
+    // }, SENSOR_DATA_PULL_INTERVAL);
 });
 
 startup();
