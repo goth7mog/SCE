@@ -61,7 +61,7 @@ resource "azurerm_container_app" "sce_app" {
   template {
     container {
       name   = "app"
-      image  = "${azurerm_container_registry.sce_acr.login_server}/app:latest"
+      image  = "${azurerm_container_registry.sce_acr.login_server}/app:latest" # Custom app image from ACR
       cpu    = 0.5
       memory = "1.0Gi"
       env {
@@ -72,7 +72,7 @@ resource "azurerm_container_app" "sce_app" {
     }
     container {
       name   = "redis"
-      image  = "${azurerm_container_registry.sce_acr.login_server}/redis:latest"
+      image  = "redis/redis-stack-server:latest" # Public Redis image from Docker Hub
       cpu    = 0.5
       memory = "1.0Gi"
       env {
