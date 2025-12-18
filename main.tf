@@ -105,6 +105,22 @@ resource "azurerm_container_app" "sce_app" {
   }
 }
 
+# --- Outputs ---
+output "iothub_hostname" {
+  description = "The hostname of the Azure IoT Hub."
+  value       = azurerm_iothub.sce_iothub.hostname
+}
+
+output "acr_login_server" {
+  description = "The login server of the Azure Container Registry."
+  value       = azurerm_container_registry.sce_acr.login_server
+}
+
+output "container_app_fqdn" {
+  description = "The FQDN of the Azure Container App."
+  value       = azurerm_container_app.sce_app.latest_revision_fqdn
+}
+
 
 
 
