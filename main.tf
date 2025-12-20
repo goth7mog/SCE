@@ -105,6 +105,44 @@ resource "azurerm_container_app" "sce_app" {
   }
 }
 
+# --- Log Analytics Workspace for Diagnostics ---
+resource "azurerm_log_analytics_workspace" "sce_law" {
+  name                = "sce-law"
+  location            = azurerm_resource_group.sce_rg.location
+  resource_group_name = azurerm_resource_group.sce_rg.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+resource "azurerm_container_app_diagnostic_setting" "sce_app_diag" {
+  name                       = "sce-app-diag"
+  container_app_id           = azurerm_container_app.sce_app.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.sce_law.id
+
+  log {
+    category = "ContainerAppConsoleLogs"
+    enabled  = true
+    retention_policy {
+      enabled = false
+    }
+  }
+
+  log {
+    category = "ContainerAppSystemLogs"
+    enabled  = true
+    retention_policy {
+      enabled = false
+    }
+  }
+
+  metric {
+    category = "AllMetrics"
+    enabled  = true
+    retention_policy {
+      enabled = false
+    }
+  }
+}
+
 # --- Outputs ---
 output "iothub_hostname" {
   description = "The hostname of the Azure IoT Hub."
