@@ -25,6 +25,8 @@ module.exports = async (database, retries = 3, delay = 2000) => {
             // Send a ping to confirm a successful connection
             await DB.command({ ping: 1 });
 
+            console.log(`MONGO_HOST: ${process.env.MONGO_HOST}, MONGO_PORT: ${process.env.MONGO_PORT}`);
+
             return DB;
         } catch (err) {
             console.log(`MongoDB connection attempt ${attempt} failed:`, err.message);
