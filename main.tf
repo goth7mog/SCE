@@ -51,7 +51,7 @@ resource "azurerm_container_app_environment" "sce_env" {
   resource_group_name = azurerm_resource_group.sce_rg.name
 }
 
-# --- Azure Container App (multi-container: app + redis) ---
+# --- Azure Container App ---
 resource "azurerm_container_app" "sce_app" {
   name                         = "sce-app"
   container_app_environment_id = azurerm_container_app_environment.sce_env.id
@@ -70,17 +70,17 @@ resource "azurerm_container_app" "sce_app" {
       }
       # Add more env vars as needed
     }
-    container {
-      name   = "redis"
-      image  = "redis/redis-stack-server:latest" # Public Redis image from Docker Hub
-      cpu    = 0.5
-      memory = "1.0Gi"
-      env {
-        name  = "TZ"
-        value = "Europe/London"
-      }
-    }
-    # Optionally define volumes here
+    # container {
+    #   name   = "redis"
+    #   image  = "redis/redis-stack-server:latest" # Public Redis image from Docker Hub
+    #   cpu    = 0.5
+    #   memory = "1.0Gi"
+    #   env {
+    #     name  = "TZ"
+    #     value = "Europe/London"
+    #   }
+    # }
+    # # Optionally define volumes here
   }
 
   ingress {
