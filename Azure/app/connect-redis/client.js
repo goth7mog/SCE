@@ -24,6 +24,7 @@ module.exports = async () => {
         });
 
         await client.connect();
+        console.log(`REDIS_HOST: ${host}, REDIS_PORT: ${port}`);
         return client;
     } catch (err) {
         console.error('[Redis Debug] Failed to connect to Redis:', err);
