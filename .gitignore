@@ -7,5 +7,6 @@ terraform.tfstate.backup
 *.tfstate
 *.tfstate.backup
 .env
+Azure/redis/
 docker-compose-mqtt.yml
 
