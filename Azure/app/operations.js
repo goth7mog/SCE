@@ -27,11 +27,11 @@ module.exports.setUpMQTT = async () => {
             try {
                 const result = await triggerDirectMethod(site.name, 'setUpMQTT', payload);
                 // console.log(`setUpMQTT called for site ${site.name}:`, result);
-                RESULT.push({ site: site.name, status: result.status });
+                RESULT.push({ site: site.name, result: result });
                 // console.log(`setUpMQTT called for site ${site.name}.`, `Status: ${result.status}`);
 
             } catch (err) {
-                RESULT.push({ site: site.name, status: err });
+                RESULT.push({ site: site.name, result: err });
             }
         }
 

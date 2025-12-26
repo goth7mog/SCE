@@ -12,7 +12,7 @@ services:
     networks:
       - sce-net-edge
     depends_on:
-      - redis
+      - mosquitto
 
   mosquitto: # Topics (`node/${global.nodeId}/data/`, payload) and (`node/${circuit.nodeId}/${circuit.circuitId}/relay`, 1)
     container_name: mosquitto
@@ -47,7 +47,6 @@ services:
       - ./server:/usr/src/app
       - ./nodered/data/certificates:/usr/src/app/certificates
     depends_on:
-      - nodered
       - redis
       - mosquitto
 
