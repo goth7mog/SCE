@@ -110,7 +110,11 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
                     }
 
                     // console.log('Downsampled data:', timeSeriesData);
-                    console.log(`** Downsampled ${numberOfKeys} keys from ${site.name} **`);
+                    console.log(`
+-----------------------------------------------
+** Downsampled ${numberOfKeys} keys from ${site.name} **
+-----------------------------------------------
+                    `);
 
                 } else {
                     throw new Error('No result from remoteExecuteRedis method');

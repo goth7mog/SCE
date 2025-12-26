@@ -74,6 +74,8 @@ services:
     environment:
       - TZ=Europe/London
       - GF_INSTALL_PLUGINS=redis-app
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=3t5h0pQz
     depends_on:
       - redis
     networks:

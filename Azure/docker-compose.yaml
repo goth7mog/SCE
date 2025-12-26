@@ -23,9 +23,9 @@ services:
     ports:
       - "6380:6379"
     volumes:
+      # - redis-data-cloud:/var/lib/redis-stack
       - ./redis:/var/lib/redis-stack
       - ./redis.conf:/usr/local/etc/redis/redis.conf
-      # - /var/lib/redis-stack
     environment:
       - TZ=Europe/London
     networks:
