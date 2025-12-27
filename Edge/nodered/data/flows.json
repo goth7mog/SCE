@@ -586,7 +586,7 @@
     "type": "debug",
     "z": "524bde768d1b3eb9",
     "name": "debug MQTT",
-    "active": true,
+    "active": false,
     "tosidebar": true,
     "console": false,
     "tostatus": false,

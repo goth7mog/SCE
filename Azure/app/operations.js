@@ -90,12 +90,20 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
                             const key = series[0];
                             const labels = series[1];
                             const datapoints = series[2];
+
+                            if (!datapoints || datapoints.length === 0) {
+                                console.log(`No datapoints for key: ${key}`);
+                                continue;
+                            }
+
+
                             for (const [timestamp, value] of datapoints) {
                                 timeSeriesData.push({
                                     key: `${site.name}:${key}`,
                                     timestamp: Number(timestamp),
                                     value: value
                                 });
+
 
                                 await global.redisClient.sendCommand([
                                     'TS.ADD',
@@ -104,8 +112,9 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
                                     String(value),
                                     'ON_DUPLICATE', 'LAST'
                                 ]);
-                                numberOfKeys++;
                             }
+
+                            numberOfKeys++;
                         }
                     }
 
