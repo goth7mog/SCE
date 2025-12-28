@@ -1,8 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
-const { subscribeToClients } = require('./automate');
-// const { aggregateTimeSeries } = require('./timeseries');
+const { subscribeToTopics } = require('./automate');
+// const { aggregateTimeSeries } = require('./timeseries');const mosquitto = require('./connect-mqtt/mosquitto');const mosquitto = require('./connect-mqtt/mosquitto');
+const mosquitto = require('./connect-mqtt/mosquitto');
+
 
 global.MQTT_SETUP_STATUS = null;
 
@@ -124,7 +126,66 @@ app.on('ready', async () => {
     // Register handler for setupMQTT direct method
     global.azureClient.onDeviceMethod('setUpMQTT', async (request, response) => {
         try {
-            const result = await subscribeToClients(request.payload);
+            // Connect to MOSQUITTO
+            await mosquitto.connect();
+
+            // Set up a callback for incoming messages first
+            global.mqttClient.on('message', async (topic, message) => {
+                console.log(`Received on ${topic}:`, message.toString());
+
+                /*** Processing telemetry from Raspberries and storing it in Redis Time Series ***/
+                if (/\/node\/.+?\/data$/.test(topic)) {
+                    try {
+                        const data = JSON.parse(message.toString());
+                        const timestamp = data.timestamp;
+                        const extract = topic.match(/\/node\/(.+?)\/data/);
+                        const deviceId = extract ? extract[1] : 'unknown';
+                        for (const circuit of ['circuitA', 'circuitB', 'circuitC']) {
+                            if (data[circuit]) {
+                                // Temperature
+                                await global.redisClient.sendCommand([
+                                    'TS.ADD',
+                                    `${deviceId}:${circuit}:temperature`,
+                                    String(timestamp),
+                                    String(data[circuit].temperature)
+                                ]);
+                                // Humidity
+                                await global.redisClient.sendCommand([
+                                    'TS.ADD',
+                                    `${deviceId}:${circuit}:humidity`,
+                                    String(timestamp),
+                                    String(data[circuit].humidity)
+                                ]);
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Failed to store in Redis Time Series:', err);
+                    }
+
+                }
+
+
+                /*** Receiving status of Pis and storing it in Redis ***/
+                if (/\/node\/.+?\/status$/.test(topic)) {
+                    console.log(`Status received on ${topic}:`, message.toString());
+                    const deviceIdMatch = topic.match(/\/node\/(.+?)\/status/);
+                    const deviceId = deviceIdMatch ? deviceIdMatch[1] : 'unknown';
+                    const status = message.toString().trim();
+                    try {
+                        await global.redisClient.sendCommand([
+                            'SET',
+                            `${deviceId}:status`,
+                            status
+                        ]);
+                    } catch (err) {
+                        console.error('Failed to store device status in Redis:', err);
+                    }
+                }
+            });
+
+
+            // Then subscribe to topics
+            const result = await subscribeToTopics(request.payload);
 
             global.MQTT_SETUP_STATUS = 'COMPLETE';
 
@@ -176,3 +237,4 @@ app.on('ready', async () => {
 
 //----------------------------RUN APP------------------------------//
 startup();
+

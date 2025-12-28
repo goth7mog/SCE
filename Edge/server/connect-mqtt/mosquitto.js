@@ -10,16 +10,14 @@ const options = {
 }
 
 // MQTT Connect
-let client = null;
 module.exports.connect = function () {
     return new Promise((resolve, reject) => {
-        client = mqtt.connect(server, options);
-        client.on('connect', () => {
+        global.mqttClient = mqtt.connect(server, options);
+        global.mqttClient.on('connect', () => {
             console.log('Connected to MQTT broker');
-            global.mqttClient = client;
-            resolve(client);
+            resolve({ success: true, message: 'Connected to MQTT broker' });
         });
-        client.on('error', (error) => {
+        global.mqttClient.on('error', (error) => {
             console.error('MQTT error:', error);
             reject(error);
         });
@@ -29,8 +27,8 @@ module.exports.connect = function () {
 // MQTT Subscribe
 module.exports.subscribe = function (topic) {
     return new Promise((resolve, reject) => {
-        if (!client) return reject(new Error('MQTT client not connected'));
-        client.subscribe(topic, (err, granted) => {
+        if (!global.mqttClient) return reject(new Error('MQTT client not connected'));
+        global.mqttClient.subscribe(topic, (err, granted) => {
             if (err) return reject(err);
             resolve({ success: true, message: `Subscribed to Topic ${topic}`, data: granted });
         });
@@ -40,9 +38,9 @@ module.exports.subscribe = function (topic) {
 // MQTT Publish
 module.exports.publish = function (topic, data) {
     return new Promise((resolve, reject) => {
-        if (!client) return reject(new Error('MQTT client not connected'));
+        if (!global.mqttClient) return reject(new Error('MQTT client not connected'));
         let payload = JSON.stringify(data);
-        client.publish(topic, payload, (err) => {
+        global.mqttClient.publish(topic, payload, (err) => {
             if (err) return reject(err);
             resolve({ success: true, message: `Published to Topic ${topic}` });
         });
