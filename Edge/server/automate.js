@@ -1,6 +1,6 @@
 const mosquitto = require('./connect-mqtt/mosquitto');
 
-async function setupMessageListener() {
+function setupMQTTListener() {
     // Set up a callback for incoming messages first
     global.mqttClient.on('message', async (topic, message) => {
         console.log(`Received on ${topic}:`, message.toString());
@@ -98,4 +98,7 @@ async function subscribeToTopics(payload) {
     }
 }
 
-module.exports.subscribeToTopics = subscribeToTopics;
+module.exports = {
+    setupMQTTListener,
+    subscribeToTopics
+};

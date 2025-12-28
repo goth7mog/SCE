@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
-const { subscribeToTopics } = require('./automate');
+const { setupMQTTListener, subscribeToTopics } = require('./automate');
 // const { aggregateTimeSeries } = require('./timeseries');const mosquitto = require('./connect-mqtt/mosquitto');const mosquitto = require('./connect-mqtt/mosquitto');
 const mosquitto = require('./connect-mqtt/mosquitto');
 
@@ -129,6 +129,8 @@ app.on('ready', async () => {
             // Connect to MOSQUITTO
             await mosquitto.connect();
 
+            // Set up a message listener
+            setupMQTTListener();
 
             // Then subscribe to topics
             const result = await subscribeToTopics(request.payload);
