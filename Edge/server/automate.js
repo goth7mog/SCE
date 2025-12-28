@@ -1,5 +1,61 @@
 const mosquitto = require('./connect-mqtt/mosquitto');
 
+async function setupMessageListener() {
+    // Set up a callback for incoming messages first
+    global.mqttClient.on('message', async (topic, message) => {
+        console.log(`Received on ${topic}:`, message.toString());
+
+        /*** Processing telemetry from Raspberries and storing it in Redis Time Series ***/
+        if (/\/node\/.+?\/data$/.test(topic)) {
+            try {
+                const data = JSON.parse(message.toString());
+                const timestamp = data.timestamp;
+                const extract = topic.match(/\/node\/(.+?)\/data/);
+                const deviceId = extract ? extract[1] : 'unknown';
+                for (const circuit of ['circuitA', 'circuitB', 'circuitC']) {
+                    if (data[circuit]) {
+                        // Temperature
+                        await global.redisClient.sendCommand([
+                            'TS.ADD',
+                            `${deviceId}:${circuit}:temperature`,
+                            String(timestamp),
+                            String(data[circuit].temperature)
+                        ]);
+                        // Humidity
+                        await global.redisClient.sendCommand([
+                            'TS.ADD',
+                            `${deviceId}:${circuit}:humidity`,
+                            String(timestamp),
+                            String(data[circuit].humidity)
+                        ]);
+                    }
+                }
+            } catch (err) {
+                console.error('Failed to store in Redis Time Series:', err);
+            }
+
+        }
+
+
+        /*** Receiving status of Pis and storing it in Redis ***/
+        if (/\/node\/.+?\/status$/.test(topic)) {
+            console.log(`Status received on ${topic}:`, message.toString());
+            const deviceIdMatch = topic.match(/\/node\/(.+?)\/status/);
+            const deviceId = deviceIdMatch ? deviceIdMatch[1] : 'unknown';
+            const status = message.toString().trim();
+            try {
+                await global.redisClient.sendCommand([
+                    'SET',
+                    `${deviceId}:status`,
+                    status
+                ]);
+            } catch (err) {
+                console.error('Failed to store device status in Redis:', err);
+            }
+        }
+    });
+}
+
 
 // Handler for setupMQTT direct method
 async function subscribeToTopics(payload) {
