@@ -6,9 +6,10 @@ const { setupMQTTListener, subscribeToTopics } = require('./automate');
 const mosquitto = require('./connect-mqtt/mosquitto');
 
 
+const AUTOMATED_MQTT_SETUP = false; // Default - false
+const MQTT_SETUP_TIMEOUT = 5 * 60 * 1000; // 5 minutes
 global.MQTT_SETUP_STATUS = null;
 
-const MQTT_SETUP_TIMEOUT = 3000000; //
 
 // Create Global Directory to use throughout the app
 const path = require('path');
@@ -107,18 +108,22 @@ app.on('ready', async () => {
         console.log(`Express server running on port ${PORT}`);
     });
 
-    // // Timeout for MQTT setup
-    // setTimeout(async () => {
-    //     try {
-    //         if (!(global.MQTT_SETUP_STATUS === 'COMPLETE' || global.MQTT_SETUP_STATUS === 'DEFAULT')) {
-    //             await subscribeToClients([]); // Defaults to subscribing to all topics
-    //             global.MQTT_SETUP_STATUS = 'DEFAULT';
-    //         }
-    //     } catch (err) {
-    //         global.MQTT_SETUP_STATUS = 'ERROR';
-    //         console.error('MQTT setup timeout error:', err);
-    //     }
-    // }, MQTT_SETUP_TIMEOUT);
+
+    if (AUTOMATED_MQTT_SETUP && !(global.MQTT_SETUP_STATUS === 'COMPLETE' || global.MQTT_SETUP_STATUS === 'DEFAULT')) {
+        setTimeout(async () => {
+            try {
+                await mosquitto.connect();
+                setupMQTTListener();
+                const result = await subscribeToTopics([]); // Defaults to subscribing to all topics
+
+                global.MQTT_SETUP_STATUS = 'DEFAULT';
+                console.log(result);
+            } catch (err) {
+                global.MQTT_SETUP_STATUS = 'ERROR';
+                console.error('MQTT setup timeout error:', err);
+            }
+        }, MQTT_SETUP_TIMEOUT);
+    }
 
 
 
@@ -158,10 +163,7 @@ app.on('ready', async () => {
                 // commandsArray is an array of arrays
                 RESULT = [];
                 for (const cmdArr of commands) {
-                    // console.log(cmdArr);
-                    // console.log('------------');
                     const res = await global.redisClient.sendCommand(cmdArr);
-                    // console.log(res);
                     RESULT.push(res);
                 }
             } else {
