@@ -24,6 +24,8 @@ module.exports = async () => {
         });
 
         await client.connect();
+        await client.ping();
+
         return client;
     } catch (err) {
         console.error('[Redis Debug] Failed to connect to Redis:', err);

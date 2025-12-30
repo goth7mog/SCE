@@ -24,6 +24,8 @@ module.exports = async () => {
         });
 
         await client.connect();
+        await client.ping();
+
         console.log(`REDIS_HOST: ${host}, REDIS_PORT: ${port}`);
         return client;
     } catch (err) {

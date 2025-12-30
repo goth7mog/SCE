@@ -11,7 +11,8 @@ const cors = require('cors');
 const { setUpMQTT, downsampleEdgeData } = require('./operations.js');
 
 
-const SENSOR_DATA_PULL_INTERVAL = 30000; /** */
+// const SENSOR_DATA_PULL_INTERVAL = 35000; /** */
+const SENSOR_DATA_PULL_INTERVAL = 15 * 60 * 1000; /** */
 
 const connectRedis = async () => {
     try {
