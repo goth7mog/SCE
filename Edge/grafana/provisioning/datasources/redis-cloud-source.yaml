@@ -4,7 +4,10 @@ datasources:
   - name: Redis-Cloud
     type: redis-datasource
     access: proxy
-    url: redis://192.168.0.41:6380
+    # url: redis://192.168.0.41:6380
+    url: redis://redis-14046.c56.east-us.azure.cloud.redislabs.com:14046
+    secureJsonData:
+      password: ${REDIS_CLOUD_PASSWORD}
     jsonData:
       client: standalone
       poolSize: 5
