@@ -63,6 +63,9 @@ resource "azurerm_container_app" "sce_app" {
   revision_mode                = "Single"
 
   template {
+    min_replicas = 1
+    max_replicas = 4
+
     container {
       name   = "app"
       image  = "${azurerm_container_registry.sce_acr.login_server}/app:latest" # Custom app image from ACR
