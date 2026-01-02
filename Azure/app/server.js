@@ -86,13 +86,13 @@ app.get("/collect-sensor-data", async (req, res) => {
         const timePeriod = req.query.timePeriod || null;
         const bucketSize = req.query.bucketSize || null;
 
-        await downsampleEdgeData(timePeriod, bucketSize);
+        const result = await downsampleEdgeData(timePeriod, bucketSize);
 
-        res.status(200).json({ success: true, message: "Started" });
+        res.status(200).json({ success: true, result: result });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: "Error starting data collection", error: error.message });
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 

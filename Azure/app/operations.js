@@ -61,6 +61,7 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
             throw new Error('No sites found');
         }
 
+        const RESULT = [];
         for (const site of sites) {
             // Get devices for this site
             const devices = await devicesCollection.find({ site_id: site._id }).toArray();
@@ -121,12 +122,16 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
                         }
                     }
 
+                    const res = `Downsampled ${numberOfKeys} keys from ${site.name}`;
+
                     // console.log('Downsampled data:', timeSeriesData);
                     console.log(`
 -----------------------------------------------
-** Downsampled ${numberOfKeys} keys from ${site.name} **
+** ${res} **
 -----------------------------------------------
                     `);
+
+                    RESULT.push({ site: site.name, result: res });
 
                 } else {
                     throw new Error('No result from remoteExecuteRedis method');
@@ -136,6 +141,9 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
                 throw new Error(`remoteExecuteRedis error for site ${site.name}: ${err}`);
             }
         }
+
+        return RESULT;
+
     } catch (err) {
         throw err;
     }
