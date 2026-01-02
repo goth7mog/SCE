@@ -2,9 +2,10 @@ version: '3.8'
 services:
   app:
     container_name: app
-    build:
-      context: ./app
-      target: debug
+    # build:
+    #   context: ./app
+    #   target: debug
+    image: sceacr31103.azurecr.io/app:latest
     ports:
       - "8080:8080"
     env_file:

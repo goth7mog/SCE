@@ -51,12 +51,14 @@ app.use(cors());
 app.get('/api/v1/info', (req, res) => {
     res.json({
         code: 1,
-        message: `${process.env.npm_package_name} is running`,
         data: {
             NAME: process.env.npm_package_name,
             VERSION: process.env.npm_package_version,
             REDIS_HOST: process.env.REDIS_HOST,
             REDIS_PORT: process.env.REDIS_PORT,
+            MONGO_HOST: process.env.MONGO_HOST,
+            MONGO_PORT: process.env.MONGO_PORT,
+            IOTHUB_STATUS: global.iotHubClient && global.iotHubClient.isConnected ? 'connected' : 'not connected'
         },
         error: null
     });

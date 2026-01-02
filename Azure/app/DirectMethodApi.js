@@ -6,6 +6,8 @@ const connectionString = process.env.IOTHUB_CONNECTION_STRING;
 
 const serviceClient = iothub.Client.fromConnectionString(connectionString);
 
+global.iotHubClient = serviceClient;
+
 async function triggerDirectMethod(gatewayId, methodName, payload = {}) {
     return new Promise((resolve, reject) => {
         const methodParams = {
