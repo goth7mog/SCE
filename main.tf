@@ -64,7 +64,7 @@ resource "azurerm_container_app" "sce_app" {
 
   template {
     min_replicas = 1
-    max_replicas = 4
+    max_replicas = 3
 
     container {
       name   = "app"
