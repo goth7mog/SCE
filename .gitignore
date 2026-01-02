@@ -2,8 +2,10 @@ etc/
 .DS_Store
 .terraform/
 .github/copilot-instructions.md
+terraform.tfvars
 terraform.tfstate
 terraform.tfstate.backup
+env.auto.tfvars
 *.tfstate
 *.tfstate.backup
 .env

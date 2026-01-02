@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">= 3.0.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.0.0"
+    }
   }
 }
 
@@ -68,7 +72,46 @@ resource "azurerm_container_app" "sce_app" {
         name  = "TZ"
         value = "Europe/London"
       }
-      # Add more env vars as needed
+      env {
+        name  = "PORT"
+        value = var.port
+      }
+      env {
+        name        = "IOTHUB_CONNECTION_STRING"
+        secret_name = "iothub-connection-string"
+      }
+      env {
+        name  = "MONGO_HOST"
+        value = var.mongo_host
+      }
+      env {
+        name  = "MONGO_PORT"
+        value = var.mongo_port
+      }
+      env {
+        name  = "MONGO_USER"
+        value = var.mongo_user
+      }
+      env {
+        name        = "MONGO_PASSWORD"
+        secret_name = "mongo-password"
+      }
+      env {
+        name  = "MONGO_DATABASE"
+        value = var.mongo_database
+      }
+      env {
+        name  = "REDIS_HOST"
+        value = var.redis_host
+      }
+      env {
+        name  = "REDIS_PORT"
+        value = var.redis_port
+      }
+      env {
+        name        = "REDIS_PASSWORD"
+        secret_name = "redis-password"
+      }
     }
     # container {
     #   name   = "redis"
@@ -103,45 +146,59 @@ resource "azurerm_container_app" "sce_app" {
     name  = "acr-password"
     value = azurerm_container_registry.sce_acr.admin_password
   }
-}
 
-# --- Log Analytics Workspace for Diagnostics ---
-resource "azurerm_log_analytics_workspace" "sce_law" {
-  name                = "sce-law"
-  location            = azurerm_resource_group.sce_rg.location
-  resource_group_name = azurerm_resource_group.sce_rg.name
-  sku                 = "PerGB2018"
-  retention_in_days   = 30
-}
-resource "azurerm_container_app_diagnostic_setting" "sce_app_diag" {
-  name                       = "sce-app-diag"
-  container_app_id           = azurerm_container_app.sce_app.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.sce_law.id
-
-  log {
-    category = "ContainerAppConsoleLogs"
-    enabled  = true
-    retention_policy {
-      enabled = false
-    }
+  # App secrets from .env
+  secret {
+    name  = "mongo-password"
+    value = var.mongo_password
   }
-
-  log {
-    category = "ContainerAppSystemLogs"
-    enabled  = true
-    retention_policy {
-      enabled = false
-    }
+  secret {
+    name  = "iothub-connection-string"
+    value = var.iothub_connection_string
   }
-
-  metric {
-    category = "AllMetrics"
-    enabled  = true
-    retention_policy {
-      enabled = false
-    }
+  secret {
+    name  = "redis-password"
+    value = var.redis_password
   }
 }
+
+# # --- Log Analytics Workspace for Diagnostics ---
+# resource "azurerm_log_analytics_workspace" "sce_law" {
+#   name                = "sce-law"
+#   location            = azurerm_resource_group.sce_rg.location
+#   resource_group_name = azurerm_resource_group.sce_rg.name
+#   sku                 = "PerGB2018"
+#   retention_in_days   = 30
+# }
+# resource "azurerm_container_app_diagnostic_setting" "sce_app_diag" {
+#   name                       = "sce-app-diag"
+#   container_app_id           = azurerm_container_app.sce_app.id
+#   log_analytics_workspace_id = azurerm_log_analytics_workspace.sce_law.id
+
+#   log {
+#     category = "ContainerAppConsoleLogs"
+#     enabled  = true
+#     retention_policy {
+#       enabled = false
+#     }
+#   }
+
+#   log {
+#     category = "ContainerAppSystemLogs"
+#     enabled  = true
+#     retention_policy {
+#       enabled = false
+#     }
+#   }
+
+#   metric {
+#     category = "AllMetrics"
+#     enabled  = true
+#     retention_policy {
+#       enabled = false
+#     }
+#   }
+# }
 
 # --- Outputs ---
 output "iothub_hostname" {
