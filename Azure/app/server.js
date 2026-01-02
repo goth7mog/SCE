@@ -78,19 +78,15 @@ app.get("/mqtt/start-up", async (req, res) => {
     }
 });
 
-app.get("/collect-data/start", async (req, res) => {
+app.get("/collect-sensor-data", async (req, res) => {
+    /** PULLING SENSOR DATA */
+    // const timePeriod = 60 * 60 * 1000; // Query data for the last hour. Nonetheless, this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
+    // const bucketSize = 15 * 60 * 1000; // Aggregate data in 15-minute buckets
     try {
+        const timePeriod = req.query.timePeriod || null;
+        const bucketSize = req.query.bucketSize || null;
 
-        /** PULLING SENSOR DATA */
-        global.intervalId = setInterval(async () => {
-            const timePeriod = 60 * 60 * 1000; // Query data for the last hour. Nonetheless, this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
-            const bucketSize = 15 * 60 * 1000; // Aggregate data in 15-minute buckets
-            try {
-                await downsampleEdgeData(timePeriod, bucketSize);
-            } catch (err) {
-                console.log('Error pulling sensor data:', err);
-            }
-        }, SENSOR_DATA_PULL_INTERVAL);
+        await downsampleEdgeData(timePeriod, bucketSize);
 
         res.status(200).json({ success: true, message: "Started" });
 
@@ -100,18 +96,40 @@ app.get("/collect-data/start", async (req, res) => {
     }
 });
 
+// app.get("/collect-data/start", async (req, res) => {
+//     try {
 
-app.get("/collect-data/stop", async (req, res) => {
-    try {
-        clearInterval(global.intervalId);
+//         /** PULLING SENSOR DATA */
+//         global.intervalId = setInterval(async () => {
+//             const timePeriod = 60 * 60 * 1000; // Query data for the last hour. Nonetheless, this value is supposed to be the same as SENSOR_DATA_PULL_INTERVAL
+//             const bucketSize = 15 * 60 * 1000; // Aggregate data in 15-minute buckets
+//             try {
+//                 await downsampleEdgeData(timePeriod, bucketSize);
+//             } catch (err) {
+//                 console.log('Error pulling sensor data:', err);
+//             }
+//         }, SENSOR_DATA_PULL_INTERVAL);
 
-        res.status(200).json({ success: true, message: "Stopped" });
+//         res.status(200).json({ success: true, message: "Started" });
 
-    } catch (error) {
-        // console.error(error);
-        res.status(500).json({ success: false, message: "Error stopping data collection", error: error.message });
-    }
-});
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ success: false, message: "Error starting data collection", error: error.message });
+//     }
+// });
+
+
+// app.get("/collect-data/stop", async (req, res) => {
+//     try {
+//         clearInterval(global.intervalId);
+
+//         res.status(200).json({ success: true, message: "Stopped" });
+
+//     } catch (error) {
+//         // console.error(error);
+//         res.status(500).json({ success: false, message: "Error stopping data collection", error: error.message });
+//     }
+// });
 
 const startup = async () => {
     try {

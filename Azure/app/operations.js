@@ -45,8 +45,11 @@ module.exports.setUpMQTT = async () => {
 
 module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
     try {
+        if (!timePeriod) throw new Error('No timePeriod is set');
+        if (!bucketSize) throw new Error('No bucketSize is set');
+
         const now = new Date();
-        const fromTimestamp = (new Date(now.getTime() - timePeriod)).getTime(); // ms since epoch
+        const fromTimestamp = (new Date(now.getTime() - Number(timePeriod))).getTime(); // ms since epoch
         const toTimestamp = now.getTime();
 
         const sitesCollection = global.mongoDB.collection('sites');
