@@ -88,11 +88,11 @@ app.get("/collect-sensor-data", async (req, res) => {
 
         const result = await downsampleEdgeData(timePeriod, bucketSize);
 
-        res.status(200).json({ success: true, result: result });
+        res.status(200).json({ result: result });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
