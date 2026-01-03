@@ -116,17 +116,7 @@ resource "azurerm_container_app" "sce_app" {
         secret_name = "redis-password"
       }
     }
-    # container {
-    #   name   = "redis"
-    #   image  = "redis/redis-stack-server:latest" # Public Redis image from Docker Hub
-    #   cpu    = 0.5
-    #   memory = "1.0Gi"
-    #   env {
-    #     name  = "TZ"
-    #     value = "Europe/London"
-    #   }
-    # }
-    # # Optionally define volumes here
+
   }
 
   ingress {
@@ -163,6 +153,35 @@ resource "azurerm_container_app" "sce_app" {
     name  = "redis-password"
     value = var.redis_password
   }
+}
+
+# --- Azure Logic App for Scheduled Data Collection ---
+resource "azurerm_logic_app_workflow" "sce_scheduler" {
+  name                = "sce-data-collector"
+  location            = azurerm_resource_group.sce_rg.location
+  resource_group_name = azurerm_resource_group.sce_rg.name
+
+  tags = {
+    environment = "sce-demo"
+  }
+}
+
+resource "azurerm_logic_app_trigger_recurrence" "sce_scheduler_trigger" {
+  name         = "recurrence-trigger"
+  logic_app_id = azurerm_logic_app_workflow.sce_scheduler.id
+  frequency    = "Minute"
+  interval     = 15
+}
+
+resource "azurerm_logic_app_action_http" "sce_scheduler_action" {
+  name         = "collect-sensor-data"
+  logic_app_id = azurerm_logic_app_workflow.sce_scheduler.id
+  method       = "GET"
+  uri          = "https://${azurerm_container_app.sce_app.ingress[0].fqdn}/collect-sensor-data?timePeriod=60&bucketSize=15"
+
+  depends_on = [
+    azurerm_logic_app_trigger_recurrence.sce_scheduler_trigger
+  ]
 }
 
 # # --- Log Analytics Workspace for Diagnostics ---
