@@ -49,3 +49,30 @@ variable "redis_password" {
   type        = string
   sensitive   = true
 }
+
+variable "okta_domain" {
+  description = "Okta domain"
+  type        = string
+}
+
+variable "okta_client_id" {
+  description = "Okta OAuth client ID for Logic App"
+  type        = string
+  sensitive   = true
+}
+
+variable "okta_client_secret" {
+  description = "Okta OAuth client secret for Logic App"
+  type        = string
+  sensitive   = true
+}
+
+variable "okta_audience" {
+  description = "Okta audience for token validation"
+  type        = string
+}
+
+variable "okta_scope" {
+  description = "Okta OAuth scope to request"
+  type        = string
+}
