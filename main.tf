@@ -115,6 +115,18 @@ resource "azurerm_container_app" "sce_app" {
         name        = "REDIS_PASSWORD"
         secret_name = "redis-password"
       }
+      env {
+        name  = "OKTA_DOMAIN"
+        value = var.okta_domain
+      }
+      env {
+        name  = "OKTA_AUDIENCE"
+        value = var.okta_audience
+      }
+      env {
+        name  = "SCP_PERMISSION"
+        value = var.okta_scope
+      }
     }
 
   }
@@ -173,15 +185,38 @@ resource "azurerm_logic_app_trigger_recurrence" "sce_scheduler_trigger" {
   interval     = 15
 }
 
+resource "azurerm_logic_app_action_http" "get_oauth_token" {
+  name         = "get-oauth-token"
+  logic_app_id = azurerm_logic_app_workflow.sce_scheduler.id
+  method       = "POST"
+  uri          = "https://${var.okta_domain}.okta.com/oauth2/default/v1/token"
+
+  headers = {
+    "Content-Type"  = "application/x-www-form-urlencoded"
+    "Authorization" = "Basic @{base64(concat('${var.okta_client_id}', ':', '${var.okta_client_secret}'))}"
+  }
+
+  body = "grant_type=client_credentials&scope=${var.okta_scope}"
+
+  depends_on = [
+    azurerm_logic_app_trigger_recurrence.sce_scheduler_trigger
+  ]
+}
+
 resource "azurerm_logic_app_action_http" "sce_scheduler_action" {
   name         = "collect-sensor-data"
   logic_app_id = azurerm_logic_app_workflow.sce_scheduler.id
   method       = "GET"
   uri          = "https://${azurerm_container_app.sce_app.ingress[0].fqdn}/collect-sensor-data?timePeriod=60&bucketSize=15"
 
-  depends_on = [
-    azurerm_logic_app_trigger_recurrence.sce_scheduler_trigger
-  ]
+  headers = {
+    "Authorization" = "Bearer @{body('get-oauth-token')['access_token']}"
+  }
+
+  run_after {
+    action_name   = "get-oauth-token"
+    action_result = "Succeeded"
+  }
 }
 
 # # --- Log Analytics Workspace for Diagnostics ---
