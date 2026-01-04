@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 
 const client = jwksClient({
-    jwksUri: `https://login.microsoftonline.com/common/discovery/v2.0/keys`
+    jwksUri: `https://${process.env.OKTA_DOMAIN}.okta.com/oauth2/default/v1/keys`
 });
 
 function getKey(header, callback) {
@@ -13,7 +13,7 @@ function getKey(header, callback) {
     });
 }
 
-function validateAzureADToken(req, res, next) {
+function validateAuth(req, res, next) {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -23,15 +23,15 @@ function validateAzureADToken(req, res, next) {
     const token = authHeader.substring(7);
 
     jwt.verify(token, getKey, {
-        audience: process.env.AZURE_CLIENT_ID, // Your App Registration client ID
-        issuer: `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/v2.0`,
+        audience: process.env.OKTA_AUDIENCE,
+        issuer: `https://${process.env.OKTA_DOMAIN}.okta.com/oauth2/default`,
         algorithms: ['RS256']
     }, (err, decoded) => {
         if (err) {
             return res.status(401).json({ error: 'Invalid token', details: err.message });
         }
-        // Check app role
-        if (!decoded.roles || !decoded.roles.includes('DataCollector.ReadWrite')) {
+        // Check for required scope or role (adjust based on Okta setup; e.g., check scopes or groups)
+        if (!decoded.scp || !decoded.scp.includes(process.env.SCP_PERMISSION)) {
             return res.status(403).json({ error: 'Insufficient permissions' });
         }
 
@@ -40,4 +40,4 @@ function validateAzureADToken(req, res, next) {
     });
 }
 
-module.exports = validateAzureADToken;
+module.exports = validateAuth;
