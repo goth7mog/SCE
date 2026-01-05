@@ -8,7 +8,8 @@ global.approute = path.resolve(__dirname);
 const port = process.env.PORT || 8080;
 const express = require('express');
 const cors = require('cors');
-const validateAuth = require('./middleware/auth0.js');
+const OktaAuth = require('./middleware/auth0.js');
+const AzureAuth = require('./middleware/azure-auth.js');
 const { setUpMQTT, downsampleEdgeData } = require('./operations.js');
 
 
@@ -47,8 +48,10 @@ const connectMongo = async () => {
 const app = new express();
 app.use(express.json());
 app.use(cors());
+
 // Apply authentication to all routes below this point
-app.use(validateAuth);
+// app.use(OktaAuth);
+app.use(AzureAuth);
 
 app.get('/api/v1/info', (req, res) => {
     res.json({

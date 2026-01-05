@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">= 3.0.0"
     }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = ">= 2.0.0"
+    }
     random = {
       source  = "hashicorp/random"
       version = ">= 3.0.0"
@@ -16,9 +20,56 @@ provider "azurerm" {
   subscription_id = "584f8a59-dcda-4698-a720-39e3963a9708"
 }
 
+provider "azuread" {}
+
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_resource_group" "sce_rg" {
   name     = "sce-rg"
   location = "switzerlandnorth" # ["switzerlandnorth","polandcentral","italynorth","norwayeast","swedencentral"]
+}
+
+# --- Azure AD App Registration for Container App ---
+resource "azuread_application" "sce_app" {
+  display_name = "SCE-App"
+
+  owners = [data.azurerm_client_config.current.object_id]
+
+  api {
+    requested_access_token_version = 2
+  }
+
+  app_role {
+    allowed_member_types = ["Application"]
+    description          = "Allow access to collect sensor data"
+    display_name         = "DataCollector"
+    enabled              = true
+    id                   = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    value                = "DataCollector.ReadWrite"
+  }
+}
+
+resource "azuread_application_identifier_uri" "sce_app" {
+  application_id = azuread_application.sce_app.id
+  identifier_uri = "api://${azuread_application.sce_app.client_id}"
+}
+
+resource "azuread_service_principal" "sce_app" {
+  client_id = azuread_application.sce_app.client_id
+
+  owners = [data.azurerm_client_config.current.object_id]
+}
+
+resource "azuread_application_password" "sce_app" {
+  application_id = azuread_application.sce_app.id
+  display_name   = "SCE App Client Secret"
+}
+
+# Assign the app role to the service principal so it can authenticate
+resource "azuread_app_role_assignment" "sce_app" {
+  app_role_id         = azuread_application.sce_app.app_role_ids["DataCollector.ReadWrite"]
+  principal_object_id = azuread_service_principal.sce_app.object_id
+  resource_object_id  = azuread_service_principal.sce_app.object_id
 }
 
 resource "azurerm_iothub" "sce_iothub" {
@@ -80,6 +131,14 @@ resource "azurerm_container_app" "sce_app" {
         value = var.port
       }
       env {
+        name  = "AZURE_TENANT_ID"
+        value = data.azurerm_client_config.current.tenant_id
+      }
+      env {
+        name  = "AZURE_CLIENT_ID"
+        value = azuread_application.sce_app.client_id
+      }
+      env {
         name        = "IOTHUB_CONNECTION_STRING"
         secret_name = "iothub-connection-string"
       }
@@ -115,18 +174,6 @@ resource "azurerm_container_app" "sce_app" {
         name        = "REDIS_PASSWORD"
         secret_name = "redis-password"
       }
-      env {
-        name  = "OKTA_DOMAIN"
-        value = var.okta_domain
-      }
-      env {
-        name  = "OKTA_AUDIENCE"
-        value = var.okta_audience
-      }
-      env {
-        name  = "SCP_PERMISSION"
-        value = var.okta_scope
-      }
     }
 
   }
@@ -139,6 +186,10 @@ resource "azurerm_container_app" "sce_app" {
       latest_revision = true
       percentage      = 100
     }
+  }
+
+  identity {
+    type = "SystemAssigned"
   }
 
   registry {
@@ -189,14 +240,13 @@ resource "azurerm_logic_app_action_http" "get_oauth_token" {
   name         = "get-oauth-token"
   logic_app_id = azurerm_logic_app_workflow.sce_scheduler.id
   method       = "POST"
-  uri          = "https://${var.okta_domain}.okta.com/oauth2/default/v1/token"
+  uri          = "https://login.microsoftonline.com/${data.azurerm_client_config.current.tenant_id}/oauth2/v2.0/token"
 
   headers = {
-    "Content-Type"  = "application/x-www-form-urlencoded"
-    "Authorization" = "Basic @{base64(concat('${var.okta_client_id}', ':', '${var.okta_client_secret}'))}"
+    "Content-Type" = "application/x-www-form-urlencoded"
   }
 
-  body = "grant_type=client_credentials&scope=${var.okta_scope}"
+  body = "grant_type=client_credentials&client_id=${azuread_application.sce_app.client_id}&client_secret=${azuread_application_password.sce_app.value}&scope=api://${azuread_application.sce_app.client_id}/.default"
 
   depends_on = [
     azurerm_logic_app_trigger_recurrence.sce_scheduler_trigger

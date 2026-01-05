@@ -3,8 +3,7 @@ etc/
 .terraform/
 .github/copilot-instructions.md
 terraform.tfvars
-terraform.tfstate
-terraform.tfstate.backup
+terraform.tfstate.*
 env.auto.tfvars
 *.tfstate
 *.tfstate.backup
