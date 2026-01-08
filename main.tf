@@ -29,9 +29,9 @@ resource "azurerm_resource_group" "sce_rg" {
   location = "switzerlandnorth" # ["switzerlandnorth","polandcentral","italynorth","norwayeast","swedencentral"]
 }
 
-# --- Azure AD App Registration for Container App ---
-resource "azuread_application" "sce_app" {
-  display_name = "SCE-App"
+# --- Azure AD App Registration for API ---
+resource "azuread_application" "sce_api" {
+  display_name = "SCE-API"
 
   owners = [data.azurerm_client_config.current.object_id]
 
@@ -47,29 +47,56 @@ resource "azuread_application" "sce_app" {
     id                   = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
     value                = "DataCollector.ReadWrite"
   }
+
+  app_role {
+    allowed_member_types = ["Application"]
+    description          = "Frontend app access"
+    display_name         = "React App"
+    enabled              = true
+    id                   = "b2c3d4e5-f6a7-8901-bcde-ef1234567891"
+    value                = "Frontend.ReadWrite"
+  }
 }
 
-resource "azuread_application_identifier_uri" "sce_app" {
-  application_id = azuread_application.sce_app.id
-  identifier_uri = "api://${azuread_application.sce_app.client_id}"
+resource "azuread_application_identifier_uri" "sce_api" {
+  application_id = azuread_application.sce_api.id
+  identifier_uri = "api://${azuread_application.sce_api.client_id}"
 }
 
-resource "azuread_service_principal" "sce_app" {
-  client_id = azuread_application.sce_app.client_id
+resource "azuread_service_principal" "sce_api" {
+  client_id = azuread_application.sce_api.client_id
 
   owners = [data.azurerm_client_config.current.object_id]
 }
 
-resource "azuread_application_password" "sce_app" {
-  application_id = azuread_application.sce_app.id
-  display_name   = "SCE App Client Secret"
+resource "azuread_application_password" "sce_api" {
+  application_id = azuread_application.sce_api.id
+  display_name   = "SCE API Client Secret"
 }
 
-# Assign the app role to the service principal so it can authenticate
-resource "azuread_app_role_assignment" "sce_app" {
-  app_role_id         = azuread_application.sce_app.app_role_ids["DataCollector.ReadWrite"]
-  principal_object_id = azuread_service_principal.sce_app.object_id
-  resource_object_id  = azuread_service_principal.sce_app.object_id
+# --- Azure AD App Registration for Scheduler/Logic App ---
+resource "azuread_application" "sce_scheduler" {
+  display_name = "SCE-Scheduler"
+
+  owners = [data.azurerm_client_config.current.object_id]
+}
+
+resource "azuread_service_principal" "sce_scheduler" {
+  client_id = azuread_application.sce_scheduler.client_id
+
+  owners = [data.azurerm_client_config.current.object_id]
+}
+
+resource "azuread_application_password" "sce_scheduler" {
+  application_id = azuread_application.sce_scheduler.id
+  display_name   = "SCE Scheduler Client Secret"
+}
+
+# Assign the DataCollector.ReadWrite role to the scheduler service principal
+resource "azuread_app_role_assignment" "scheduler_to_api" {
+  app_role_id         = azuread_application.sce_api.app_role_ids["DataCollector.ReadWrite"]
+  principal_object_id = azuread_service_principal.sce_scheduler.object_id
+  resource_object_id  = azuread_service_principal.sce_api.object_id
 }
 
 resource "azurerm_iothub" "sce_iothub" {
@@ -136,7 +163,7 @@ resource "azurerm_container_app" "sce_app" {
       }
       env {
         name  = "AZURE_CLIENT_ID"
-        value = azuread_application.sce_app.client_id
+        value = azuread_application.sce_api.client_id
       }
       env {
         name        = "IOTHUB_CONNECTION_STRING"
@@ -246,7 +273,7 @@ resource "azurerm_logic_app_action_http" "get_oauth_token" {
     "Content-Type" = "application/x-www-form-urlencoded"
   }
 
-  body = "grant_type=client_credentials&client_id=${azuread_application.sce_app.client_id}&client_secret=${azuread_application_password.sce_app.value}&scope=api://${azuread_application.sce_app.client_id}/.default"
+  body = "grant_type=client_credentials&client_id=${azuread_application.sce_scheduler.client_id}&client_secret=${azuread_application_password.sce_scheduler.value}&scope=api://${azuread_application.sce_api.client_id}/.default"
 
   depends_on = [
     azurerm_logic_app_trigger_recurrence.sce_scheduler_trigger

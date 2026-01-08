@@ -33,7 +33,12 @@ function validateAzureAuth(req, res, next) {
 
         // Check for required app role
         const roles = decoded.roles || [];
-        if (!roles.includes('DataCollector.ReadWrite')) {
+
+        // So the result will be true or false
+        const hasValidRole = roles.includes('DataCollector.ReadWrite') ||
+            roles.includes('Frontend.ReadWrite');
+
+        if (!hasValidRole) {
             return res.status(403).json({ error: 'Insufficient permissions - missing required role' });
         }
 
