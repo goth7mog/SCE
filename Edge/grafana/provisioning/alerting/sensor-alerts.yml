@@ -1,0 +1,395 @@
+apiVersion: 1
+
+groups:
+  - name: Sensor Alerts
+    folder: General
+    interval: 1m
+    rules:
+      # Humidity alerts
+      - uid: humidity-livingroom-alert
+        title: High Humidity - Living Room
+        condition: "G > 46.9"
+        data:
+          - refId: A
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-livingroom-f8e7d6c5b4a39281:circuitA:humidity
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: B
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-livingroom-f8e7d6c5b4a39281:circuitB:humidity
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: C
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-livingroom-f8e7d6c5b4a39281:circuitC:humidity
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+        expressions:
+          - refId: D
+            type: reduce
+            expression: A
+            reducer: max
+          - refId: E
+            type: reduce
+            expression: B
+            reducer: max
+          - refId: F
+            type: reduce
+            expression: C
+            reducer: max
+          - refId: G
+            type: math
+            expression: max(D, E, F)
+          - refId: H
+            type: threshold
+            expression: G > 46.9
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "Humidity in Living Room is too high (max: {{ $values.G }})"
+        labels:
+          severity: warning
+          device: livingroom
+          metric: humidity
+        isPaused: false
+
+      - uid: temp-livingroom-alert
+        title: High Temperature - Living Room
+        condition: "G > 23.05"
+        data:
+          - refId: A
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-livingroom-f8e7d6c5b4a39281:circuitA:temperature
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: B
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-livingroom-f8e7d6c5b4a39281:circuitB:temperature
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: C
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-livingroom-f8e7d6c5b4a39281:circuitC:temperature
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+        expressions:
+          - refId: D
+            type: reduce
+            expression: A
+            reducer: max
+          - refId: E
+            type: reduce
+            expression: B
+            reducer: max
+          - refId: F
+            type: reduce
+            expression: C
+            reducer: max
+          - refId: G
+            type: math
+            expression: max(D, E, F)
+          - refId: H
+            type: threshold
+            expression: G > 23.05
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "Temperature in Living Room is too high (max: {{ $values.G }})"
+        labels:
+          severity: warning
+          device: livingroom
+          metric: temperature
+        isPaused: false
+
+      - uid: humidity-hall-alert
+        title: High Humidity - Hall
+        condition: "G > 46.9"
+        data:
+          - refId: A
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-hall-1b2c3d4e5f6a7b8c:circuitA:humidity
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: B
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-hall-1b2c3d4e5f6a7b8c:circuitB:humidity
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+        expressions:
+          - refId: D
+            type: reduce
+            expression: A
+            reducer: max
+          - refId: E
+            type: reduce
+            expression: B
+            reducer: max
+          - refId: G
+            type: math
+            expression: max(D, E)
+          - refId: H
+            type: threshold
+            expression: G > 46.9
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "Humidity in Hall is too high (max: {{ $values.G }})"
+        labels:
+          severity: warning
+          device: hall
+          metric: humidity
+        isPaused: false
+
+      - uid: temp-hall-alert
+        title: High Temperature - Hall
+        condition: "G > 23.05"
+        data:
+          - refId: A
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-hall-1b2c3d4e5f6a7b8c:circuitA:temperature
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: B
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-hall-1b2c3d4e5f6a7b8c:circuitB:temperature
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+        expressions:
+          - refId: D
+            type: reduce
+            expression: A
+            reducer: max
+          - refId: E
+            type: reduce
+            expression: B
+            reducer: max
+          - refId: G
+            type: math
+            expression: max(D, E)
+          - refId: H
+            type: threshold
+            expression: G > 23.05
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "Temperature in Hall is too high (max: {{ $values.G }})"
+        labels:
+          severity: warning
+          device: hall
+          metric: temperature
+        isPaused: false
+
+      - uid: humidity-checkin-alert
+        title: High Humidity - Checkin
+        condition: "G > 46.9"
+        data:
+          - refId: A
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:humidity
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: B
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:humidity
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: C
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:humidity
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+        expressions:
+          - refId: D
+            type: reduce
+            expression: A
+            reducer: max
+          - refId: E
+            type: reduce
+            expression: B
+            reducer: max
+          - refId: F
+            type: reduce
+            expression: C
+            reducer: max
+          - refId: G
+            type: math
+            expression: max(D, E, F)
+          - refId: H
+            type: threshold
+            expression: G > 46.9
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "Humidity in Checkin is too high (max: {{ $values.G }})"
+        labels:
+          severity: warning
+          device: checkin
+          metric: humidity
+        isPaused: false
+
+      - uid: temp-checkin-alert
+        title: High Temperature - Checkin
+        condition: "G > 23.05"
+        data:
+          - refId: A
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:temperature
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: B
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:temperature
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+          - refId: C
+            datasourceUid: PA7F6415749A3297A
+            model:
+              command: ts.range
+              keyName: Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:temperature
+              aggregation: avg
+              bucket: 120000
+            relativeTimeRange:
+              from: 300   # seconds
+              to: 0
+
+
+        expressions:
+          - refId: D
+            type: reduce
+            expression: A
+            reducer: max
+          - refId: E
+            type: reduce
+            expression: B
+            reducer: max
+          - refId: F
+            type: reduce
+            expression: C
+            reducer: max
+          - refId: G
+            type: math
+            expression: max(D, E, F)
+          - refId: H
+            type: threshold
+            expression: G > 23.05
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          summary: "Temperature in Checkin is too high (max: {{ $values.G }})"
+        labels:
+          severity: warning
+          device: checkin
+          metric: temperature
+        isPaused: false

@@ -1,0 +1,11 @@
+apiVersion: 1
+route:
+  receiver: team-email
+  group_by: ['alertname']
+  routes:
+    - receiver: team-email
+      matchers:
+        - severity = "critical"
+    - receiver: team-slack
+      matchers:
+        - severity = "warning"
