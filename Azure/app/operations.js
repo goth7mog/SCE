@@ -54,8 +54,8 @@ module.exports.downsampleEdgeData = async (timePeriod, bucketSize) => {
         bucketSize = Number(bucketSize) * 60 * 1000;
 
         const now = new Date();
-        const fromTimestamp = (new Date(now.getTime() - Number(timePeriod))).getTime(); // ms since epoch
-        const toTimestamp = now.getTime();
+        const toTimestamp = now.getTime(); /* timestamp now */
+        const fromTimestamp = (new Date(now.getTime() - Number(timePeriod))).getTime();
 
         const sitesCollection = global.mongoDB.collection('sites');
         const devicesCollection = global.mongoDB.collection('devices');
