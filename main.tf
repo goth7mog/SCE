@@ -260,7 +260,7 @@ resource "azurerm_logic_app_trigger_recurrence" "sce_scheduler_trigger" {
   name         = "recurrence-trigger"
   logic_app_id = azurerm_logic_app_workflow.sce_scheduler.id
   frequency    = "Minute"
-  interval     = 15
+  interval     = 60
 }
 
 resource "azurerm_logic_app_action_http" "get_oauth_token" {
