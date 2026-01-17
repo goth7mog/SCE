@@ -82,10 +82,9 @@ services:
       - sce-net-edge
     volumes:
       - grafana-data:/var/lib/grafana
-      # - ./grafana/provisioning:/etc/grafana/provisioning
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./grafana/provisioning/alerting:/etc/grafana/provisioning/alerting
+      # - ./grafana/provisioning/alerting:/etc/grafana/provisioning/alerting
       
 
 networks:
