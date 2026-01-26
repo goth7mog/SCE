@@ -147,8 +147,8 @@ resource "azurerm_container_app" "sce_app" {
     container {
       name   = "app"
       image  = "${azurerm_container_registry.sce_acr.login_server}/app:latest" # Custom app image from ACR
-      cpu    = 0.5
-      memory = "1.0Gi"
+      cpu    = 0.25
+      memory = "0.5Gi"
       env {
         name  = "TZ"
         value = "Europe/London"
