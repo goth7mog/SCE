@@ -1,3 +1,9 @@
+# --- MikroTik CHR Admin Password Variable ---
+variable "mikrotik_admin_password" {
+  description = "Admin password for MikroTik CHR VM."
+  type        = string
+  sensitive   = true
+}
 variable "port" {
   description = "App port"
   type        = string

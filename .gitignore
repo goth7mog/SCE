@@ -11,4 +11,5 @@ env.auto.tfvars
 Azure/redis/
 docker-compose-mqtt.yml
 readme.md
+vms/
 

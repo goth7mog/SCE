@@ -245,6 +245,158 @@ resource "azurerm_container_app" "sce_app" {
   }
 }
 
+
+# --- MikroTik CHR VM Deployment (Custom Image) ---
+resource "azurerm_public_ip" "mikrotik_chr" {
+  name                = "mikrotik-chr-pip"
+  location            = azurerm_resource_group.sce_rg.location
+  resource_group_name = azurerm_resource_group.sce_rg.name
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
+resource "azurerm_network_security_group" "mikrotik_chr" {
+  name                = "mikrotik-chr-nsg"
+  location            = azurerm_resource_group.sce_rg.location
+  resource_group_name = azurerm_resource_group.sce_rg.name
+
+  security_rule {
+    name                       = "AllowWinbox"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8291"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+  security_rule {
+    name                       = "AllowSSH"
+    priority                   = 1002
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+  security_rule {
+    name                       = "AllowHTTP"
+    priority                   = 1003
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+  security_rule {
+    name                       = "AllowHTTPS"
+    priority                   = 1004
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+
+resource "azurerm_virtual_network" "mikrotik_chr" {
+  name                = "mikrotik-chr-vnet"
+  address_space       = ["10.20.0.0/16"]
+  location            = azurerm_resource_group.sce_rg.location
+  resource_group_name = azurerm_resource_group.sce_rg.name
+}
+
+resource "azurerm_subnet" "mikrotik_chr" {
+  name                 = "mikrotik-chr-subnet"
+  resource_group_name  = azurerm_resource_group.sce_rg.name
+  virtual_network_name = azurerm_virtual_network.mikrotik_chr.name
+  address_prefixes     = ["10.20.1.0/24"]
+}
+
+resource "azurerm_network_interface" "mikrotik_chr" {
+  name                = "mikrotik-chr-nic"
+  location            = azurerm_resource_group.sce_rg.location
+  resource_group_name = azurerm_resource_group.sce_rg.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.mikrotik_chr.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.mikrotik_chr.id
+  }
+}
+
+resource "azurerm_network_interface_security_group_association" "mikrotik_chr" {
+  network_interface_id      = azurerm_network_interface.mikrotik_chr.id
+  network_security_group_id = azurerm_network_security_group.mikrotik_chr.id
+}
+
+# --- Storage for Custom Image ---
+resource "azurerm_storage_account" "mikrotik_chr" {
+  name                     = "mikrotikchrsa${random_integer.suffix.result}"
+  resource_group_name      = azurerm_resource_group.sce_rg.name
+  location                 = azurerm_resource_group.sce_rg.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "mikrotik_chr" {
+  name                  = "vhds"
+  storage_account_id    = azurerm_storage_account.mikrotik_chr.id
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_blob" "mikrotik_chr" {
+  name                   = "chr.vhd"
+  storage_account_name   = azurerm_storage_account.mikrotik_chr.name
+  storage_container_name = azurerm_storage_container.mikrotik_chr.name
+  type                   = "Page"
+  source                 = "${path.module}/vms/chr.vhd"
+}
+
+resource "azurerm_image" "mikrotik_chr" {
+  name                = "mikrotik-chr-image"
+  location            = azurerm_resource_group.sce_rg.location
+  resource_group_name = azurerm_resource_group.sce_rg.name
+
+  os_disk {
+    os_type      = "Linux"
+    blob_uri     = azurerm_storage_blob.mikrotik_chr.url
+    caching      = "ReadWrite"
+    size_gb      = 8
+    storage_type = "Standard_LRS"
+    os_state     = "Generalized"
+  }
+}
+
+resource "azurerm_linux_virtual_machine" "mikrotik_chr" {
+  name                            = "mikrotik-chr-vm"
+  resource_group_name             = azurerm_resource_group.sce_rg.name
+  location                        = azurerm_resource_group.sce_rg.location
+  size                            = "Standard_B1ms"
+  admin_username                  = "mikrotikadmin"
+  network_interface_ids           = [azurerm_network_interface.mikrotik_chr.id]
+  disable_password_authentication = false
+  admin_password                  = var.mikrotik_admin_password
+
+  os_disk {
+    name                 = "mikrotik-chr-osdisk"
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+    disk_size_gb         = 8
+  }
+
+  source_image_id = azurerm_image.mikrotik_chr.id
+}
+
+
 # --- Azure Logic App for Scheduled Data Collection ---
 resource "azurerm_logic_app_workflow" "sce_scheduler" {
   name                = "sce-data-collector"
@@ -312,6 +464,12 @@ output "container_app_fqdn" {
   description = "The FQDN of the Azure Container App."
   value       = azurerm_container_app.sce_app.latest_revision_fqdn
 }
+
+output "mikrotik_chr_public_ip" {
+  description = "The public IP address of the MikroTik CHR VM."
+  value       = azurerm_public_ip.mikrotik_chr.ip_address
+}
+
 
 
 
