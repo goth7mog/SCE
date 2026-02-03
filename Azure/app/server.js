@@ -48,9 +48,8 @@ const app = new express();
 app.use(express.json());
 app.use(cors());
 
-// Apply authentication to all routes below this point
-// app.use(OktaAuth);
-app.use(AzureADAuth);
+
+
 
 app.get('/api/v1/info', (req, res) => {
     res.json({
@@ -67,6 +66,11 @@ app.get('/api/v1/info', (req, res) => {
         error: null
     });
 });
+
+// Apply authentication to all routes below this point
+// app.use(OktaAuth);
+app.use(AzureADAuth);
+
 
 app.get("/mqtt/start-up", async (req, res) => {
     try {
