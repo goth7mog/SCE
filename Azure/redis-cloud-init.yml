@@ -1,0 +1,35 @@
+---
+- name: Initialize Redis Cloud TimeSeries keys
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  vars:
+    redis_keys:
+      - edge-gateway-3:Pi-hall-1b2c3d4e5f6a7b8c:circuitA:temperature
+      - edge-gateway-3:Pi-hall-1b2c3d4e5f6a7b8c:circuitA:humidity
+      - edge-gateway-3:Pi-hall-1b2c3d4e5f6a7b8c:circuitB:temperature
+      - edge-gateway-3:Pi-hall-1b2c3d4e5f6a7b8c:circuitB:humidity
+      - edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:temperature
+      - edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitA:humidity
+      - edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:temperature
+      - edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitB:humidity
+      - edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:temperature
+      - edge-gateway-3:Pi-checkin-9e8f7d6c5b4a3e2d:circuitC:humidity
+      - edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitA:temperature
+      - edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitA:humidity
+      - edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitB:temperature
+      - edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitB:humidity
+      - edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitC:temperature
+      - edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitC:humidity
+  tasks:
+    - name: Create Redis TimeSeries keys in Redis Cloud
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} -a {{ redis_password }} TS.CREATE {{ item }}
+      loop: "{{ redis_keys }}"
+      register: create_results
+
+    - name: Print completion message
+      debug:
+        msg: "Redis Cloud time series keys initialized."

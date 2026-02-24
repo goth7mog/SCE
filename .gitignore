@@ -9,6 +9,7 @@ env.auto.tfvars
 *.tfstate.backup
 .env
 Azure/redis/
+Azure/vars.yml
 docker-compose-mqtt.yml
 readme.md
 vms/
