@@ -8,6 +8,7 @@ env.auto.tfvars
 *.tfstate
 *.tfstate.backup
 .env
+arm-template-28_02_2026.json
 Azure/redis/
 Azure/vars.yml
 docker-compose-mqtt.yml
