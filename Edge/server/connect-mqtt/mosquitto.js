@@ -2,10 +2,10 @@ const mqtt = require("mqtt");
 const server = 'mqtt://mosquitto:1883';
 const options = {
     clientId: 'edge-server',
-    clean: true,
+    // clean: true,        /* Default is 'true' nevertheless */
     // username: '',         
     // password: '',         
-    connectTimeout: 4000
+    connectTimeout: 5000
     // rejectUnauthorized: true 
 }
 
