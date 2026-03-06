@@ -24,6 +24,11 @@
       - edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitC:temperature
       - edge-gateway-3:Pi-livingroom-f8e7d6c5b4a39281:circuitC:humidity
   tasks:
+    - name: Flush all data in Redis Cloud
+      command: >
+        redis-cli -h {{ redis_host }} -p {{ redis_port }} -a {{ redis_password }} FLUSHALL
+      register: flushall_result
+
     - name: Create Redis TimeSeries keys in Redis Cloud
       command: >
         redis-cli -h {{ redis_host }} -p {{ redis_port }} -a {{ redis_password }} TS.CREATE {{ item }}
