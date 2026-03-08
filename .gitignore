@@ -13,5 +13,6 @@ Azure/redis/
 Azure/vars.yml
 docker-compose-mqtt.yml
 readme.md
+mikrotik-commands.md
 vms/
 
