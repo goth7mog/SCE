@@ -466,10 +466,10 @@ output "container_app_fqdn" {
   value       = azurerm_container_app.sce_app.latest_revision_fqdn
 }
 
-output "mikrotik_chr_public_ip" {
-  description = "The public IP address of the MikroTik CHR VM."
-  value       = azurerm_public_ip.mikrotik_chr.ip_address
-}
+# output "mikrotik_chr_public_ip" {
+#   description = "The public IP address of the MikroTik CHR VM."
+#   value       = azurerm_public_ip.mikrotik_chr.ip_address
+# }
 
 
 
