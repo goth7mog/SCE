@@ -6,8 +6,8 @@ const { setupMQTTListener, subscribeToTopics } = require('./automate');
 const mosquitto = require('./connect-mqtt/mosquitto');
 
 
-const AUTOMATED_MQTT_SETUP = false; // Default - false
-const MQTT_SETUP_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+const AUTOMATED_MQTT_SETUP = true; // Default - false
+const MQTT_SETUP_TIMEOUT = 60 * 1000;
 global.MQTT_SETUP_STATUS = null;
 
 
@@ -124,7 +124,6 @@ app.on('ready', async () => {
             }
         }, MQTT_SETUP_TIMEOUT);
     }
-
 
 
 

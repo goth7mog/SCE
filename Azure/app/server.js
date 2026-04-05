@@ -49,8 +49,7 @@ app.use(express.json());
 app.use(cors());
 
 // Apply authentication to all routes below this point
-// app.use(OktaAuth);
-app.use(AzureADAuth);
+// app.use(AzureADAuth);
 
 app.get('/api/v1/info', (req, res) => {
     res.json({
