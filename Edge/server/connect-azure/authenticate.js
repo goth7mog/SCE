@@ -21,7 +21,7 @@ module.exports = async () => {
         const client = Client.fromConnectionString(connectionString, Mqtt);
         client.setOptions(x509);
 
-        // If something's wrong, we fall down here, not later in the runtime
+        // If something's wrong, we fall down here, not later in the code
         await client.open();
 
         return client;

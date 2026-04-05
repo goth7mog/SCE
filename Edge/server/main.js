@@ -25,7 +25,7 @@ const connectAzure = async () => {
         console.log('Azure connection is running');
     } catch (err) {
         console.log(err);
-        throw err;
+        // throw err;
     }
 }
 
@@ -127,59 +127,59 @@ app.on('ready', async () => {
 
 
 
-    // Register handler for setupMQTT direct method
-    global.azureClient.onDeviceMethod('setUpMQTT', async (request, response) => {
-        try {
-            // Connect to MOSQUITTO
-            await mosquitto.connect();
+    // // Register handler for setupMQTT direct method
+    // global.azureClient.onDeviceMethod('setUpMQTT', async (request, response) => {
+    //     try {
+    //         // Connect to MOSQUITTO
+    //         await mosquitto.connect();
 
-            // Set up a message listener
-            setupMQTTListener();
+    //         // Set up a message listener
+    //         setupMQTTListener();
 
-            // Then subscribe to topics
-            const result = await subscribeToTopics(request.payload);
+    //         // Then subscribe to topics
+    //         const result = await subscribeToTopics(request.payload);
 
-            global.MQTT_SETUP_STATUS = 'COMPLETE';
+    //         global.MQTT_SETUP_STATUS = 'COMPLETE';
 
-            response.send(200, result, err => {
-                if (err) console.error('Failed to send method response:', err);
-            });
-        } catch (err) {
-            global.MQTT_SETUP_STATUS = 'ERROR';
-            response.send(500, { error: err.message }, () => { });
-        }
-    });
+    //         response.send(200, result, err => {
+    //             if (err) console.error('Failed to send method response:', err);
+    //         });
+    //     } catch (err) {
+    //         global.MQTT_SETUP_STATUS = 'ERROR';
+    //         response.send(500, { error: err.message }, () => { });
+    //     }
+    // });
 
 
 
-    global.azureClient.onDeviceMethod('remoteExecuteRedis', async (request, response) => {
-        try {
-            let RESULT;
+    // global.azureClient.onDeviceMethod('remoteExecuteRedis', async (request, response) => {
+    //     try {
+    //         let RESULT;
 
-            const commands = request.payload;
+    //         const commands = request.payload;
 
-            if (Array.isArray(commands) && Array.isArray(commands[0])) {
-                // commandsArray is an array of arrays
-                RESULT = [];
-                for (const cmdArr of commands) {
-                    const res = await global.redisClient.sendCommand(cmdArr);
-                    RESULT.push(res);
-                }
-            } else {
-                // Process a single command array
-                RESULT = await global.redisClient.sendCommand(commands);
-            }
+    //         if (Array.isArray(commands) && Array.isArray(commands[0])) {
+    //             // commandsArray is an array of arrays
+    //             RESULT = [];
+    //             for (const cmdArr of commands) {
+    //                 const res = await global.redisClient.sendCommand(cmdArr);
+    //                 RESULT.push(res);
+    //             }
+    //         } else {
+    //             // Process a single command array
+    //             RESULT = await global.redisClient.sendCommand(commands);
+    //         }
 
-            // console.log('remoteExecuteRedis RESULT:', RESULT);
-            // console.log(JSON.stringify(RESULT, null, 2));
+    //         // console.log('remoteExecuteRedis RESULT:', RESULT);
+    //         // console.log(JSON.stringify(RESULT, null, 2));
 
-            response.send(200, RESULT, err => {
-                if (err) console.error('Failed to send method response:', err);
-            });
-        } catch (err) {
-            response.send(500, { error: err.message }, () => { });
-        }
-    });
+    //         response.send(200, RESULT, err => {
+    //             if (err) console.error('Failed to send method response:', err);
+    //         });
+    //     } catch (err) {
+    //         response.send(500, { error: err.message }, () => { });
+    //     }
+    // });
 
 });
 
