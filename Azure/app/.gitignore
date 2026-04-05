@@ -2,3 +2,4 @@
 node_modules/
 connect-mongo/create-collections.js
 payload_*.json
+*.sh
