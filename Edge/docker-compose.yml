@@ -118,8 +118,8 @@ services:
     environment:
       - TZ=Europe/London
       - GF_INSTALL_PLUGINS=redis-app
-      # - GF_LOG_MODE=file
-      # - GF_PATHS_LOGS=/var/log/grafana # To redirect the Grafana logs
+      - GF_LOG_MODE=file
+      - GF_PATHS_LOGS=/var/log/grafana # To redirect the Grafana logs
     depends_on:
       - redis
     networks:
