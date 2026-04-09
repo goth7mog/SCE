@@ -1,3 +1,8 @@
+// Create Global Directory to use throughout the app
+const path = require('path');
+global.approute = path.resolve(__dirname);
+
+
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config({ path: '.env' });
@@ -7,13 +12,9 @@ const mosquitto = require('./connect-mqtt/mosquitto');
 
 
 const AUTOMATED_MQTT_SETUP = true; // Default - false
-const MQTT_SETUP_TIMEOUT = 60 * 1000;
+const MQTT_SETUP_TIMEOUT = 5 * 60 * 1000;
 global.MQTT_SETUP_STATUS = null;
 
-
-// Create Global Directory to use throughout the app
-const path = require('path');
-global.approute = path.resolve(__dirname);
 
 
 const connectAzure = async () => {

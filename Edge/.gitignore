@@ -10,9 +10,18 @@ nodered-backup/
 server/node_modules/
 server/.env*
 server/certificates/
+server/logs/
 
+
+splunk/*
+!splunk/inputs.conf
+!splunk/outputs.conf
+
+env/
 
 mosquitto/data/
 mosquitto/log/
+
+
 
 ts-commands.md

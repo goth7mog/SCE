@@ -32,6 +32,8 @@ services:
 
   edge-server:
     container_name: server
+    platform: linux/amd64 # for splunk forwarder compatibility
+    tty: true
     build:
       context: ./server
       target: debug
@@ -49,6 +51,47 @@ services:
     depends_on:
       - redis
       - mosquitto
+      - splunk-forwarder
+      - splunk-server
+
+
+  splunk-forwarder:
+    image: splunk/universalforwarder:9.4.2
+    container_name: splunk-forwarder
+    platform: linux/amd64
+    env_file:
+      - ./env/.splunk-forwarder.env
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+    depends_on:
+      - splunk-server
+    networks:
+      - sce-net-edge
+    volumes:
+      - ./splunk:/opt/splunkforwarder/etc/system/local
+      - ./server/logs:/var/log/app:ro
+
+
+  splunk-server:
+    image: splunk/splunk:latest
+    container_name: splunk-server
+    platform: linux/amd64
+    env_file:
+      - ./env/.splunk-server.env
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_GENERAL_TERMS=--accept-sgt-current-at-splunk-com
+      - SPLUNK_ENABLE_LISTEN=9997
+      - SPLUNK_WEB_PORT=8000
+    ports:
+      - "8000:8000"   # Splunk Web UI
+      # - "8088:8088"   # HTTP Event Collector (HEC)
+      - "9997:9997"   # Indexer/Forwarder port
+    volumes:
+      - splunk-data:/opt/splunk/var
+    networks:
+      - sce-net-edge
+
 
   redis:
     container_name: redis
@@ -66,16 +109,17 @@ services:
     command: redis-stack-server /usr/local/etc/redis/redis.conf
 
   grafana:
-    # image: grafana/grafana:latest
     image: grafana/grafana-dev:12.4.0-21003774845-ubuntu
     container_name: grafana-edge
     ports:
       - "3002:3000"
     env_file:
-      - ./server/.env
+      - ./env/.grafana.env
     environment:
       - TZ=Europe/London
       - GF_INSTALL_PLUGINS=redis-app
+      # - GF_LOG_MODE=file
+      # - GF_PATHS_LOGS=/var/log/grafana # To redirect the Grafana logs
     depends_on:
       - redis
     networks:
@@ -94,3 +138,5 @@ networks:
 volumes:
   redis-data:
   grafana-data:
+  edge-server-logs:
+  splunk-data:

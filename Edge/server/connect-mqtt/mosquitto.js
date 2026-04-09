@@ -1,4 +1,5 @@
 const mqtt = require("mqtt");
+const { logSecurityEvent } = require("../logger/Logger");
 const server = 'mqtt://mosquitto:1883';
 const options = {
     clientId: 'edge-server',
@@ -14,11 +15,15 @@ module.exports.connect = function () {
     return new Promise((resolve, reject) => {
         global.mqttClient = mqtt.connect(server, options);
         global.mqttClient.on('connect', () => {
-            console.log('Connected to MQTT broker');
-            resolve({ success: true, message: 'Connected to MQTT broker' });
+            const msg = 'Connected to MQTT broker';
+            console.log(msg);
+            logSecurityEvent(msg);
+            resolve({ success: true, message: msg });
         });
         global.mqttClient.on('error', (error) => {
-            console.error('MQTT error:', error);
+            const errMsg = `MQTT error: ${error && error.message ? error.message : error}`;
+            console.error(errMsg);
+            logSecurityEvent(errMsg);
             reject(error);
         });
     });
