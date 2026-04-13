@@ -13,9 +13,9 @@ server/certificates/
 # server/logs/
 
 
-splunk/*
-!splunk/inputs.conf
-!splunk/outputs.conf
+splunk/forwarder/*
+!splunk/forwarder/inputs.conf
+!splunk/forwarder/outputs.conf
 
 env/
 

@@ -68,7 +68,7 @@ services:
     networks:
       - sce-net-edge
     volumes:
-      - ./splunk:/opt/splunkforwarder/etc/system/local
+      - ./splunk/forwarder:/opt/splunkforwarder/etc/system/local
       - ./server/logs:/var/log/app:ro
 
 
@@ -89,6 +89,7 @@ services:
       - "9997:9997"   # Indexer/Forwarder port
     volumes:
       - splunk-data:/opt/splunk/var
+      - ./splunk/server/dashboards/dashboard_connections_24h.xml:/opt/splunk/etc/apps/search/local/data/ui/views/dashboard_connections_24h.xml
     networks:
       - sce-net-edge
 
