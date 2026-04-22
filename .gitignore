@@ -12,7 +12,7 @@ arm-template-28_02_2026.json
 Azure/redis/
 Azure/vars.yml
 docker-compose-mqtt.yml
-readme.md
+coursework-readme.md
 mikrotik-commands.md
 vms/
 .agent.md
