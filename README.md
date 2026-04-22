@@ -1,6 +1,5 @@
-# SCE Project
+# SCE
 
-This repository manages a distributed IoT/Edge/Cloud system for sensor data collection, aggregation, and visualization.
 
 ## Architecture Overview
 
@@ -9,22 +8,18 @@ This repository manages a distributed IoT/Edge/Cloud system for sensor data coll
 ---
 
 ## Key Features
-- Distributed Node.js microservices for cloud and edge
-- Node-RED flows for local automation
-- Infrastructure-as-code with Terraform
-- Container orchestration with Docker Compose
-- Integration with Azure IoT Hub, MongoDB, Redis, and MQTT
+- Azure IoT Hub used as a cloud gateway
+- MongoDB for keeping records of edge gateways and their Raspberry Pis
+- Redis TimeSeries - for time-series sensor data
 
-## Directory Structure
-- `Azure/` — Cloud-side services and deployment scripts
-- `Edge/` — Edge services, Node-RED, and device integration
-- `etc/` — Documentation, diagrams, and scripts
+## Project Structure
+- `Azure/` contains:
+* Node.js app for cloud control and data processing
 
-## Getting Started
-1. Clone the repository
-2. Review the Docker Compose files in `Azure/` and `Edge/`
-3. See the documentation in `etc/` for setup and usage instructions
-
----
-
-For more details, see the documentation in the `etc/` folder.
+- `Edge/` contains:
+* Grafana - to display the incoming sensor data
+* Node.js app - for local data processing and aggregation
+* Nodered - to simulate payload from Raspberry Pis
+* Redis - for storing the payload
+* MQTT - to connect Node.js app and simulated Raspberry Pis
+* Splunk - for tracking security events
