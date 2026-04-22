@@ -13,10 +13,11 @@
 - Redis TimeSeries - for time-series sensor data
 
 ## Project Structure
-- `Azure/` contains:
+
+### Azure/
 * Node.js app for cloud control and data processing
 
-- `Edge/` contains:
+### Edge/
 * Grafana - to display the incoming sensor data
 * Node.js app - for local data processing and aggregation
 * Nodered - to simulate payload from Raspberry Pis
