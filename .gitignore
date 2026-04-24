@@ -1,6 +1,6 @@
 etc/
-!etc/pictures/
 !etc/pictures/**
+!etc/diagrams/drawio/**
 .DS_Store
 .terraform/
 .github/copilot-instructions.md
