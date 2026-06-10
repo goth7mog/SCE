@@ -16,6 +16,7 @@
 
 ### Azure/
 * Node.js app for cloud control and data processing
+* Azure Logic App - runs with predefined intervals. Launches a data collection event inside this app
 
 ### Edge/
 * Grafana - to display the incoming sensor data
