@@ -24,4 +24,5 @@
 * Nodered - to simulate payload from Raspberry Pis
 * Redis - for storing the payload
 * MQTT - to connect Node.js app and simulated Raspberry Pis
+* OPC UA - the future transmition to this replacing MQTT
 * Splunk - for tracking security events
