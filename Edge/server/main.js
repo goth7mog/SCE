@@ -9,11 +9,13 @@ dotenv.config({ path: '.env' });
 const { setupMQTTListener, subscribeToTopics } = require('./automate');
 // const { aggregateTimeSeries } = require('./timeseries');const mosquitto = require('./connect-mqtt/mosquitto');const mosquitto = require('./connect-mqtt/mosquitto');
 const mosquitto = require('./connect-mqtt/mosquitto');
+const { startOpcUaConnector, opcuaState } = require('./connect-opcua/opcua-client');
 
 
 const AUTOMATED_MQTT_SETUP = true; // Default - false
 const MQTT_SETUP_TIMEOUT = 5 * 60 * 1000;
 global.MQTT_SETUP_STATUS = null;
+global.opcuaConnectorState = opcuaState;
 
 
 
@@ -62,7 +64,8 @@ app.get('/heartbeat', (req, res) => {
         nodeVersion: process.version,
         memoryUsage: process.memoryUsage(),
         redis: global.redisClient ? 'connected' : 'disconnected',
-        azure: global.azureClient ? 'connected' : 'disconnected'
+        azure: global.azureClient ? 'connected' : 'disconnected',
+        opcua: global.opcuaConnectorState ? global.opcuaConnectorState.status : 'disabled'
     });
 });
 
@@ -94,6 +97,7 @@ const startup = async () => {
     try {
         await connectAzure();
         await connectRedis();
+        await startOpcUaConnector({ redisClient: global.redisClient });
         console.log('Startup complete');
         app.emit('ready');
 
