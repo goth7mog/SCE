@@ -9,6 +9,7 @@ nodered-backup/
 
 server/node_modules/
 server/.env*
+!server/.env.template*
 server/certificates/
 # server/logs/
 
