@@ -286,7 +286,11 @@ async function startOpcUaConnector({ redisClient } = {}) {
         opcuaState.lastError = err.message;
         cleanupConnection();
         scheduleReconnect(redisClient);
-        throw err;
+        return {
+            success: false,
+            error: err.message,
+            monitoredNodes: monitoredNodes.length
+        };
     }
 }
 

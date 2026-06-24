@@ -51,6 +51,7 @@ services:
       - ./nodered/data/certificates:/usr/src/app/certificates
     depends_on:
       - redis
+      - nodered
       - mosquitto
       - splunk-forwarder
       - splunk-server

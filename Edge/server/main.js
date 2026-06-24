@@ -97,7 +97,10 @@ const startup = async () => {
     try {
         await connectAzure();
         await connectRedis();
-        await startOpcUaConnector({ redisClient: global.redisClient });
+        const opcuaStartup = await startOpcUaConnector({ redisClient: global.redisClient });
+        if (opcuaStartup && !opcuaStartup.success && !opcuaStartup.skipped) {
+            console.warn(`OPC UA connector startup issue: ${opcuaStartup.error}`);
+        }
         console.log('Startup complete');
         app.emit('ready');
 
