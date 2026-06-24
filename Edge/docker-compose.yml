@@ -5,6 +5,7 @@ services:
     image: nodered/node-red
     ports:
       - "1880:1880"
+      - "53880:53880"
     environment:
       - TZ=Europe/London
     volumes:

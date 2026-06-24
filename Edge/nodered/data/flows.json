@@ -775,5 +775,138 @@
         "9914aec49361a956"
       ]
     ]
+  },
+  {
+    "id": "b3ad2b3a5b5d4f17",
+    "type": "tab",
+    "label": "OPC UA Server",
+    "disabled": false,
+    "info": "Hosts an OPC UA server for the edge server to read directly.",
+    "env": []
+  },
+  {
+    "id": "a24d79c4e7a9f201",
+    "type": "OpcUa-Server",
+    "z": "b3ad2b3a5b5d4f17",
+    "port": "53880",
+    "name": "Node-RED OPC UA Server",
+    "endpoint": "UA/SimpleNodeRedServer",
+    "users": "users.json",
+    "nodesetDir": "",
+    "folderName4PKI": "",
+    "autoAcceptUnknownCertificate": true,
+    "registerToDiscovery": false,
+    "constructDefaultAddressSpace": false,
+    "allowAnonymous": true,
+    "endpointNone": true,
+    "endpointSign": true,
+    "endpointSignEncrypt": true,
+    "endpointBasic128Rsa15": true,
+    "endpointBasic256": true,
+    "endpointBasic256Sha256": true,
+    "maxNodesPerBrowse": 0,
+    "maxNodesPerHistoryReadData": 0,
+    "maxNodesPerHistoryReadEvents": 0,
+    "maxNodesPerHistoryUpdateData": 0,
+    "maxNodesPerRead": 0,
+    "maxNodesPerWrite": 0,
+    "maxNodesPerMethodCall": 0,
+    "maxNodesPerRegisterNodes": 0,
+    "maxNodesPerNodeManagement": 0,
+    "maxMonitoredItemsPerCall": 0,
+    "maxNodesPerHistoryUpdateEvents": 0,
+    "maxNodesPerTranslateBrowsePathsToNodeIds": 0,
+    "x": 610,
+    "y": 120,
+    "wires": [
+      [
+        "8f8f0d08d67f6f79"
+      ]
+    ]
+  },
+  {
+    "id": "9fd3f2e12b0e4d10",
+    "type": "inject",
+    "z": "b3ad2b3a5b5d4f17",
+    "name": "Seed temperature",
+    "props": [],
+    "repeat": "5",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "1",
+    "topic": "",
+    "x": 150,
+    "y": 80,
+    "wires": [
+      [
+        "f1e7b5f6b5b0f5ec"
+      ]
+    ]
+  },
+  {
+    "id": "f1e7b5f6b5b0f5ec",
+    "type": "function",
+    "z": "b3ad2b3a5b5d4f17",
+    "name": "Temperature value",
+    "func": "const temperature = 20 + Math.random() * 5;\nmsg.payload = {\n    messageType: 'Variable',\n    namespace: '4',\n    variableName: 'Temperature',\n    variableValue: Number(temperature.toFixed(2))\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 390,
+    "y": 80,
+    "wires": [
+      [
+        "a24d79c4e7a9f201"
+      ]
+    ]
+  },
+  {
+    "id": "44d6a773f7e8d68f",
+    "type": "inject",
+    "z": "b3ad2b3a5b5d4f17",
+    "name": "Seed humidity",
+    "props": [],
+    "repeat": "5",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "1",
+    "topic": "",
+    "x": 150,
+    "y": 140,
+    "wires": [
+      [
+        "0f3dfaf0be2e4d41"
+      ]
+    ]
+  },
+  {
+    "id": "0f3dfaf0be2e4d41",
+    "type": "function",
+    "z": "b3ad2b3a5b5d4f17",
+    "name": "Humidity value",
+    "func": "const humidity = 40 + Math.random() * 20;\nmsg.payload = {\n    messageType: 'Variable',\n    namespace: '4',\n    variableName: 'Humidity',\n    variableValue: Number(humidity.toFixed(2))\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 390,
+    "y": 140,
+    "wires": [
+      [
+        "a24d79c4e7a9f201"
+      ]
+    ]
+  },
+  {
+    "id": "8f8f0d08d67f6f79",
+    "type": "debug",
+    "z": "b3ad2b3a5b5d4f17",
+    "name": "debug OPC UA Server",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "true",
+    "targetType": "full",
+    "x": 840,
+    "y": 120,
+    "wires": []
   }
 ]
