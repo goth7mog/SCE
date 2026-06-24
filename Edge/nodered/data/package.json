@@ -9,6 +9,7 @@
         "dotenv": "^17.2.3",
         "express": "^5.1.0",
         "node-red-contrib-azure-iot-device": "^0.2.6",
-        "node-red-contrib-azure-iot-hub": "^0.4.0"
+        "node-red-contrib-azure-iot-hub": "^0.4.0",
+        "node-red-contrib-opcua": "^0.2.352"
     }
 }
