@@ -48,6 +48,7 @@ services:
       - ./server/.env
     volumes:
       - ./server:/usr/src/app
+      - /usr/src/app/node_modules
       - ./nodered/data/certificates:/usr/src/app/certificates
     depends_on:
       - redis
