@@ -9,13 +9,13 @@ dotenv.config({ path: '.env' });
 const { setupMQTTListener, subscribeToTopics } = require('./automate');
 // const { aggregateTimeSeries } = require('./timeseries');const mosquitto = require('./connect-mqtt/mosquitto');const mosquitto = require('./connect-mqtt/mosquitto');
 const mosquitto = require('./connect-mqtt/mosquitto');
-const { startOpcUaConnector, opcuaState } = require('./connect-opcua/opcua-client');
+const opcuaConnector = require('./connect-opcua/opcua-client');
 
 
 const AUTOMATED_MQTT_SETUP = true; // Default - false
 const MQTT_SETUP_TIMEOUT = 5 * 60 * 1000;
 global.MQTT_SETUP_STATUS = null;
-global.opcuaConnectorState = opcuaState;
+global.opcuaConnectorState = opcuaConnector.state;
 
 
 
@@ -97,7 +97,7 @@ const startup = async () => {
     try {
         await connectAzure();
         await connectRedis();
-        const opcuaStartup = await startOpcUaConnector({ redisClient: global.redisClient });
+        const opcuaStartup = await opcuaConnector.start({ redisClient: global.redisClient });
         if (opcuaStartup && !opcuaStartup.success && !opcuaStartup.skipped) {
             console.warn(`OPC UA connector startup issue: ${opcuaStartup.error}`);
         }

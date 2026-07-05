@@ -15,21 +15,8 @@ const {
 } = require('node-opcua');
 
 const DEFAULT_RECONNECT_DELAY_MS = 5000;
+const MAX_RECONNECT_DELAY_MS = 60000;
 const DEFAULT_PUBLISHING_INTERVAL_MS = 1000;
-
-const opcuaState = {
-    status: 'disabled',
-    endpoint: null,
-    monitoredNodes: [],
-    lastError: null,
-    lastValueAt: null
-};
-
-let activeClient = null;
-let activeSession = null;
-let activeSubscription = null;
-let reconnectTimer = null;
-let shuttingDown = false;
 
 function sanitizeKeyPart(value) {
     return String(value || '')
@@ -37,6 +24,11 @@ function sanitizeKeyPart(value) {
         .replace(/[^a-zA-Z0-9:_-]+/g, '_')
         .replace(/_+/g, '_')
         .replace(/^_+|_+$/g, '');
+}
+
+function parsePositiveInt(value, fallback) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
 function parseMonitoredNodes() {
@@ -84,136 +76,220 @@ function buildClientOptions() {
     };
 }
 
-async function persistReading(redisClient, reading) {
-    if (!redisClient) {
-        return;
+class OpcUaConnector {
+    constructor() {
+        this.state = {
+            status: 'disabled',
+            endpoint: null,
+            monitoredNodes: [],
+            lastError: null,
+            lastValueAt: null,
+            reconnectAttempts: 0
+        };
+
+        this.redisClient = null;
+        this.client = null;
+        this.session = null;
+        this.subscription = null;
+        this.reconnectTimer = null;
+        this.shuttingDown = false;
+        this.connecting = false;
     }
 
-    const redisKey = reading.seriesKey;
-    const latestKey = `${redisKey}:latest`;
-    const valueAsString = String(reading.value);
+    async start({ redisClient } = {}) {
+        const endpointUrl = process.env.OPCUA_ENDPOINT;
 
-    if (Number.isFinite(reading.value)) {
-        await redisClient.sendCommand([
-            'TS.ADD',
-            redisKey,
-            String(reading.timestamp),
+        if (!endpointUrl) {
+            this.state.status = 'disabled';
+            this.state.endpoint = null;
+            this.state.monitoredNodes = [];
+            return { success: false, skipped: true, reason: 'OPCUA_ENDPOINT is not configured' };
+        }
+
+        if (this.connecting) {
+            return { success: false, skipped: true, reason: 'OPC UA connector is already connecting' };
+        }
+
+        this.redisClient = redisClient;
+        const monitoredNodes = parseMonitoredNodes();
+
+        this.cleanup();
+        this.shuttingDown = false;
+        this.connecting = true;
+        this.state.status = 'connecting';
+        this.state.lastError = null;
+
+        try {
+            await this.connect(monitoredNodes);
+            this.state.reconnectAttempts = 0;
+            return {
+                success: true,
+                status: this.state.status,
+                monitoredNodes: monitoredNodes.length
+            };
+        } catch (err) {
+            this.state.status = 'error';
+            this.state.lastError = err.message;
+            this.cleanup();
+            this.scheduleReconnect();
+            return {
+                success: false,
+                error: err.message,
+                monitoredNodes: monitoredNodes.length
+            };
+        } finally {
+            this.connecting = false;
+        }
+    }
+
+    async stop() {
+        this.shuttingDown = true;
+        this.cleanup();
+        this.state.status = 'stopped';
+    }
+
+    cleanup() {
+        if (this.reconnectTimer) {
+            clearTimeout(this.reconnectTimer);
+            this.reconnectTimer = null;
+        }
+
+        if (this.subscription) {
+            try {
+                this.subscription.terminate();
+            } catch (err) {
+                // best effort cleanup
+            }
+            this.subscription = null;
+        }
+
+        if (this.session) {
+            try {
+                this.session.close();
+            } catch (err) {
+                // best effort cleanup
+            }
+            this.session = null;
+        }
+
+        if (this.client) {
+            try {
+                this.client.disconnect();
+            } catch (err) {
+                // best effort cleanup
+            }
+            this.client = null;
+        }
+    }
+
+    scheduleReconnect() {
+        if (this.shuttingDown || this.reconnectTimer) {
+            return;
+        }
+
+        this.state.status = 'reconnecting';
+        this.state.reconnectAttempts += 1;
+
+        const backoff = Math.min(
+            DEFAULT_RECONNECT_DELAY_MS * 2 ** (this.state.reconnectAttempts - 1),
+            MAX_RECONNECT_DELAY_MS
+        );
+        const jitter = Math.floor(Math.random() * 1000);
+
+        this.reconnectTimer = setTimeout(() => {
+            this.reconnectTimer = null;
+            this.start({ redisClient: this.redisClient }).catch(err => {
+                this.state.lastError = err.message;
+            });
+        }, backoff + jitter);
+    }
+
+    async persistReading(reading) {
+        if (!this.redisClient) {
+            return;
+        }
+
+        const redisKey = reading.seriesKey;
+        const latestKey = `${redisKey}:latest`;
+        const valueAsString = String(reading.value);
+
+        if (Number.isFinite(reading.value)) {
+            await this.redisClient.sendCommand([
+                'TS.ADD',
+                redisKey,
+                String(reading.timestamp),
+                valueAsString
+            ]);
+        }
+
+        await this.redisClient.sendCommand([
+            'SET',
+            latestKey,
             valueAsString
         ]);
     }
 
-    await redisClient.sendCommand([
-        'SET',
-        latestKey,
-        valueAsString
-    ]);
-}
+    async connect(monitoredNodes) {
+        const endpointUrl = process.env.OPCUA_ENDPOINT;
+        const username = process.env.OPCUA_USERNAME;
+        const password = process.env.OPCUA_PASSWORD;
+        const client = OPCUAClient.create(buildClientOptions());
 
-function cleanupConnection() {
-    if (reconnectTimer) {
-        clearTimeout(reconnectTimer);
-        reconnectTimer = null;
-    }
+        this.client = client;
+        this.state.endpoint = endpointUrl;
+        this.state.monitoredNodes = monitoredNodes;
 
-    if (activeSubscription) {
-        try {
-            activeSubscription.terminate();
-        } catch (err) {
-            // best effort cleanup
-        }
-        activeSubscription = null;
-    }
-
-    if (activeSession) {
-        try {
-            activeSession.close();
-        } catch (err) {
-            // best effort cleanup
-        }
-        activeSession = null;
-    }
-
-    if (activeClient) {
-        try {
-            activeClient.disconnect();
-        } catch (err) {
-            // best effort cleanup
-        }
-        activeClient = null;
-    }
-}
-
-function scheduleReconnect(redisClient) {
-    if (shuttingDown) {
-        return;
-    }
-
-    if (reconnectTimer) {
-        clearTimeout(reconnectTimer);
-    }
-
-    opcuaState.status = 'reconnecting';
-    reconnectTimer = setTimeout(() => {
-        startOpcUaConnector({ redisClient }).catch(err => {
-            opcuaState.lastError = err.message;
+        client.on('connection_lost', () => {
+            this.state.status = 'disconnected';
+            this.scheduleReconnect();
         });
-    }, DEFAULT_RECONNECT_DELAY_MS);
-}
 
-async function connectMonitoredNodes(redisClient, monitoredNodes) {
-    const endpointUrl = process.env.OPCUA_ENDPOINT;
-    const username = process.env.OPCUA_USERNAME;
-    const password = process.env.OPCUA_PASSWORD;
-    const client = OPCUAClient.create(buildClientOptions());
+        client.on('backoff', (retryNumber, delay) => {
+            this.state.status = 'reconnecting';
+            this.state.lastError = `OPC UA reconnect attempt ${retryNumber} in ${delay}ms`;
+        });
 
-    activeClient = client;
-    opcuaState.endpoint = endpointUrl;
-    opcuaState.monitoredNodes = monitoredNodes;
+        await client.connect(endpointUrl);
 
-    client.on('connection_lost', () => {
-        opcuaState.status = 'disconnected';
-        scheduleReconnect(redisClient);
-    });
+        this.session = username
+            ? await client.createSession({ userName: username, password })
+            : await client.createSession();
 
-    client.on('backoff', (retryNumber, delay) => {
-        opcuaState.status = 'reconnecting';
-        opcuaState.lastError = `OPC UA reconnect attempt ${retryNumber} in ${delay}ms`;
-    });
+        this.state.status = 'connected';
+        this.state.lastError = null;
 
-    await client.connect(endpointUrl);
+        if (!monitoredNodes.length) {
+            return;
+        }
 
-    activeSession = username
-        ? await client.createSession({ userName: username, password })
-        : await client.createSession();
+        this.subscription = ClientSubscription.create(this.session, {
+            requestedPublishingInterval: parsePositiveInt(process.env.OPCUA_PUBLISHING_INTERVAL_MS, DEFAULT_PUBLISHING_INTERVAL_MS),
+            requestedLifetimeCount: 60,
+            requestedMaxKeepAliveCount: 10,
+            maxNotificationsPerPublish: 100,
+            publishingEnabled: true,
+            priority: 1
+        });
 
-    opcuaState.status = 'connected';
-    opcuaState.lastError = null;
+        this.subscription.on('started', () => {
+            this.state.status = 'subscribed';
+        });
 
-    if (!monitoredNodes.length) {
-        return;
+        this.subscription.on('terminated', () => {
+            if (this.shuttingDown) {
+                return;
+            }
+            this.state.status = 'disconnected';
+            this.scheduleReconnect();
+        });
+
+        monitoredNodes.forEach((nodeConfig, index) => this.monitorNode(nodeConfig, index));
     }
 
-    activeSubscription = ClientSubscription.create(activeSession, {
-        requestedPublishingInterval: Number(process.env.OPCUA_PUBLISHING_INTERVAL_MS || DEFAULT_PUBLISHING_INTERVAL_MS),
-        requestedLifetimeCount: 60,
-        requestedMaxKeepAliveCount: 10,
-        maxNotificationsPerPublish: 100,
-        publishingEnabled: true,
-        priority: 1
-    });
-
-    activeSubscription.on('started', () => {
-        opcuaState.status = 'subscribed';
-    });
-
-    activeSubscription.on('terminated', () => {
-        opcuaState.status = 'disconnected';
-        scheduleReconnect(redisClient);
-    });
-
-    for (const [index, nodeConfig] of monitoredNodes.entries()) {
+    monitorNode(nodeConfig, index) {
         if (!nodeConfig || !nodeConfig.nodeId) {
-            continue;
+            this.state.lastError = `Skipped invalid monitored node at index ${index}: missing nodeId`;
+            return;
         }
 
         const seriesKey = nodeConfig.seriesKey || [
@@ -223,85 +299,47 @@ async function connectMonitoredNodes(redisClient, monitoredNodes) {
         ].filter(Boolean).join(':');
 
         const monitoredItem = ClientMonitoredItem.create(
-            activeSubscription,
+            this.subscription,
             {
                 nodeId: nodeConfig.nodeId,
                 attributeId: AttributeIds.Value
             },
             {
-                samplingInterval: Number(nodeConfig.samplingInterval || process.env.OPCUA_SAMPLING_INTERVAL_MS || DEFAULT_PUBLISHING_INTERVAL_MS),
+                samplingInterval: parsePositiveInt(nodeConfig.samplingInterval || process.env.OPCUA_SAMPLING_INTERVAL_MS, DEFAULT_PUBLISHING_INTERVAL_MS),
                 discardOldest: true,
-                queueSize: Number(nodeConfig.queueSize || 10)
+                queueSize: parsePositiveInt(nodeConfig.queueSize, 10)
             },
             TimestampsToReturn.Both
         );
 
+        monitoredItem.on('err', (message) => {
+            this.state.lastError = `Monitored item error for ${seriesKey}: ${message}`;
+        });
+
         monitoredItem.on('changed', async (dataValue) => {
+            if (dataValue && dataValue.statusCode && !dataValue.statusCode.isGood()) {
+                this.state.lastError = `Bad status (${dataValue.statusCode.toString()}) for ${seriesKey}`;
+                return;
+            }
+
             const value = dataValue && dataValue.value ? dataValue.value.value : null;
+            if (value === null || value === undefined) {
+                return;
+            }
+
             const timestamp = (dataValue && dataValue.sourceTimestamp instanceof Date)
                 ? dataValue.sourceTimestamp.getTime()
                 : Date.now();
 
-            opcuaState.lastValueAt = new Date(timestamp).toISOString();
+            this.state.lastValueAt = new Date(timestamp).toISOString();
 
             try {
-                await persistReading(redisClient, {
-                    seriesKey,
-                    value,
-                    timestamp
-                });
+                await this.persistReading({ seriesKey, value, timestamp });
             } catch (err) {
-                opcuaState.lastError = `Redis write failed for ${seriesKey}: ${err.message}`;
+                this.state.lastError = `Redis write failed for ${seriesKey}: ${err.message}`;
             }
         });
     }
 }
 
-async function startOpcUaConnector({ redisClient } = {}) {
-    const endpointUrl = process.env.OPCUA_ENDPOINT;
-
-    if (!endpointUrl) {
-        opcuaState.status = 'disabled';
-        opcuaState.endpoint = null;
-        opcuaState.monitoredNodes = [];
-        return { success: false, skipped: true, reason: 'OPCUA_ENDPOINT is not configured' };
-    }
-
-    const monitoredNodes = parseMonitoredNodes();
-
-    cleanupConnection();
-    shuttingDown = false;
-    opcuaState.status = 'connecting';
-    opcuaState.lastError = null;
-
-    try {
-        await connectMonitoredNodes(redisClient, monitoredNodes);
-        return {
-            success: true,
-            status: opcuaState.status,
-            monitoredNodes: monitoredNodes.length
-        };
-    } catch (err) {
-        opcuaState.status = 'error';
-        opcuaState.lastError = err.message;
-        cleanupConnection();
-        scheduleReconnect(redisClient);
-        return {
-            success: false,
-            error: err.message,
-            monitoredNodes: monitoredNodes.length
-        };
-    }
-}
-
-async function stopOpcUaConnector() {
-    shuttingDown = true;
-    cleanupConnection();
-    opcuaState.status = 'stopped';
-}
-
-module.exports = {
-    opcuaState,
-    startOpcUaConnector,
-    stopOpcUaConnector
-};
+module.exports = new OpcUaConnector();
