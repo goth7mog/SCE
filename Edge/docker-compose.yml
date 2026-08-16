@@ -72,7 +72,7 @@ services:
   #     - sce-net-edge
   #   volumes:
   #     - ./splunk/forwarder:/opt/splunkforwarder/etc/system/local
-  #     - ./server/logs:/var/log/app:ro
+  #     - ./server/logs:/var/log/app
 
 
   # splunk-server:
